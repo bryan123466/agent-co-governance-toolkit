@@ -8,12 +8,12 @@
 
 **中文从这里开始：[Windows 完整操作流程](docs/zh-CN/windows-example.md)**
 
-为你自己的现实项目建立一套治理，不需要先做演示业务或测试任务。
+让几个 Codex 工作窗口围绕同一个项目持续协作：各自推进任务，由治理窗口整理进度、汇总阶段成果，并把可以继续工作的状态保存下来。直接接入你自己的项目即可。
 
 1. 先建 `CoGov`、`CoGov/control`、`CoGov/toolkit` 三个目录，把包内内容直接解压到 `toolkit`。
 2. 在 `control` 新建治理聊天，填写**【项目名称】**和**【一句话介绍】**，使用主手册的安装提示词。
 3. 由治理据实际现场判断首次建立基线或接续原工作；不需要选择新/旧路线。空目录不代表没有已有成果。需要新专业窗口时填写**【n：新专业窗口数量】**，每个窗口填写**【实际负责的项目内容】**。
-4. 接入治理 MCP，CLI 作后备；完成首次完整状态盘点，再按需要启用宿主定时治理。
+4. 按手册接通治理工具，先整理各项工作目前做到哪里，再按需要设置定时汇总。MCP 用于直接调用工具，CLI 是同一工具的命令行入口。
 
 一套 CoGov 对应一个项目。只在首次初始化前统一选择或替换根目录，不直接搬动已有绑定。完整流程已提供治理、专业接续和自动化的提示词；需填字段已加粗，登录、远端和业务决定使用真实信息。
 
@@ -27,12 +27,12 @@
 
 **Start here in English: [Complete Windows workflow](docs/en/windows-example.md)**
 
-Use your real project; no demonstration business or maintenance test exercise is required.
+Connect the Codex chats working on your project. Each chat advances its assigned work, while a governance chat brings progress and completed stages together and records where to continue. Start with your own project.
 
 1. Create `CoGov`, `CoGov/control` and `CoGov/toolkit`. Extract the package directly into `toolkit`.
 2. Open a new governance chat in `control`, supply **[Project name]** and **[One-sentence introduction]**, and use the main walkthrough's installation prompt.
 3. Governance uses the actual context to establish the first baseline or continue previous work; there is no new/existing route to choose. An empty directory does not prove there are no previous outputs. For new specialists, fill in **[n: number of new specialist chats]** and **[Actual work assigned to each chat]**.
-4. Connect governance through MCP with CLI fallback, establish a complete current-state inventory, then configure host scheduling if useful.
+4. Connect the governance tools, establish where each task stands, and set up scheduled summaries if useful. MCP offers direct tool calls; the CLI is a command-line entry to the same tools.
 
 One CoGov directory belongs to one project. Choose or consistently replace the root only before first initialization; do not move an already bound project as a migration shortcut. The walkthrough supplies governance, specialist and scheduling prompts; input fields are bold. Account, remote and business details must be real.
 
@@ -46,12 +46,12 @@ For an existing chat, paste its onboarding prompt there, send the reply together
 
 **繁體中文從這裡開始：[Windows 完整操作流程](docs/zh-TW/windows-example.md)**
 
-為自己的實際專案建立治理，不需要先做示範業務或測試任務。
+讓多個 Codex 工作視窗圍繞同一個專案持續協作：各自推進任務，由治理視窗整理進度、彙整階段成果，並儲存下次可以接續的位置。直接接入你自己的專案即可。
 
 1. 先建立 `CoGov`、`CoGov/control`、`CoGov/toolkit` 三個目錄，將套件內容直接解壓縮到 `toolkit`。
 2. 在 `control` 建立治理對話，填寫 **【專案名稱】**與 **【一句話介紹】**，使用主手冊的安裝提示詞。
 3. 治理依實際情況判斷首次建立基線或接續原工作，不需要選擇新／舊路線。空目錄不代表沒有既有成果。需要新的專業視窗時，填寫 **【n：新增專業視窗數量】**，每個視窗填寫 **【實際負責的專案內容】**。
-4. 接入治理 MCP，保留 CLI 作為備用；完成首次狀態盤點，再依需要啟用宿主排程治理。
+4. 依手冊接通治理工具，先整理各項工作目前做到哪裡，再依需要設定定時彙整。MCP 用於直接呼叫工具，CLI 是同一工具的命令列入口。
 
 一套 CoGov 對應一個專案。只在首次初始化前統一選擇或替換根目錄，不直接搬動已有綁定。完整流程已提供治理、專業接續與自動化的提示詞；需填欄位已加粗，登入、遠端與業務決定使用實際資訊。
 

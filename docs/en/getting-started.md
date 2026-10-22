@@ -1,8 +1,10 @@
-# Quick orientation: describe the project and let governance connect it
+# Getting started: connect your project progress and working chats
 
 [Complete Windows workflow](windows-example.md) · [Overview and options](operation-manual.md) · [简体中文](../zh-CN/getting-started.md) · [繁體中文](../zh-TW/getting-started.md)
 
-Open the [complete Windows workflow](windows-example.md). It is the primary installation and operating guide. This page explains the same onboarding path without introducing another set of commands or prompts.
+Keep your existing Codex chats, or add independent chats for work that needs to proceed in parallel. A governance chat uses the task and file information you provide to organize progress, bring ready stages together, and establish a clear starting point for continued work.
+
+Follow the [complete Windows workflow](windows-example.md) for installation, copyable prompts, and commands. This page explains how you will use the project afterward.
 
 ## Prepare the directories and two project inputs
 
@@ -33,8 +35,8 @@ Suitable workspaces can stay in place. When several old chats share a directory,
 ## After connection
 
 1. [Governance MCP](windows-example.md#mcp) supplies direct tool calls; the CLI is a fallback to the same engine.
-2. The [initial complete inventory](windows-example.md#delivery) covers registered tasks and workspaces. Distinguish already integrated work, stable pending stages, unfinished checkpoints and paused state. Complete coverage does not mean accepting all unfinished outputs.
+2. [Review the current work](windows-example.md#delivery): which results are already collected, which stages are ready, and which tasks remain unfinished or waiting. Keep progress and next steps for unfinished work; connecting the toolkit does not require declaring it complete.
 3. [Configure scheduling if useful](windows-example.md#automation). The host wakes governance to read the actual registered set without a fixed chat count.
-4. Continue real work: preserve checkpoints when pausing, declare stable stages, then receive and update eligible workspaces as needed.
+4. Continue your work. When pausing, save the files and next step you want to retain. Offer a stable stage to governance when it is ready, then update eligible workspaces as needed. The toolkit calls a saved progress record a checkpoint.
 
-For an installed project, continue its current state rather than initializing again. [Private Git, backups and multiple computers](remote-and-multicomputer.md) remain optional; unused options are not a backlog.
+History and pause points remain available. When returning to an installed project, continue from its current state rather than initializing again. [Private Git, backups and multiple computers](remote-and-multicomputer.md) remain optional; unused options are not a backlog.

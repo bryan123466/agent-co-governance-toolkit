@@ -1,145 +1,123 @@
 # Agent Co-Governance Toolkit
 
-**Keep long-running Codex projects understandable, resumable, and coordinated across independent workspaces.**
+**Give AI collaboration lasting project memory, with multiple workspaces advancing one long-running project.**
 
 [English](README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md)
 
-[Download v0.2.0rc1](https://github.com/bryan123466/agent-co-governance-toolkit/releases/tag/v0.2.0rc1) · [Windows guide](docs/en/windows-example.md) · [Interactive workflow](docs/index.html#en)
+[Download and install](https://github.com/bryan123466/agent-co-governance-toolkit/releases) · [User manual](docs/en/windows-example.md) · [Architecture](docs/en/architecture.md)
 
-**Version 0.2.0rc1 — release candidate.** A local toolkit for people already using Codex and Git. Give a governance chat your project name and a short introduction, connect the workspaces you actually use, and let professional chats continue their work with a shared record of tasks, deliverables, and next steps.
+Agent Co-Governance Toolkit (AGCT) is an open-source project collaboration toolkit for **Codex users**. It organizes task progress, stage deliverables, important decisions, and continuation information from different workspaces into project records you can save, trace, and use again.
 
-The public toolkit is an independent implementation of reusable governance capabilities. It is not the complete source of any private production governance system. Its documented RC features run without a hidden private module.
+Different Codex chats can advance software, hardware, algorithms, research, operations, or writing. A governance chat combines AI and tools to bring together progress, receive deliverables, and update participating workspaces with shared results when appropriate. Existing chats can join, and work already in progress can continue.
 
-## Why use it?
+**It is for people already using Codex who want to organize multiple conversations into a long-running project.** You set the direction and make important decisions, Codex helps understand and advance the work, and AGCT keeps its state and results traceable.
 
-Long-running work becomes difficult when useful state is scattered across chats, working files, commits, and reports. A task can be paused without failing. A deliverable can be ready while its overall task remains open. Several versions can arrive before governance next runs. A Git operation can finish while its receipt is missing.
+## Why AGCT?
 
-AGCT gives these situations different records and actions. It preserves a task's current position, receives explicitly declared stable stages, and updates registered workspaces when they can safely adopt the shared baseline. Historical work stays traceable without every old task becoming a recurring queue item.
+A conversation can complete a task, but a long-running project often spans many conversations, files, and versions. As the work grows, the difficult parts become:
 
-You keep making project decisions and working with Codex. The toolkit supplies a common execution layer for the governance workflow; it does not require everyone to manage a second project-management system manually.
+- Returning after a week and having to explain where you stopped, why you made certain choices, and what comes next.
+- Keeping several chats moving while trying to tell which deliverables have joined the project and which remain in individual workspaces.
+- Managing several versions of one task when old records and current action items are mixed together.
+- Working out what actually finished after an interruption, and whether anything needs to start again.
 
-## How the project fits together
+AGCT retains these relationships during everyday work. **Project continuity does not have to depend entirely on chat context; independent work can also contribute to a clear view of the whole project.**
 
-![Project governance flow: user direction, governance AI and shared engine, professional workspaces, stable deliveries and continuation](docs/assets/governance-flow.en.svg)
+## What can you do with it?
 
-[Open the offline interactive explanation](docs/index.html#en). The diagram describes responsibilities and the working loop; it is not a claim of automatic access to all chats or external systems.
-
-| Participant | Responsibility |
+| Capability | How it helps your work |
 |---|---|
-| **You** | Set the project direction, assign responsibilities, and decide business acceptance, consequential tradeoffs, and additional external sharing. |
-| **Governance chat** | Use AI to interpret task evidence and relationships, maintain current project state, prepare intake and workspace-update plans, verify actual results, and explain concrete decisions or actions needed from you. |
-| **1–n professional chats** | Advance assigned work in registered workspaces, retain unfinished work and next steps, and declare stable stages for receipt. Sequential subtasks can remain in one chat. |
-| **Shared toolkit engine** | Record state, validate explicit inputs and conditions, execute supported local operations, and keep receipts that both CLI and MCP can inspect. |
+| **Lasting project memory** | Keep progress, key decisions, deliverable locations, and next steps for registered tasks so work can continue across sessions. |
+| **Multiple-workspace collaboration** | Prepare independent workspaces for tasks that need to run in parallel, letting specialist chats advance their work before bringing the results together. |
+| **Build results stage by stage** | A task does not need to be entirely finished before it contributes. A stable stage can be handed to governance for inclusion in the shared version. |
+| **Retain unfinished work** | Save selected files and continuation notes when work pauses. Return to the previous position while paused tasks remain quietly available. |
+| **Keep iterations clear** | Record relationships between earlier and later results, retain history, and clearly distinguish results already integrated, stages offered for receipt, and work being retained for later. |
+| **Reuse verified recovery methods** | For known problems the tools already support, check current conditions before applying a suitable recovery method to reduce repeated operations. |
 
-One control directory belongs to one real project, with one receiving baseline and as many registered task workspaces as that project needs. Professional work does not have to stop just because the entire project or an unrelated task is unfinished. Updates to a particular workspace do require coordination with its writers.
+The same local tools provide these capabilities. You can use MCP tools connected to Codex or work from the command line; both read and write the same project state.
 
-## One way to organize your workspaces
+## How people, AI, and tools work together
 
-<img src="docs/assets/workspace-sidebar-example.png" alt="Generic Codex sidebar organization with governance and chats for different professional responsibilities" width="360">
+![Collaboration structure: the user sets direction, governance organizes the project, specialist workspaces advance in parallel, and all share persistent project records](docs/assets/collaboration.en.svg)
 
-This is a **generic organization illustration based on the interface style**, not an actual installation screenshot generated by the toolkit. Your project determines the roles and their number; software, hardware, and algorithms in the image are examples.
+The **governance chat** is the project's coordination point. It uses Codex to understand the work information provided, assess relationships between tasks and deliverables, and call tools to save state, organize delivery, and update workspaces.
 
-Project management and governance can share one chat with clearly distinguished responsibilities, or use separate chats when useful. Backup and observer chats are not required components. What matters is matching actual tasks, workspaces, and write scopes, rather than reproducing an identical sidebar.
+**Specialist chats** focus on their actual work. One chat can continue through related subtasks; add independent workspaces when parallel work is needed. Your project determines the roles and their number.
 
-## AI judgment plus one execution engine
+**AGCT tools** retain tasks, files, versions, and operation results, checking targets and conditions before updates run. AI interprets the work, tools provide repeatable recording and execution, and people retain control of direction, important tradeoffs, and final business decisions.
 
-The model and scripts do different jobs:
+This gives collaboration a shared record while allowing each workspace to keep its own pace.
 
-- **Codex provides the AI.** It understands instructions, reviews relevant evidence, reasons about task boundaries, and proposes or selects the next supported action.
-- **AGCT provides persistent records and checked operations.** Task state, checkpoints, frozen stages, plans, receipts, and experience rules are stored outside a chat's temporary context.
-- **CLI and MCP call the same engine.** MCP exposes tools such as `agct_status` and `agct_checkpoint` directly to Codex; CLI invokes that same implementation through Python. Both use the same control state.
-- **Project Skills explain the workflow.** The public package includes setup, task delivery, governance reconciliation, and experience recovery Skills. Instructions guide use of the tools; they do not grant native permissions or constitute an operating-system sandbox.
+## From starting work to continuing progress
 
-The toolkit does not train model weights, call a model API itself, or add another AI service. A well-written experience record also does not create a new executable recovery capability by itself.
+![Workflow: advance tasks, save progress, prepare stable stage deliverables, integrate them into the project, update workspaces, and continue](docs/assets/governance-flow.en.svg)
 
-## The everyday loop
+For example, a product project might use three workspaces for software, experiments, and documentation. Software has a usable module, experiments are still being prepared, and documentation has a first draft. Governance can receive the stable software result while recording the current positions of the experiments and documentation. They do not have to wait for the whole project to finish together.
 
-**Work → retain a checkpoint when useful → declare a stable stage → plan and receive → adopt when ready → continue**
+When a newer software version arrives, governance organizes the results using the declared task and version relationships, retaining the necessary history. Workspaces that need shared progress first have their supported local work checked and preserved. If a conflict appears, governance identifies it so the relevant workspace can resolve it.
 
-| Step | What it means |
+Here, “receiving” means bringing a stage's deliverables into the project. You and the appropriate owners still decide whether they meet product goals or are ready for external delivery.
+
+## What does lasting memory retain?
+
+AGCT stores project memory outside the chat, in your local project. It records **the information needed to continue the work**:
+
+| Project record | Questions it can answer later |
 |---|---|
-| **Maintain the task** | Keep a stable task identity, current state, relevant decisions, and next step. An unchanged paused or waiting task remains available for continuation. |
-| **Save a checkpoint** | Preserve selected files already saved to disk and continuation information. A checkpoint is not a delivery or a copy of all conversation history. |
-| **Declare a stable stage** | Identify the exact Git base, commit, and complete changed-path list. Later edits in the professional workspace do not silently alter this frozen delivery. |
-| **Plan and receive** | Review the integration plan, execute supported operations, and verify their actual effects before recording completion. Technical receipt does not decide business acceptance. |
-| **Adopt the baseline** | Update an eligible workspace while preserving supported local commits, staged changes, unstaged changes, and new files. Busy or conflicting workspaces need a specific next condition, not a forced overwrite. |
-| **Continue or recover** | Reuse valid receipts. For a known problem with an applicable implemented recovery action, check current conditions and effects, then finish the missing steps. Unknown problems require diagnosis rather than unlimited retries. |
+| Task state and key decisions | How far has this progressed? Why was it arranged this way? |
+| Saved work and next steps | Where did we stop? What should happen next? |
+| Stage deliverables and version relationships | Which result is already part of the project? Which stage did it evolve from? |
+| File references and deliverable locations | Where are the materials? Do they need to be saved separately? |
+| Operation results and applicable experience | What has already run? Which method may help with a similar problem? |
 
-**Checkpoint ≠ delivery ≠ business acceptance.** Receiving one stage does not close the whole task. A later version replaces an earlier stage only with explicit cumulative relationships, ancestry, and coverage evidence; a newer date alone is not enough. Cumulative `supersedes` must satisfy the current same-task and same-workspace contract.
+You do not need to put every large file into Git. The tools can record material locations to help you find files and arrange backups; actual copying and backup still follow your storage setup. When you want remote storage for project deliverables and selected records, the manual explains how to configure a private Git repository.
 
-The engine also supports artifact references for materials such as files too large for selected-file checkpoints. A reference or a backup decision is not proof that a backup exists; actual evidence must support that conclusion.
+You or the governance chat explicitly record this information; unrecorded decisions in conversations do not automatically become project memory. It comes from the tasks and work materials you connect. It does not automatically collect every conversation or save editor content that has not been written to disk.
+
+## Connect an existing project or start a new one
+
+**Existing work can continue.** In the original chat, summarize the current task, deliverables, important context, and unfinished work. Give that summary to governance for onboarding, then bring the continuation instructions back to the original chat. You can keep a suitable existing chat without redoing the project.
+
+**Add workspaces when parallel work is needed.** Each workspace has a clear task scope. Multiple workspaces advance separately through independent directories and Git worktrees. If several existing chats share a directory, keep one primary writer there and follow the manual to move responsibilities that need parallel work into separate workspaces.
+
+<img src="docs/assets/workspace-sidebar-example.png" alt="Generic arrangement of a governance chat and multiple specialist chats in Codex" width="360">
+
+The image is a generic organization example. You choose the specialist names and their number; backup or observer chats are not required.
 
 ## Start in three steps
 
-1. **Prepare the product.** Download the named [v0.2.0rc1 release](https://github.com/bryan123466/agent-co-governance-toolkit/releases/tag/v0.2.0rc1) and follow the [Windows preparation steps](docs/en/windows-example.md#choose). The guide provides the exact folders and commands.
-2. **Open the governance chat.** Supply **[Project name]** and **[One-sentence introduction]**, then use the [installation prompt](docs/en/windows-example.md#install). Governance checks existing work before choosing initialization or continuation. An empty installation directory does not prove that the project has no earlier deliverables.
-3. **Connect work and review current state.** Connect existing chats or add professional workspaces, configure [governance MCP](docs/en/windows-example.md#mcp) if available, and complete the [first current-state review](docs/en/windows-example.md#delivery). The CLI remains a working fallback through the same engine.
+1. **Prepare a project.** [Download the product package](https://github.com/bryan123466/agent-co-governance-toolkit/releases) and follow the [user manual](docs/en/windows-example.md#choose) to create its directory. Each project directory corresponds to one actual project.
+2. **Create the governance chat.** Select the directory specified by the manual, paste the [installation prompt](docs/en/windows-example.md#install), and fill in **[Project name]** and **[One-sentence introduction]**.
+3. **Connect your work.** [Continue existing chats](docs/en/windows-example.md#existing) or [add specialist workspaces](docs/en/windows-example.md#agents), specify **[The actual work each workspace is responsible for]**, and start making progress.
 
-The README introduces the product. The Windows guide is the single detailed operating walkthrough, with copyable prompts and clearly marked input fields. Normal users do not need to run development maintenance tests to start a real project.
+The complete user manual provides directory examples, copyable prompts, MCP setup, and automation configuration. Follow its steps; you do not need to read engine source code or run development tests first.
 
-## Keep existing chats and task history
+## Expand gradually from local collaboration
 
-You do not need to abandon an ongoing conversation to connect its work.
+- **Organize the project on a schedule.** Configure a scheduled task in Codex or another host so governance reviews connected work, summarizes changes, and handles eligible updates. The host provides scheduling.
+- **Store results in private Git.** Push selected deliverables and project records to your own remote repository for traceability and recovery. Remote synchronization is configured separately and follows your authorization.
+- **Assign different tasks to different computers.** The manual suggests a workflow with independent task branches and one integration computer. It has not completed a real two-computer end-to-end validation; consider it after the local workflow is stable.
 
-**Original chat prepares an onboarding reply → send that reply and the handoff prompt together to governance → governance registers and verifies the actual binding → paste its continuation prompt back into the original chat.**
+## Technology and usage
 
-The reply covers the real directory, Git history, deliverables, unfinished work, decisions, and next step. It preserves the task and relevant history without copying an entire chat log into governance. The toolkit does not automatically scan every chat in the App.
+AGCT uses **Python 3.11+ and Git**, with your existing **Codex** providing AI capabilities. It includes a local execution engine, CLI, MCP interface, and four project Skills: setup, task delivery, governance reconciliation, and experience recovery. Its runtime uses the Python standard library and does not require a separate model service.
 
-If several original chats share one directory, keep one primary professional writer there. Move responsibilities that need parallel work into separate workspaces, preserving scoped WIP and continuation information before stopping the old writer for that scope. Different chat names do not create file or Git-index isolation.
+Each project has one local governance store and one baseline for receiving shared results. This supports independent task progress and orderly integration; concurrent writes and updates within the same workspace still need coordination. Recovery covers implemented and verified methods and cannot guarantee automatic resolution of every unknown failure. See [Architecture](docs/en/architecture.md) and [Operating scope](docs/RELEASE_BOUNDARIES.md) for implementation details.
 
-See [Connect existing chats](docs/en/windows-example.md#existing).
-
-## Add 1–n professional workspaces when needed
-
-Provide **[n: number of new professional workspaces this time]** and assign **[The actual project work each chat should own]**.
-
-Governance checks registered workspaces, continues their numbering, records this operation's target list, and prepares a filled-in prompt for each new workspace. If preparation is interrupted, it should reuse completed entries from that same list rather than adding another batch. You then create each chat, choose its listed folder, and paste its prompt.
-
-There is no preset department structure, demonstration business, or fixed three-chat team. Divide work by responsibilities or independent subtasks that actually need parallel progress. A new business task receives a new stable task identity; a transferred task retains its existing identity and evidence.
-
-See [Add professional workspaces](docs/en/windows-example.md#agents).
-
-## Optional extensions
-
-| Option | What it adds | Boundary |
-|---|---|---|
-| **Scheduled governance** | The host wakes the governance chat to inspect the currently registered tasks and workspaces, receive new stages, report changes, and perform applicable updates. | The host creates the schedule. AGCT is not a scheduler, and a saved prompt is not evidence of a successful run. |
-| **Private Git memory repository** | Preserve received deliverables and selected task notes through explicitly scoped commits and pushes. | Remote push is a separate operation. Git does not automatically capture uncommitted files, all chats, or the active control database. |
-| **Multiple computers** | Divide independent tasks across separate branches, with one integration computer receiving their work. | This procedure has not completed a real two-computer end-to-end validation. There is no distributed lock, automatic leader election, or automatic merge of local governance stores. |
-
-Start locally. Add scheduling when the workflow is clear, and add remote or multi-computer operations only when their real accounts, access, task scopes, and recovery arrangements are established.
-
-## Requirements and current limits
-
-The normal project workflow requires **Python 3.11+**, **Git**, and your existing **Codex** for model-assisted work. The toolkit runtime uses the Python standard library; no additional runtime Python dependency or model API subscription is introduced by AGCT itself. Git is required for Git-based checkpoint, intake, and adoption operations.
-
-The current public release supports one local control store and one receiving baseline per project. Its limits matter:
-
-- Toolkit locks serialize its own operations. They cannot prevent another editor, chat, or external Git command from writing the same target. Keep one primary writer per workspace and coordinate adoption.
-- Checkpoints capture selected saved files, not unsaved editor buffers, hidden conversation state, or a full repository mirror. Larger materials can be tracked by reference.
-- MCP setup generates a configuration fragment. A supported host configuration, project trust where required, and a successful tool call are still needed to establish the connection.
-- Task registration is not automatic discovery of every project, file, or chat. A paused task is not proof that a workspace has no active writer.
-- Experience recovery is conditional and limited to implemented actions. It does not execute arbitrary instructions from an experience record or repair Codex, Windows, or other host software.
-- Remote publishing, native permissions, external messaging, and multi-computer takeover remain explicit operations outside the local engine's automatic scope.
-
-This release is not a complete export of a private system or a claim that every failure can be repaired autonomously. Read [Release boundaries](docs/RELEASE_BOUNDARIES.md), [Operating principles](docs/OPERATING_PRINCIPLES.md), and [Security](SECURITY.md) before extending its scope.
-
-## Documentation in three languages
+## Documentation and participation
 
 | Document | English | 简体中文 | 繁體中文 |
 |---|---|---|---|
 | Product introduction | [README](README.md) | [项目介绍](README.zh-CN.md) | [專案介紹](README.zh-TW.md) |
-| Complete Windows workflow | [Guide](docs/en/windows-example.md) | [完整手册](docs/zh-CN/windows-example.md) | [完整手冊](docs/zh-TW/windows-example.md) |
-| Quick orientation | [Quick start](docs/en/getting-started.md) | [快速了解](docs/zh-CN/getting-started.md) | [快速瞭解](docs/zh-TW/getting-started.md) |
-| Workflow overview | [Overview](docs/en/operation-manual.md) | [操作总览](docs/zh-CN/operation-manual.md) | [操作總覽](docs/zh-TW/operation-manual.md) |
-| Private Git and multiple computers | [Guide](docs/en/remote-and-multicomputer.md) | [操作说明](docs/zh-CN/remote-and-multicomputer.md) | [操作說明](docs/zh-TW/remote-and-multicomputer.md) |
+| User manual | [Manual](docs/en/windows-example.md) | [完整手册](docs/zh-CN/windows-example.md) | [完整手冊](docs/zh-TW/windows-example.md) |
+| Quick orientation | [Overview](docs/en/getting-started.md) | [快速了解](docs/zh-CN/getting-started.md) | [快速瞭解](docs/zh-TW/getting-started.md) |
 | Architecture | [Architecture](docs/en/architecture.md) | [架构](docs/zh-CN/architecture.md) | [架構](docs/zh-TW/architecture.md) |
-| Offline interactive workflow | [Open](docs/index.html#en) | [打开](docs/index.html#zh-CN) | [開啟](docs/index.html#zh-TW) |
+| Private Git and multiple computers | [Guide](docs/en/remote-and-multicomputer.md) | [说明](docs/zh-CN/remote-and-multicomputer.md) | [說明](docs/zh-TW/remote-and-multicomputer.md) |
 
-[Package entrypoint](START_HERE.md) · [Command reference](docs/COMMANDS.md) · [Public Skills](skills)
+[CLI / MCP reference](docs/COMMANDS.md) · [Public Skills](skills) · [Contributing](https://github.com/bryan123466/agent-co-governance-toolkit/blob/main/CONTRIBUTING.md) · [Issues and suggestions](https://github.com/bryan123466/agent-co-governance-toolkit/issues)
 
-The three language versions describe the same public capabilities. Commands, field names, and supported boundaries stay consistent across translations.
+Share your use cases, ask questions, or contribute improvements. Before submitting feedback, remove project materials, personal paths, credentials, and sensitive runtime records; see the [Security guide](SECURITY.md). Version changes are recorded in [Releases](https://github.com/bryan123466/agent-co-governance-toolkit/releases).
 
-## License
+## Open-source license
 
-The independently authored public source, documentation, templates, and examples are available under [MIT](LICENSE), including commercial reuse under its terms. The license does not cover private projects that use or inspired this toolkit, or separately distributed implementations. Python, Git, Codex, and external services retain their own terms. See [License scope](LICENSE_SCOPE.md).
+The public source, documentation, templates, and examples use the [MIT](LICENSE) license, allowing use, modification, and commercial reuse under its terms. You retain control of the projects and materials you manage with the toolkit; this repository contains no private business project. Dependencies and services retain their own licenses and terms. See [License scope](LICENSE_SCOPE.md).

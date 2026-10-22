@@ -1,49 +1,47 @@
-# Architecture and workflow
+# How the toolkit keeps a project moving
 
 [简体中文](../zh-CN/architecture.md) · [繁體中文](../zh-TW/architecture.md) · [Home](../../README.md)
 
-Agent Co-Governance Toolkit keeps durable project state outside the model's conversation. One local core owns the records and mutations. A CLI, local MCP server, and project Skills present that core to people and Codex.
+When several Codex chats work on a project, each needs to know what to do next without losing its earlier work. Agent Co-Governance Toolkit gives them a shared set of task records and a governance chat that brings ready results together. Files and progress remain on your computer; the project does not depend on one chat remembering everything.
 
-## Components
+## Who does what
 
-| Component | Responsibility |
+You set the direction, divide responsibilities, and decide whether a result meets your needs. Professional chats work in their own registered directories. The governance chat uses AI to interpret their task records and deliverables, then calls the tools to save state, collect stages, and update workspaces.
+
+| Part | What it does for you |
 |---|---|
-| Core and store | Tasks, immutable selected-file snapshots, artifacts, scoped experience, events, current state |
-| Git integration | Frozen delivery validation, plans, local baseline integration, effect checks, workspace adoption |
-| CLI | JSON request files and machine-readable result envelopes |
-| MCP | Typed tools fixed to a configured project; no alternative execution engine |
-| Skills | When to record, deliver, reconcile, or inspect a failure; no new authority |
-| Optional scheduler | Invokes the existing workflow under the host's actual capabilities |
+| Task records | Keep the goal, current position, decisions, saved progress, and next step together. |
+| Git workspaces | Give parallel tasks separate working files and retain their change history. |
+| Receiving baseline | Hold the stages already collected into the shared project. |
+| CLI and MCP | Offer two ways to call the same local tools and records. |
+| Project Skills | Explain when and how the chats should save progress, deliver work, and handle a known problem. |
+| Optional host scheduling | Wake the governance chat at configured times to perform the same workflow. |
 
-Durable state lives under the configured project's `.agct` directory. Treat it and its snapshots as project data. It is not meant to be committed or copied into a public issue. Do not edit the database to force a successful result.
+## From unfinished work to the next stage
 
-## Work moves through explicit boundaries
+1. **Work on the task.** A professional chat uses its registered workspace and stable task record.
+2. **Save a useful pause point.** A checkpoint records selected files already saved to disk and where to continue. Within its selected scope, a Git checkpoint keeps the committed version, staged changes, working files, and new files distinguishable.
+3. **Offer a ready stage.** The chat identifies the Git commit, its starting commit, and the complete changed-path list. Later edits in that workspace do not silently change the offered stage.
+4. **Bring it into the shared project.** Governance prepares a plan against the current receiving baseline, checks its scope, and executes it. If the baseline changes first, it prepares a new plan using the current facts.
+5. **Update workspaces that are ready.** A separate update plan preserves supported local work. A busy workspace or a concrete conflict keeps its own next step while other independent tasks continue.
+6. **Continue.** The records show what was collected, what is still in progress, and what should happen next. You still decide whether the result satisfies the business or professional requirements.
 
-1. A worker records a task and works in a registered Git workspace.
-2. At a pause or useful boundary it records a checkpoint of exact selected saved files. Git snapshots preserve distinctions between HEAD, index, worktree bytes, and untracked files where covered.
-3. A stable stage is explicitly delivered with a commit, base commit, and exact changed paths. Mutable workspace contents are not the frozen delivery.
-4. Governance plans against an exact baseline HEAD. An execution request names the persisted plan. Changed prerequisites require a new plan, not broad reapproval of the business goal.
-5. Integration verifies actual Git effects and records terminal results. On interruption, the next call checks those effects before considering missing steps.
-6. A separate adoption plan updates a registered worktree if its current local work can be preserved. A conflict is reported for that workspace rather than reinterpreted as a failure of every task.
+## Keep history without repeating old work
 
-Technical acceptance never certifies business meaning, regulatory compliance, or customer approval.
+A pause remains a pause; an unchanged task does not become new backlog on every run. Old stages remain traceable after a newer cumulative stage replaces them. Before replacing one, the tools require evidence that the newer stage belongs to the same task and registered workspace, descends from the earlier commit, and covers its changed paths. A newer filename or date alone is not enough; independent results remain separate.
 
-## Iteration and history
+After an interrupted operation, governance checks what actually happened before continuing. It reuses valid records and completes only the missing steps supported by the tools, rather than assuming that a missing reply means the whole operation failed.
 
-Independent stages remain independent. A cumulative stage must explicitly identify what it supersedes, stay in the same task, prove ancestor relationships, and cover the earlier changed paths. A timestamp, version label, or similar filename is insufficient proof.
+## Reuse experience where it applies
 
-History remains available after supersession; it does not automatically remain in the actionable queue. Paused or unchanged work remains a current state, not a repeatedly escalating backlog. Do not infer that a user abandoned a task merely because no new instruction arrived.
+An experience record describes a known problem and an available recovery action. The tools check its failure code, operation, version, task scope, and enabled state before applying it. This can help with a repeated problem under matching conditions. It does not turn a written note into a new repair capability or execute arbitrary scripts from that note.
 
-## Experience must affect action
+For an unfamiliar problem, governance explains the concrete obstacle and next step. A general prevention fix still requires a change to the shared software and verification before it is installed; recording experience alone does not install that fix or guarantee that the model will select it.
 
-An experience rule contains a failure code, operation, supported version, optional task scope, enabled flag, and a supported recovery action. Matching similar prose is not enough. In this RC the allowed actions are bounded tool behaviors, not shell scripts supplied by an experience record.
+## Where the records live
 
-Known recovery still verifies current prerequisites. Stale, disabled, unsupported-version, and wrong-task rules must not authorize an action. An unfamiliar issue is retained with a concrete next step. It is not relabeled solved because an explanation was written.
+The project's `.agct` directory stores its task database, events, experience records, and selected-file snapshots. Keep these as project data, with suitable backups. Do not publish the database or edit it to make an incomplete operation look successful.
 
-Source-level prevention follows a separate maintenance step: reproduce with synthetic data, change the shared implementation, run regression coverage, then release it. Saving an experience record alone does not install a patch or prove the model will use it.
+The tools run locally on one computer. Separate worktrees support parallel tasks; multi-computer work needs the explicit branch-based handoff described in the manual. The toolkit does not provide distributed locks, automatic remote push or deployment, or guaranteed recovery of effects in external services.
 
-## Boundaries
-
-The RC is local and single-host. Local worktrees can represent parallel task streams. It does not implement distributed leases, multi-host consensus, remote Git push, deployment, or cross-chat scheduling. A local operation journal cannot guarantee exactly-once effects in arbitrary external services.
-
-No agent can obtain additional native permissions by writing a project rule. The model is provided by the user's Codex environment; this toolkit does not train a model or hide a second required inference service.
+AI comes from your Codex environment. The toolkit does not train a model or require its own model API. Skills do not grant extra permissions; Codex connections and scheduling are enabled through the host's supported settings. See [practical capabilities and limits](../RELEASE_BOUNDARIES.md).
