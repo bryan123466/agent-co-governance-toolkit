@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="810" viewBox="0 0 1200 810" role="img" aria-labelledby="title description" xml:lang="zh-CN">
+<title id="title">一个治理闭环，多个专业工作区</title>
+<desc id="description">用户目标指导治理 Codex AI。CLI 与 MCP 使用同一引擎。专业工作区可保存检查点，也可提交明确的稳定阶段。核验接收后形成本地基线，按需采用并保全本地工作。具名恢复核验实际效果；未能确定的决策可能需要用户动作。</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#47717e"/></marker></defs>
+<rect width="1200" height="810" rx="16" fill="#f4f7f7"/>
+<g font-family="Segoe UI, Noto Sans CJK SC, Microsoft JhengHei, Microsoft YaHei, sans-serif">
+<text x="40" y="46" font-size="29" font-weight="700" fill="#183044">一个治理闭环，多个专业工作区</text>
+<text x="40" y="76" font-size="18" fill="#536979">Codex 理解工作；同一本地引擎核验限定范围的操作，并记录实际效果。</text>
+<rect x="40" y="108" width="270" height="110" rx="12" fill="#ffffff" stroke="#b8cdd3"/>
+<text x="175" y="139" text-anchor="middle" font-size="20" font-weight="650" fill="#183044">用户目标</text>
+<text x="175" y="171" text-anchor="middle" font-size="15.5" fill="#536979">优先级、决策与授权</text>
+<rect x="355" y="108" width="410" height="110" rx="12" fill="#143546" stroke="#143546"/>
+<text x="560" y="139" text-anchor="middle" font-size="20" font-weight="650" fill="#ffffff">治理 Codex AI</text>
+<text x="560" y="171" text-anchor="middle" font-size="15.5" fill="#d7e6ed">理解任务关系，判断下一步</text>
+<text x="560" y="194" text-anchor="middle" font-size="15.5" fill="#d7e6ed">Skills 提供方法，权限仍须明确</text>
+<rect x="810" y="108" width="350" height="110" rx="12" fill="#143546" stroke="#143546"/>
+<text x="985" y="139" text-anchor="middle" font-size="20" font-weight="650" fill="#ffffff">CLI / MCP → 共享引擎</text>
+<text x="985" y="171" text-anchor="middle" font-size="15.5" fill="#d7e6ed">本地状态 · 范围核验 · 计划 · 回执</text>
+<rect x="40" y="290" width="195" height="140" rx="12" fill="#ffffff" stroke="#b8cdd3"/>
+<text x="137.5" y="321" text-anchor="middle" font-size="20" font-weight="650" fill="#183044">专业工作区 1..n</text>
+<text x="137.5" y="353" text-anchor="middle" font-size="15.5" fill="#536979">推进已登记任务</text>
+<text x="137.5" y="376" text-anchor="middle" font-size="15.5" fill="#536979">保留本地工作</text>
+<rect x="270" y="290" width="195" height="140" rx="12" fill="#ffffff" stroke="#b8cdd3"/>
+<text x="367.5" y="321" text-anchor="middle" font-size="20" font-weight="650" fill="#183044">稳定交付</text>
+<text x="367.5" y="353" text-anchor="middle" font-size="15.5" fill="#536979">精确冻结 Git 变化</text>
+<text x="367.5" y="376" text-anchor="middle" font-size="15.5" fill="#536979">明确任务与范围</text>
+<rect x="500" y="290" width="195" height="140" rx="12" fill="#143546" stroke="#143546"/>
+<text x="597.5" y="321" text-anchor="middle" font-size="20" font-weight="650" fill="#ffffff">计划与接收</text>
+<text x="597.5" y="353" text-anchor="middle" font-size="15.5" fill="#d7e6ed">核对当前执行条件</text>
+<text x="597.5" y="376" text-anchor="middle" font-size="15.5" fill="#d7e6ed">验证实际发生的效果</text>
+<rect x="730" y="290" width="195" height="140" rx="12" fill="#143546" stroke="#143546"/>
+<text x="827.5" y="321" text-anchor="middle" font-size="20" font-weight="650" fill="#ffffff">已接收基线</text>
+<text x="827.5" y="353" text-anchor="middle" font-size="15.5" fill="#d7e6ed">记录技术接收回执</text>
+<text x="827.5" y="376" text-anchor="middle" font-size="15.5" fill="#d7e6ed">保留阶段历史</text>
+<rect x="960" y="290" width="200" height="140" rx="12" fill="#ffffff" stroke="#b8cdd3"/>
+<text x="1060" y="321" text-anchor="middle" font-size="20" font-weight="650" fill="#183044">按需采用</text>
+<text x="1060" y="353" text-anchor="middle" font-size="15.5" fill="#536979">计划工作区更新</text>
+<text x="1060" y="376" text-anchor="middle" font-size="15.5" fill="#536979">保全 WIP 或报告冲突</text>
+<rect x="40" y="520" width="330" height="118" rx="12" fill="#fff7e6" stroke="#d8c69d"/>
+<text x="205" y="551" text-anchor="middle" font-size="20" font-weight="650" fill="#183044">检查点 / 当前状态</text>
+<text x="205" y="583" text-anchor="middle" font-size="15.5" fill="#536979">保存工作与下一步，包含暂停中的工作</text>
+<text x="205" y="606" text-anchor="middle" font-size="15.5" fill="#536979">与待接收交付队列分别管理</text>
+<rect x="415" y="520" width="475" height="118" rx="12" fill="#fff7e6" stroke="#d8c69d"/>
+<text x="652.5" y="551" text-anchor="middle" font-size="20" font-weight="650" fill="#183044">具名、有界恢复</text>
+<text x="652.5" y="583" text-anchor="middle" font-size="15.5" fill="#536979">匹配规则，核验已经发生的效果</text>
+<text x="652.5" y="606" text-anchor="middle" font-size="15.5" fill="#536979">只接续已实现恢复路径中的缺步</text>
+<rect x="935" y="520" width="225" height="118" rx="12" fill="#fff7e6" stroke="#d8c69d"/>
+<text x="1047.5" y="551" text-anchor="middle" font-size="20" font-weight="650" fill="#183044">必要时由用户动作</text>
+<text x="1047.5" y="583" text-anchor="middle" font-size="15.5" fill="#536979">业务决策或授权</text>
+<text x="1047.5" y="606" text-anchor="middle" font-size="15.5" fill="#536979">仍无法确定的事项</text>
+<text x="617" y="479" font-size="15.5" fill="#536979">出现缺步时</text>
+<g fill="none" stroke="#47717e" stroke-width="2" marker-end="url(#arrow)">
+<path d="M310 163H355"/>
+<path d="M765 163H810"/>
+<path d="M985 218V252H597.5V290"/>
+<path d="M235 360H270"/>
+<path d="M465 360H500"/>
+<path d="M695 360H730"/>
+<path d="M925 360H960"/>
+<path d="M137.5 430V520"/>
+<path d="M597.5 430V520"/>
+<path d="M890 579H935"/>
+<path d="M1160 360H1180V676H20V360H40"/>
+</g>
+<text x="600" y="704" text-anchor="middle" font-size="17" fill="#536979">需要时将已接收进度带回专业工作区，继续推进任务。</text>
+<rect x="40" y="728" width="1120" height="64" rx="9" fill="#e4f2ef"/>
+<text x="60" y="753" font-size="17" fill="#285851">检查点 ≠ 交付 ≠ 业务批准；定时触发由宿主平台提供。</text>
+<text x="60" y="777" font-size="17" fill="#285851">自动恢复仅覆盖已实现的具名规则，不承诺任意故障自动修复。</text>
+</g></svg>

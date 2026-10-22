@@ -1,6 +1,6 @@
 # Quick orientation: describe the project and let governance connect it
 
-[Complete Windows workflow](windows-example.md) · [Overview and options](operation-manual.md) · [中文](../zh-CN/getting-started.md)
+[Complete Windows workflow](windows-example.md) · [Overview and options](operation-manual.md) · [简体中文](../zh-CN/getting-started.md) · [繁體中文](../zh-TW/getting-started.md)
 
 Open the [complete Windows workflow](windows-example.md). It is the primary installation and operating guide. This page explains the same onboarding path without introducing another set of commands or prompts.
 

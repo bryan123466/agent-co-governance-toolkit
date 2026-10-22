@@ -17,18 +17,23 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from agct import __version__
 
-ROOT_FILES = {"README.md", "README.zh-CN.md", "START_HERE.md", "LICENSE", "LICENSE_SCOPE.md", "SECURITY.md", "CONTRIBUTING.md", "pyproject.toml", "setup.py", ".gitignore", ".gitattributes", "AGENTS.md"}
+ROOT_FILES = {"README.md", "README.zh-CN.md", "README.zh-TW.md", "START_HERE.md", "LICENSE", "LICENSE_SCOPE.md", "SECURITY.md", "CONTRIBUTING.md", "pyproject.toml", "setup.py", ".gitignore", ".gitattributes", "AGENTS.md"}
 DIRECTORIES = {"agct", "skills", "docs", "templates", "examples", "tests", "scripts", ".github"}
 EXTENSIONS = {".py", ".md", ".json", ".toml", ".html", ".css", ".js", ".yaml", ".yml", ".txt", ".svg", ".csv"}
+# This illustrative redraw was visually reviewed; original project screenshots
+# are not allowed. A changed or additional binary must be reviewed explicitly.
+REVIEWED_BINARY_ASSETS = {
+    "docs/assets/workspace-sidebar-example.png": "dfc75af11cf1a2950f16479b70e95346b97fb0a06f73fc0fbdfca6dbacfaee22",
+}
 EXCLUDED = {"__pycache__", ".agct", ".venv", ".git", "node_modules", "dist", "build", "local"}
 SKILLS = {"agct-project-setup", "agct-task-delivery", "agct-governance-reconcile", "agct-experience-recovery"}
-REQUIRED = {"docs/VALIDATION.md", "docs/VALIDATION_RESULTS.json", "README.md", "README.zh-CN.md", "LICENSE", "LICENSE_SCOPE.md", "pyproject.toml", "setup.py"}
+REQUIRED = {"docs/VALIDATION.md", "docs/VALIDATION_RESULTS.json", "README.md", "README.zh-CN.md", "README.zh-TW.md", "LICENSE", "LICENSE_SCOPE.md", "pyproject.toml", "setup.py"}
 # Deliberately invalid path in a public traversal-rejection test fixture.
 SYNTHETIC_ABSOLUTE_LITERALS = {"C:/outside.txt"}
 # Reviewed public tutorial root, permitted only in the named example resources.
 # This does not permit real user paths, traversal, another drive, or secrets.
 SYNTHETIC_EXAMPLE_FILES = {
-    "docs/en/windows-example.md", "docs/zh-CN/windows-example.md",
+    "docs/en/windows-example.md", "docs/zh-CN/windows-example.md", "docs/zh-TW/windows-example.md",
     "examples/windows_quickstart/bootstrap.py",
 }
 # The documented fresh-install example must be runnable from the archive.
@@ -84,7 +89,8 @@ def files():
             if linked(path) or not path.is_file():
                 continue
             relative = path.relative_to(ROOT)
-            if relative.as_posix() in ROOT_FILES or (relative.parts[0] in DIRECTORIES and path.suffix.lower() in EXTENSIONS):
+            if (relative.as_posix() in ROOT_FILES or relative.as_posix() in REVIEWED_BINARY_ASSETS
+                    or (relative.parts[0] in DIRECTORIES and path.suffix.lower() in EXTENSIONS)):
                 selected.append(path)
     return sorted(selected)
 
@@ -95,6 +101,10 @@ def screen_content(contents, deny_tokens=()):
     findings = []
     absolute_pattern = re.compile(r'''(?<![A-Za-z0-9_])(?:[A-Za-z]:[\\/])[^"'`\s<>()\[\]{},;]*''')
     for name, content in contents.items():
+        if name in REVIEWED_BINARY_ASSETS:
+            if sha(content) != REVIEWED_BINARY_ASSETS[name] or not content.startswith(b"\x89PNG\r\n\x1a\n"):
+                findings.append({"path": name, "kind": "reviewed_asset_changed"})
+            continue
         try:
             text = content.decode("utf-8-sig")
         except UnicodeError:
@@ -193,7 +203,7 @@ def product_contents(contents):
     result = {name: data for name, data in contents.items()
               if name not in excluded_files and not name.startswith(excluded_prefixes)}
     required = {"START_HERE.md", "docs/en/getting-started.md", "docs/zh-CN/getting-started.md",
-                "docs/en/windows-example.md", "docs/zh-CN/windows-example.md",
+                "docs/en/windows-example.md", "docs/zh-CN/windows-example.md", "docs/zh-TW/windows-example.md",
                 "examples/windows_quickstart/bootstrap.py"}
     if not required.issubset(result):
         raise RuntimeError("Product package needs complete project onboarding documentation")

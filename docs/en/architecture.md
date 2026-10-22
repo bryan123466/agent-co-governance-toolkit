@@ -1,6 +1,6 @@
 # Architecture and workflow
 
-[中文](../zh-CN/architecture.md) · [Home](../../README.md)
+[简体中文](../zh-CN/architecture.md) · [繁體中文](../zh-TW/architecture.md) · [Home](../../README.md)
 
 Agent Co-Governance Toolkit keeps durable project state outside the model's conversation. One local core owns the records and mutations. A CLI, local MCP server, and project Skills present that core to people and Codex.
 

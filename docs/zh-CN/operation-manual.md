@@ -1,6 +1,6 @@
 # 操作总览与配置选项
 
-[Windows 完整操作流程](windows-example.md) · [English](../en/operation-manual.md) · [产品首页](../../README.zh-CN.md) · [命令参考](../COMMANDS.md)
+[Windows 完整操作流程](windows-example.md) · [English](../en/operation-manual.md) · [繁體中文](../zh-TW/operation-manual.md) · [产品首页](../../README.zh-CN.md) · [命令参考](../COMMANDS.md)
 
 适用版本：0.2.0rc1。**完整操作、目录和可复制提示词统一以 [Windows 主手册](windows-example.md)为准。** 本页解释工作流与选项，不再提供另一套重复安装流程。
 

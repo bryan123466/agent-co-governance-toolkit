@@ -1,6 +1,6 @@
 # Workflow overview and configuration choices
 
-[Complete Windows workflow](windows-example.md) · [中文](../zh-CN/operation-manual.md) · [Product home](../../README.md) · [Command reference](../COMMANDS.md)
+[Complete Windows workflow](windows-example.md) · [简体中文](../zh-CN/operation-manual.md) · [繁體中文](../zh-TW/operation-manual.md) · [Product home](../../README.md) · [Command reference](../COMMANDS.md)
 
 Applies to 0.2.0rc1. **Use the [Windows walkthrough](windows-example.md) as the single detailed source for steps, directories and copyable prompts.** This page explains the workflow and choices rather than supplying a second installation procedure.
 

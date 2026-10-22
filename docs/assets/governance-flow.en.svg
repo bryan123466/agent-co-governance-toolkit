@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="810" viewBox="0 0 1200 810" role="img" aria-labelledby="title description" xml:lang="en">
+<title id="title">One governance loop, many professional workspaces</title>
+<desc id="description">User goals guide governance Codex AI. CLI and MCP use one engine. Professional workspaces can save checkpoints or submit exact stable stages. Reconciliation produces a verified local baseline, adopted as needed while preserving local work. Named recovery verifies effects; unresolved decisions may require user action.</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#47717e"/></marker></defs>
+<rect width="1200" height="810" rx="16" fill="#f4f7f7"/>
+<g font-family="Segoe UI, Noto Sans CJK SC, Microsoft JhengHei, Microsoft YaHei, sans-serif">
+<text x="40" y="46" font-size="29" font-weight="700" fill="#183044">One governance loop, many professional workspaces</text>
+<text x="40" y="76" font-size="18" fill="#536979">Codex interprets the work; one local engine verifies scoped operations and records their effects.</text>
+<rect x="40" y="108" width="270" height="110" rx="12" fill="#ffffff" stroke="#b8cdd3"/>
+<text x="175" y="139" text-anchor="middle" font-size="20" font-weight="650" fill="#183044">User goals</text>
+<text x="175" y="171" text-anchor="middle" font-size="15.5" fill="#536979">Priorities, decisions, authorization</text>
+<rect x="355" y="108" width="410" height="110" rx="12" fill="#143546" stroke="#143546"/>
+<text x="560" y="139" text-anchor="middle" font-size="20" font-weight="650" fill="#ffffff">Governance Codex AI</text>
+<text x="560" y="171" text-anchor="middle" font-size="15.5" fill="#d7e6ed">Understand task relationships and choose next steps</text>
+<text x="560" y="194" text-anchor="middle" font-size="15.5" fill="#d7e6ed">Skills guide the workflow; authority stays explicit</text>
+<rect x="810" y="108" width="350" height="110" rx="12" fill="#143546" stroke="#143546"/>
+<text x="985" y="139" text-anchor="middle" font-size="20" font-weight="650" fill="#ffffff">CLI / MCP → shared engine</text>
+<text x="985" y="171" text-anchor="middle" font-size="15.5" fill="#d7e6ed">Local state · scope checks · plans · receipts</text>
+<rect x="40" y="290" width="195" height="140" rx="12" fill="#ffffff" stroke="#b8cdd3"/>
+<text x="137.5" y="321" text-anchor="middle" font-size="20" font-weight="650" fill="#183044">Professional</text>
+<text x="137.5" y="346" text-anchor="middle" font-size="20" font-weight="650" fill="#183044">workspaces 1..n</text>
+<text x="137.5" y="378" text-anchor="middle" font-size="15.5" fill="#536979">Work on registered tasks</text>
+<text x="137.5" y="401" text-anchor="middle" font-size="15.5" fill="#536979">Preserve local work</text>
+<rect x="270" y="290" width="195" height="140" rx="12" fill="#ffffff" stroke="#b8cdd3"/>
+<text x="367.5" y="321" text-anchor="middle" font-size="20" font-weight="650" fill="#183044">Stable delivery</text>
+<text x="367.5" y="353" text-anchor="middle" font-size="15.5" fill="#536979">Exact frozen Git delta</text>
+<text x="367.5" y="376" text-anchor="middle" font-size="15.5" fill="#536979">Task + explicit scope</text>
+<rect x="500" y="290" width="195" height="140" rx="12" fill="#143546" stroke="#143546"/>
+<text x="597.5" y="321" text-anchor="middle" font-size="20" font-weight="650" fill="#ffffff">Plan &amp; reconcile</text>
+<text x="597.5" y="353" text-anchor="middle" font-size="15.5" fill="#d7e6ed">Check current conditions</text>
+<text x="597.5" y="376" text-anchor="middle" font-size="15.5" fill="#d7e6ed">Verify actual effects</text>
+<rect x="730" y="290" width="195" height="140" rx="12" fill="#143546" stroke="#143546"/>
+<text x="827.5" y="321" text-anchor="middle" font-size="20" font-weight="650" fill="#ffffff">Accepted baseline</text>
+<text x="827.5" y="353" text-anchor="middle" font-size="15.5" fill="#d7e6ed">Record technical receipt</text>
+<text x="827.5" y="376" text-anchor="middle" font-size="15.5" fill="#d7e6ed">Keep stage history</text>
+<rect x="960" y="290" width="200" height="140" rx="12" fill="#ffffff" stroke="#b8cdd3"/>
+<text x="1060" y="321" text-anchor="middle" font-size="20" font-weight="650" fill="#183044">Adopt as needed</text>
+<text x="1060" y="353" text-anchor="middle" font-size="15.5" fill="#536979">Plan workspace update</text>
+<text x="1060" y="376" text-anchor="middle" font-size="15.5" fill="#536979">Keep WIP; flag conflict</text>
+<rect x="40" y="520" width="330" height="118" rx="12" fill="#fff7e6" stroke="#d8c69d"/>
+<text x="205" y="551" text-anchor="middle" font-size="20" font-weight="650" fill="#183044">Checkpoint / current state</text>
+<text x="205" y="583" text-anchor="middle" font-size="15.5" fill="#536979">Saved work + next step, including pauses</text>
+<text x="205" y="606" text-anchor="middle" font-size="15.5" fill="#536979">Separate from the delivery queue</text>
+<rect x="415" y="520" width="475" height="118" rx="12" fill="#fff7e6" stroke="#d8c69d"/>
+<text x="652.5" y="551" text-anchor="middle" font-size="20" font-weight="650" fill="#183044">Named, bounded recovery</text>
+<text x="652.5" y="583" text-anchor="middle" font-size="15.5" fill="#536979">Match rule and verify existing effect</text>
+<text x="652.5" y="606" text-anchor="middle" font-size="15.5" fill="#536979">Resume only the implemented missing step</text>
+<rect x="935" y="520" width="225" height="118" rx="12" fill="#fff7e6" stroke="#d8c69d"/>
+<text x="1047.5" y="551" text-anchor="middle" font-size="20" font-weight="650" fill="#183044">User action if needed</text>
+<text x="1047.5" y="583" text-anchor="middle" font-size="15.5" fill="#536979">Decisions or authorization</text>
+<text x="1047.5" y="606" text-anchor="middle" font-size="15.5" fill="#536979">Unresolved uncertainty</text>
+<text x="617" y="479" font-size="15.5" fill="#536979">If incomplete</text>
+<g fill="none" stroke="#47717e" stroke-width="2" marker-end="url(#arrow)">
+<path d="M310 163H355"/>
+<path d="M765 163H810"/>
+<path d="M985 218V252H597.5V290"/>
+<path d="M235 360H270"/>
+<path d="M465 360H500"/>
+<path d="M695 360H730"/>
+<path d="M925 360H960"/>
+<path d="M137.5 430V520"/>
+<path d="M597.5 430V520"/>
+<path d="M890 579H935"/>
+<path d="M1160 360H1180V676H20V360H40"/>
+</g>
+<text x="600" y="704" text-anchor="middle" font-size="17" fill="#536979">Adoption brings accepted progress back to professional workspaces when appropriate.</text>
+<rect x="40" y="728" width="1120" height="64" rx="9" fill="#e4f2ef"/>
+<text x="60" y="753" font-size="17" fill="#285851">Checkpoint ≠ delivery ≠ business approval. Scheduled triggers belong to the host platform.</text>
+<text x="60" y="777" font-size="17" fill="#285851">Automatic recovery covers implemented named rules; it does not promise arbitrary self-repair.</text>
+</g></svg>

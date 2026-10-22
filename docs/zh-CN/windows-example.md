@@ -1,6 +1,6 @@
 # Windows 操作手册：接入一个现实项目
 
-[English](../en/windows-example.md) · [操作总览](operation-manual.md) · [快速入门](getting-started.md) · [命令参考](../COMMANDS.md)
+[English](../en/windows-example.md) · [繁體中文](../zh-TW/windows-example.md) · [操作总览](operation-manual.md) · [快速入门](getting-started.md) · [命令参考](../COMMANDS.md)
 
 [准备项目](#choose) · [安装](#install) · [治理窗口](#governance) · [专业窗口](#agents) · [MCP 与 CLI](#mcp) · [首次盘点](#delivery) · [自动化](#automation) · [私有 Git](#private-git) · [多电脑](#multi-computer) · [完成核对](#check)
 

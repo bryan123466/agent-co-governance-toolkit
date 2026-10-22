@@ -1,6 +1,6 @@
 # 架构与工作流
 
-[English](../en/architecture.md) · [首页](../../README.zh-CN.md)
+[English](../en/architecture.md) · [繁體中文](../zh-TW/architecture.md) · [首页](../../README.zh-CN.md)
 
 Agent Co-Governance Toolkit 把持久项目状态保存在模型聊天之外。本地内核统一负责记录和变更，CLI、本地 MCP 与项目 Skills 将同一内核提供给用户和 Codex。
 

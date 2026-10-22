@@ -1,6 +1,6 @@
 # 快速了解：给出项目介绍，由治理接入
 
-[Windows 完整流程](windows-example.md) · [总览与选项](operation-manual.md) · [English](../en/getting-started.md)
+[Windows 完整流程](windows-example.md) · [总览与选项](operation-manual.md) · [English](../en/getting-started.md) · [繁體中文](../zh-TW/getting-started.md)
 
 直接打开 [Windows 完整操作流程](windows-example.md)。它是安装与操作的主入口；本页只说明这条接入流程，不重复另一套命令或提示词。
 

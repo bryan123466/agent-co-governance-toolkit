@@ -1,5 +1,6 @@
 """Permit the named public tutorial without opening arbitrary host paths."""
 import unittest
+from pathlib import Path
 
 from scripts.build_trial import reviewed_example_path, screen_content
 
@@ -7,7 +8,7 @@ from scripts.build_trial import reviewed_example_path, screen_content
 class ExampleReleaseScreenTests(unittest.TestCase):
     def test_only_named_tutorial_resources_allow_the_synthetic_root(self):
         root = "C:" + "/CoGov"
-        for name in ("docs/en/windows-example.md", "docs/zh-CN/windows-example.md",
+        for name in ("docs/en/windows-example.md", "docs/zh-CN/windows-example.md", "docs/zh-TW/windows-example.md",
                      "examples/windows_quickstart/bootstrap.py"):
             for path in (root, root + "/runtime/Scripts/python.exe", root + "/control/"):
                 with self.subTest(name=name, path=path):
@@ -56,6 +57,15 @@ class ExampleReleaseScreenTests(unittest.TestCase):
                            ["PRIVATE_TOKEN"])
         with self.assertRaises(RuntimeError):
             screen_content({"docs/en/windows-example.md": (root + " sk-" + "a" * 40).encode()})
+
+    def test_reviewed_image_cannot_be_replaced_or_allow_other_binary_assets(self):
+        name = "docs/assets/workspace-sidebar-example.png"
+        content = (Path(__file__).resolve().parents[1] / name).read_bytes()
+        screen_content({name: content})
+        with self.assertRaisesRegex(RuntimeError, "reviewed_asset_changed"):
+            screen_content({name: content + b"unreviewed change"})
+        with self.assertRaisesRegex(RuntimeError, "unexpected_binary"):
+            screen_content({"docs/assets/unreviewed.png": content})
 
 
 if __name__ == "__main__":

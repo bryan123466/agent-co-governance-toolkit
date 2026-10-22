@@ -2,7 +2,7 @@
 
 Windows users can follow the [fixed-path walkthrough](windows-example.md) with ready-to-paste commands and prompts. The general reference below remains configurable.
 
-[Operation manual](operation-manual.md) · [中文](../zh-CN/remote-and-multicomputer.md) · [Command reference](../COMMANDS.md)
+[Operation manual](operation-manual.md) · [简体中文](../zh-CN/remote-and-multicomputer.md) · [繁體中文](../zh-TW/remote-and-multicomputer.md) · [Command reference](../COMMANDS.md)
 
 Applies to 0.2.0rc1. These are optional reference procedures, not daily tasks required after installation. The cross-computer procedure has not been validated end to end on two physical computers. It combines Git operations with the existing local AGCT interface; it does not add automatic cross-host synchronization or recovery.
 

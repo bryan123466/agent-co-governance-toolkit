@@ -2,7 +2,7 @@
 
 Windows 用户可以直接跟随[固定目录完整示例](windows-example.md)，复制配套命令与提示词；以下通用说明仍适用于自定义目录。
 
-[返回操作手册](operation-manual.md) · [English](../en/remote-and-multicomputer.md) · [命令参考](../COMMANDS.md)
+[返回操作手册](operation-manual.md) · [English](../en/remote-and-multicomputer.md) · [繁體中文](../zh-TW/remote-and-multicomputer.md) · [命令参考](../COMMANDS.md)
 
 适用版本：0.2.0rc1。这两章是按需要启用的参考流程，不是安装后每天必须执行的任务。下述跨电脑流程尚未经过两台实体电脑的端到端验证；它组合了 Git 操作与现有本地 AGCT 接口，没有新增跨机同步或自动恢复能力。
 

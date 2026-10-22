@@ -1,6 +1,6 @@
 # Windows guide: connect a real project
 
-[中文](../zh-CN/windows-example.md) · [Operating overview](operation-manual.md) · [Quick start](getting-started.md) · [Command reference](../COMMANDS.md)
+[简体中文](../zh-CN/windows-example.md) · [繁體中文](../zh-TW/windows-example.md) · [Operating overview](operation-manual.md) · [Quick start](getting-started.md) · [Command reference](../COMMANDS.md)
 
 [Prepare the project](#choose) · [Install](#install) · [Governance chat](#governance) · [Professional chats](#agents) · [MCP and CLI](#mcp) · [First review](#delivery) · [Automation](#automation) · [Private Git](#private-git) · [Multiple computers](#multi-computer) · [Completion check](#check)
 
