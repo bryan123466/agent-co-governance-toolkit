@@ -16,9 +16,13 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
         python: ['3.11', '3.12']
     runs-on: ${{ matrix.os }}
-    env:
-      TMPDIR: ${{ runner.temp }}
     steps:
+      - name: Use runner temporary directory
+        shell: python
+        run: |
+          import os
+          with open(os.environ['GITHUB_ENV'], 'a', encoding='utf-8') as environment_file:
+              environment_file.write('TMPDIR=' + os.environ['RUNNER_TEMP'] + '\n')
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
