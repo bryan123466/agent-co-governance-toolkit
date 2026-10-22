@@ -1,0 +1,3 @@
+action_id,inspection_id,proposed_action,effectiveness_evidence,state
+DEMO-A-001,DEMO-I-001,review handling surface,,proposed
+DEMO-A-002,DEMO-I-003,check label guide alignment,,proposed

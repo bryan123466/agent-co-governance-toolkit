@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Quality Record · Fictional Workshop</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">Fictional workshop / synthetic prototype</p>
+      <h1>Quality record</h1>
+      <p>Record an observation, its investigation, and the evidence needed to close it.</p>
+    </header>
+    <aside class="notice">Use invented data only. This local preview does not save a record, submit work, or approve a quality decision.</aside>
+    <div class="layout">
+      <section class="card" aria-labelledby="form-title">
+        <h2 id="form-title">Record details</h2>
+        <p class="hint">All fields are required except resolution and reviewer, which depend on status.</p>
+        <form id="quality-form" novalidate>
+          <div id="errors" class="errors" role="alert" tabindex="-1" hidden></div>
+          <div class="field-grid">
+            <label>Record ID<input name="id" required autocomplete="off" placeholder="DEMO-Q-001"></label>
+            <label>Date<input name="date" type="date" required></label>
+            <label>Area<input name="area" required autocomplete="off" placeholder="Demo finishing area"></label>
+            <label>Severity<select name="severity" required><option value="">Choose severity</option><option value="minor">Minor</option><option value="major">Major</option><option value="critical">Critical</option></select></label>
+            <label class="wide">Description<textarea name="description" rows="3" required placeholder="Describe the fictional observation."></textarea></label>
+            <label>Owner<input name="owner" required autocomplete="off" placeholder="Demo owner"></label>
+            <label>Status<select name="status" required><option value="open">Open</option><option value="investigating">Investigating</option><option value="resolved">Resolved</option><option value="closed">Closed</option></select></label>
+            <label class="wide">Resolution<textarea name="resolution" rows="3" aria-describedby="status-help" placeholder="Describe the action and supporting evidence."></textarea></label>
+            <label class="wide">Reviewer<input name="reviewer" autocomplete="off" aria-describedby="status-help" placeholder="Fictional reviewer identifier"></label>
+          </div>
+          <p id="status-help" class="hint">Resolved requires a resolution. Closed requires both a resolution and a reviewer.</p>
+          <div class="actions"><button type="submit">Validate and preview</button><button type="reset" class="secondary">Clear form</button></div>
+        </form>
+      </section>
+      <section class="card preview" aria-labelledby="preview-title">
+        <p class="eyebrow">Local record preview</p><h2 id="preview-title">Check before delivery</h2>
+        <p id="feedback" role="status" aria-live="polite">No record has been validated.</p>
+        <pre id="record-preview" aria-label="Validated record as JSON">{}</pre>
+        <p class="hint">Preview text is rendered as text, never as HTML. Refreshing this page clears its in-memory state.</p>
+      </section>
+    </div>
+    <footer>Prototype validation is separate from a real investigation, review, or production acceptance.</footer>
+  </main>
+</body>
+</html>

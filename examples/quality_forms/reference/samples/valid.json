@@ -1,0 +1,8 @@
+{
+  "cases": [
+    {"name": "open inspection", "record": {"id": "SYN-001", "date": "2026-10-22", "area": "Fictional packing", "severity": "minor", "description": "Label alignment needs review.", "owner": "Demo Operator", "status": "open"}},
+    {"name": "investigation", "record": {"id": "SYN-002", "date": "2026-10-22", "area": "Fictional assembly", "severity": "major", "description": "A generated sample has an uneven seam.", "owner": "Demo Investigator", "status": "investigating"}},
+    {"name": "resolved with explanation", "record": {"id": "SYN-003", "date": "2026-10-22", "area": "Fictional packing", "severity": "minor", "description": "Generated label alignment issue.", "owner": "Demo Operator", "status": "resolved", "resolution": "Adjusted the fictional alignment guide."}},
+    {"name": "closed after review", "record": {"id": "SYN-004", "date": "2026-10-22", "area": "Fictional assembly", "severity": "critical", "description": "Synthetic closure scenario.", "owner": "Demo Investigator", "status": "closed", "resolution": "Replaced a fictional fixture and checked the sample.", "reviewer": "Demo Reviewer"}}
+  ]
+}

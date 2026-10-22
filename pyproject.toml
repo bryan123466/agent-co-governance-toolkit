@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent-co-governance-toolkit"
+version = "0.2.0rc1"
+description = "Local-first task continuity and evidence-based governance tools for coding agents"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [{name = "Agent Co-Governance Toolkit contributors"}]
+dependencies = []
+
+[project.scripts]
+agct = "agct.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["agct*"]
+
+[tool.setuptools.package-data]
+agct = ["skill_data/**/*"]

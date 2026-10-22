@@ -1,0 +1,736 @@
+{
+  "schema": "agct.release-validation.v1",
+  "version": "0.2.0rc1",
+  "recorded_at": "2026-10-21T17:27:32.970378+00:00",
+  "platform": "Windows",
+  "python": "3.12.14",
+  "effective_test_coverage": {
+    "unique_cases": 79,
+    "passed": 77,
+    "skipped": 2,
+    "failed": 0,
+    "errors": 0
+  },
+  "source_suite": {
+    "schema": "agct.test-evidence.v1",
+    "recorded_at": "2026-10-21T17:23:54.537546+00:00",
+    "platform": "Windows",
+    "python": "3.12.14",
+    "tests_run": 78,
+    "passed": 75,
+    "skipped": 3,
+    "failures": 0,
+    "errors": 0,
+    "successful": true,
+    "tests": [
+      {
+        "test": "test_adversarial.AdversarialGovernanceTests.test_adoption_does_not_overwrite_an_ignored_local_artifact",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_adversarial.AdversarialGovernanceTests.test_autocrlf_does_not_convert_untracked_lf_bytes_during_adoption",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_adversarial.AdversarialGovernanceTests.test_autocrlf_preserves_distinct_staged_and_worktree_bytes",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_adversarial.AdversarialGovernanceTests.test_autocrlf_recovery_never_overwrites_new_user_content",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_adversarial.AdversarialGovernanceTests.test_invalid_execute_does_not_claim_an_integration_baseline",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_adversarial.AdversarialGovernanceTests.test_latest_cumulative_conflict_never_falls_back_to_older_delivery",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_adversarial.AdversarialGovernanceTests.test_legacy_conflict_can_be_closed_by_verified_cumulative_successor",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_adversarial.AdversarialGovernanceTests.test_oversized_deleted_blob_rejected_from_original_tree",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_adversarial.AdversarialGovernanceTests.test_oversized_new_blob_rejected_before_delivery_record",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_adversarial.AdversarialGovernanceTests.test_private_scratch_root_cannot_be_redirected_by_junction",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_adversarial.AdversarialGovernanceTests.test_same_sha_branch_switch_after_plan_is_rejected",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_adversarial.AdversarialGovernanceTests.test_same_sha_branch_switch_during_candidate_preparation_is_rejected",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_adversarial.AdversarialGovernanceTests.test_second_baseline_cannot_reuse_first_baseline_receipt",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_adversarial.AdversarialGovernanceTests.test_three_stage_chain_after_first_accepted_has_no_historical_backlog",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_adversarial.AdversarialGovernanceTests.test_untracked_file_under_in_tree_junction_is_rejected",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_core.CoreTests.test_artifact_backup_verified_by_bytes",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_core.CoreTests.test_artifact_decision_is_bound_to_content",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_core.CoreTests.test_corrupt_snapshot_fails_before_destination_write",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_core.CoreTests.test_current_view_excludes_terminal_history",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_core.CoreTests.test_current_view_shows_cumulative_leaf_without_forging_old_terminal_state",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_core.CoreTests.test_experience_scope_version_enabled_and_action",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_core.CoreTests.test_git_checkpoint_reconstructs_binary_layers_and_deletions",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_core.CoreTests.test_partial_git_root_rejected",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_core.CoreTests.test_path_escape_metadata_and_secrets_rejected",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_core.CoreTests.test_plain_checkpoint_restore_and_source_preserved",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_core.CoreTests.test_restore_requires_independent_empty_destination",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_core.CoreTests.test_store_guard_is_reentrant_and_process_exclusive",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_core.CoreTests.test_store_persists_without_replaying_history",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_core.CoreTests.test_symlink_detection_portable_negative_path",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_core.CoreTests.test_symlink_escape_rejected",
+        "outcome": "SKIP",
+        "reason": "Host cannot create symlinks; native junction test remains separate."
+      },
+      {
+        "test": "test_core.CoreTests.test_task_pause_is_retained_not_actionable",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_core.CoreTests.test_unsupported_schema_does_not_silently_downgrade",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_core.CoreTests.test_windows_junction_escape_rejected",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_integration.AdoptTests.test_adoption_preserves_local_commits_and_all_git_layers",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_integration.AdoptTests.test_interrupted_adoption_resumes_exact_stash",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_integration.AdoptTests.test_staged_change_cancelled_in_worktree_is_still_backed_up",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_integration.AdoptTests.test_wip_conflict_retains_original_state",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_integration.ReceiveTests.test_binary_and_deletion_receive",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_integration.ReceiveTests.test_conflict_does_not_block_independent_delivery",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_integration.ReceiveTests.test_cumulative_after_received_uses_previous_source_base",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_integration.ReceiveTests.test_cumulative_latest_replaces_unreceived_stages",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_integration.ReceiveTests.test_exact_manifest_rejects_omitted_file",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_integration.ReceiveTests.test_fault_disabled_outside_marked_tests",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_integration.ReceiveTests.test_interruption_and_experience_recovery_without_duplicate_effect",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_integration.ReceiveTests.test_local_commit_without_submit_is_not_backlog",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_integration.ReceiveTests.test_mutable_workspace_does_not_change_frozen_delivery",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_integration.ReceiveTests.test_outdated_experience_does_not_authorize_recovery",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_integration.ReceiveTests.test_stale_plan_and_baseline_wip_preserved",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_integration.ReceiveTests.test_three_version_chain_retires_all_historical_pending",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_integration.ReceiveTests.test_true_integration_and_idempotent_receipt",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_integration.ReceiveTests.test_unrelated_task_cannot_be_superseded",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_interfaces.CliSubprocessTests.test_invalid_json_and_action_have_machine_readable_errors",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_interfaces.CliSubprocessTests.test_real_engine_roundtrip_in_independent_processes",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_interfaces.CliSubprocessTests.test_setup_input_file_and_mutually_exclusive_inputs",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_interfaces.ProtocolTests.test_bad_json_does_not_corrupt_next_frame",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_interfaces.ProtocolTests.test_fixed_root_and_unicode_tool_result",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_interfaces.ProtocolTests.test_malformed_schema_values_do_not_reach_engine",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_interfaces.ProtocolTests.test_notification_cannot_mutate_and_unknown_tool_is_rpc_error",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_interfaces.ProtocolTests.test_old_version_omits_structured_results",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_interfaces.ProtocolTests.test_oversized_frame_is_bounded",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_interfaces.ProtocolTests.test_project_override_and_fault_injection_are_not_tools",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_interfaces.ProtocolTests.test_requires_initialize_and_rejects_unknown_method",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_interfaces.ProtocolTests.test_session_negotiation_and_typed_tools",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_interfaces.ProtocolTests.test_tool_failure_is_not_protocol_failure",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_interfaces.SetupTests.test_generated_fragment_launches_real_subprocess_from_other_directory",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_interfaces.SetupTests.test_install_preserves_user_configuration_and_is_idempotent",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_interfaces.SetupTests.test_manifest_cannot_authorize_deleting_arbitrary_project_file",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_interfaces.SetupTests.test_preview_is_read_only",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_interfaces.SetupTests.test_symlinked_install_directory_is_refused",
+        "outcome": "SKIP",
+        "reason": "Host cannot create a directory symlink"
+      },
+      {
+        "test": "test_interfaces.SetupTests.test_uninstall_preserves_changed_skills_and_project_files",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_interfaces.SetupTests.test_unmanaged_destination_conflict_causes_no_install",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_release_contract.InstalledWheelContractTests.test_wheel_installs_four_skills_and_launches_project_bound_mcp",
+        "outcome": "SKIP",
+        "reason": "Set AGCT_TEST_WHEEL to verify the actual built wheel"
+      },
+      {
+        "test": "test_release_contract.PublicApiContractTests.test_bad_initialization_name_does_not_create_state",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_release_contract.PublicApiContractTests.test_non_object_arguments_are_rejected_even_when_falsy",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_release_contract.PublicApiContractTests.test_registered_workspace_checkpoint_uses_exact_registered_path",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_release_contract.PublicApiContractTests.test_string_enabled_does_not_store_an_enabled_rule",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_release_contract.PublicApiContractTests.test_string_execute_cannot_advance_a_real_baseline",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_release_contract.PublicApiContractTests.test_string_pause_is_rejected_before_checkpoint_or_task_change",
+        "outcome": "PASS"
+      }
+    ]
+  },
+  "supplemental_installed_wheel": {
+    "schema": "agct.installed-wheel-evidence.v1",
+    "wheel": "agent_co_governance_toolkit-0.2.0rc1-py3-none-any.whl",
+    "tests_run": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "successful": true
+  },
+  "supplemental_standard_source_build": {
+    "tests_run": 1,
+    "passed": 1,
+    "errors": 0,
+    "skipped": 0,
+    "wheel_skills_verified": 4,
+    "sdist_skills_verified": 4,
+    "no_source_skill_copy_created": true
+  },
+  "effective_test_results": [
+    {
+      "test": "test_adversarial.AdversarialGovernanceTests.test_adoption_does_not_overwrite_an_ignored_local_artifact",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_adversarial.AdversarialGovernanceTests.test_autocrlf_does_not_convert_untracked_lf_bytes_during_adoption",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_adversarial.AdversarialGovernanceTests.test_autocrlf_preserves_distinct_staged_and_worktree_bytes",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_adversarial.AdversarialGovernanceTests.test_autocrlf_recovery_never_overwrites_new_user_content",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_adversarial.AdversarialGovernanceTests.test_invalid_execute_does_not_claim_an_integration_baseline",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_adversarial.AdversarialGovernanceTests.test_latest_cumulative_conflict_never_falls_back_to_older_delivery",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_adversarial.AdversarialGovernanceTests.test_legacy_conflict_can_be_closed_by_verified_cumulative_successor",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_adversarial.AdversarialGovernanceTests.test_oversized_deleted_blob_rejected_from_original_tree",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_adversarial.AdversarialGovernanceTests.test_oversized_new_blob_rejected_before_delivery_record",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_adversarial.AdversarialGovernanceTests.test_private_scratch_root_cannot_be_redirected_by_junction",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_adversarial.AdversarialGovernanceTests.test_same_sha_branch_switch_after_plan_is_rejected",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_adversarial.AdversarialGovernanceTests.test_same_sha_branch_switch_during_candidate_preparation_is_rejected",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_adversarial.AdversarialGovernanceTests.test_second_baseline_cannot_reuse_first_baseline_receipt",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_adversarial.AdversarialGovernanceTests.test_three_stage_chain_after_first_accepted_has_no_historical_backlog",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_adversarial.AdversarialGovernanceTests.test_untracked_file_under_in_tree_junction_is_rejected",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_core.CoreTests.test_artifact_backup_verified_by_bytes",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_core.CoreTests.test_artifact_decision_is_bound_to_content",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_core.CoreTests.test_corrupt_snapshot_fails_before_destination_write",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_core.CoreTests.test_current_view_excludes_terminal_history",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_core.CoreTests.test_current_view_shows_cumulative_leaf_without_forging_old_terminal_state",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_core.CoreTests.test_experience_scope_version_enabled_and_action",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_core.CoreTests.test_git_checkpoint_reconstructs_binary_layers_and_deletions",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_core.CoreTests.test_partial_git_root_rejected",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_core.CoreTests.test_path_escape_metadata_and_secrets_rejected",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_core.CoreTests.test_plain_checkpoint_restore_and_source_preserved",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_core.CoreTests.test_restore_requires_independent_empty_destination",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_core.CoreTests.test_store_guard_is_reentrant_and_process_exclusive",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_core.CoreTests.test_store_persists_without_replaying_history",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_core.CoreTests.test_symlink_detection_portable_negative_path",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_core.CoreTests.test_symlink_escape_rejected",
+      "outcome": "SKIP",
+      "reason": "Host cannot create symlinks; native junction test remains separate."
+    },
+    {
+      "test": "test_core.CoreTests.test_task_pause_is_retained_not_actionable",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_core.CoreTests.test_unsupported_schema_does_not_silently_downgrade",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_core.CoreTests.test_windows_junction_escape_rejected",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_integration.AdoptTests.test_adoption_preserves_local_commits_and_all_git_layers",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_integration.AdoptTests.test_interrupted_adoption_resumes_exact_stash",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_integration.AdoptTests.test_staged_change_cancelled_in_worktree_is_still_backed_up",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_integration.AdoptTests.test_wip_conflict_retains_original_state",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_integration.ReceiveTests.test_binary_and_deletion_receive",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_integration.ReceiveTests.test_conflict_does_not_block_independent_delivery",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_integration.ReceiveTests.test_cumulative_after_received_uses_previous_source_base",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_integration.ReceiveTests.test_cumulative_latest_replaces_unreceived_stages",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_integration.ReceiveTests.test_exact_manifest_rejects_omitted_file",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_integration.ReceiveTests.test_fault_disabled_outside_marked_tests",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_integration.ReceiveTests.test_interruption_and_experience_recovery_without_duplicate_effect",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_integration.ReceiveTests.test_local_commit_without_submit_is_not_backlog",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_integration.ReceiveTests.test_mutable_workspace_does_not_change_frozen_delivery",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_integration.ReceiveTests.test_outdated_experience_does_not_authorize_recovery",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_integration.ReceiveTests.test_stale_plan_and_baseline_wip_preserved",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_integration.ReceiveTests.test_three_version_chain_retires_all_historical_pending",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_integration.ReceiveTests.test_true_integration_and_idempotent_receipt",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_integration.ReceiveTests.test_unrelated_task_cannot_be_superseded",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_interfaces.CliSubprocessTests.test_invalid_json_and_action_have_machine_readable_errors",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_interfaces.CliSubprocessTests.test_real_engine_roundtrip_in_independent_processes",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_interfaces.CliSubprocessTests.test_setup_input_file_and_mutually_exclusive_inputs",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_interfaces.ProtocolTests.test_bad_json_does_not_corrupt_next_frame",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_interfaces.ProtocolTests.test_fixed_root_and_unicode_tool_result",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_interfaces.ProtocolTests.test_malformed_schema_values_do_not_reach_engine",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_interfaces.ProtocolTests.test_notification_cannot_mutate_and_unknown_tool_is_rpc_error",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_interfaces.ProtocolTests.test_old_version_omits_structured_results",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_interfaces.ProtocolTests.test_oversized_frame_is_bounded",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_interfaces.ProtocolTests.test_project_override_and_fault_injection_are_not_tools",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_interfaces.ProtocolTests.test_requires_initialize_and_rejects_unknown_method",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_interfaces.ProtocolTests.test_session_negotiation_and_typed_tools",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_interfaces.ProtocolTests.test_tool_failure_is_not_protocol_failure",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_interfaces.SetupTests.test_generated_fragment_launches_real_subprocess_from_other_directory",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_interfaces.SetupTests.test_install_preserves_user_configuration_and_is_idempotent",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_interfaces.SetupTests.test_manifest_cannot_authorize_deleting_arbitrary_project_file",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_interfaces.SetupTests.test_preview_is_read_only",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_interfaces.SetupTests.test_symlinked_install_directory_is_refused",
+      "outcome": "SKIP",
+      "reason": "Host cannot create a directory symlink"
+    },
+    {
+      "test": "test_interfaces.SetupTests.test_uninstall_preserves_changed_skills_and_project_files",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_interfaces.SetupTests.test_unmanaged_destination_conflict_causes_no_install",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_release_contract.InstalledWheelContractTests.test_wheel_installs_four_skills_and_launches_project_bound_mcp",
+      "outcome": "PASS",
+      "evidence": "supplemental_installed_wheel"
+    },
+    {
+      "test": "test_release_contract.PublicApiContractTests.test_bad_initialization_name_does_not_create_state",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_release_contract.PublicApiContractTests.test_non_object_arguments_are_rejected_even_when_falsy",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_release_contract.PublicApiContractTests.test_registered_workspace_checkpoint_uses_exact_registered_path",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_release_contract.PublicApiContractTests.test_string_enabled_does_not_store_an_enabled_rule",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_release_contract.PublicApiContractTests.test_string_execute_cannot_advance_a_real_baseline",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_release_contract.PublicApiContractTests.test_string_pause_is_rejected_before_checkpoint_or_task_change",
+      "outcome": "PASS"
+    },
+    {
+      "test": "test_release_contract.StandardSourceBuildTests.test_plain_checkout_wheel_and_sdist_include_canonical_skills",
+      "outcome": "PASS",
+      "evidence": "supplemental_standard_source_build"
+    }
+  ],
+  "skills_format_validation": {
+    "validator": "Codex skill-creator quick_validate",
+    "passed": 4
+  },
+  "agent_rehearsal": {
+    "worker_roles": [
+      "schema",
+      "service",
+      "ui"
+    ],
+    "governance_role": true,
+    "interface": "real stdio MCP via shell bridge",
+    "public_mcp_calls": 25,
+    "accepted_stages": 4,
+    "superseded_stages": 1,
+    "integration_commits": 4,
+    "duplicate_integration_commits": 0,
+    "completed_adoptions": 6,
+    "actionable_stages": 0,
+    "actionable_operations": 0,
+    "actionable_artifacts": 0,
+    "paused_wip_byte_identical": true,
+    "original_failure_evidence_retained": true,
+    "experience_rule_used": "receipt-recovery-v1",
+    "unknown_error_autonomous_repair_proven": false
+  },
+  "synthetic_reference_validation": {
+    "python_tests_passed": 12,
+    "node_checks_passed": 19,
+    "schema_engine": "jsonschema 4.26.0 Draft202012Validator + FormatChecker",
+    "schema_labelled_samples": 12,
+    "additional_probe": 1,
+    "schema_service_ui_agree": true,
+    "copied_reference_independently_checked": true
+  },
+  "native_codex_host": {
+    "status": "NOT_ACCEPTED_BLOCKED_BEFORE_AGCT_START",
+    "error": "invalid transport in mcp_servers.node_repl",
+    "host_configuration_modified": false
+  },
+  "html_visual_review": {
+    "status": "NOT_PERFORMED",
+    "reason": "Browser tool rejects local-file navigation; structural checks only"
+  },
+  "untested": [
+    "hosted Linux CI",
+    "hosted macOS CI",
+    "native Codex desktop MCP activation",
+    "native scheduled automation",
+    "multiple computers",
+    "remote effects"
+  ],
+  "release_scope": "isolated trial candidate; fictional data; no production changes"
+}

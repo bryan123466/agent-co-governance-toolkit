@@ -1,0 +1,55 @@
+"""Build-only resource adapter; canonical skill sources stay in skills/."""
+from pathlib import Path
+
+from setuptools import setup
+from setuptools.command.build_py import build_py
+
+
+SKILL_NAMES = (
+    "agct-project-setup",
+    "agct-task-delivery",
+    "agct-governance-reconcile",
+    "agct-experience-recovery",
+)
+SOURCE_ROOT = Path(__file__).resolve().parent
+
+
+class BuildWithSkills(build_py):
+    """Copy reviewed skills into the built package, never into the source tree."""
+
+    def skill_sources(self):
+        for name in SKILL_NAMES:
+            relative = Path("skills") / name / "SKILL.md"
+            source = SOURCE_ROOT / relative
+            if not source.is_file() or source.is_symlink():
+                raise RuntimeError(f"Missing canonical public skill: {relative.as_posix()}")
+            yield relative, Path(self.build_lib) / "agct" / "skill_data" / name / "SKILL.md"
+
+    def run(self):
+        super().run()
+        if self.editable_mode:
+            # Editable source use resolves the canonical skills/ directory directly.
+            return
+        for relative, target in self.skill_sources():
+            self.mkpath(str(target.parent))
+            self.copy_file(str(SOURCE_ROOT / relative), str(target))
+
+    def get_source_files(self):
+        # Also include canonical resources in source distributions produced by
+        # standard PEP 517 tooling, without a generated duplicate or MANIFEST file.
+        return list(dict.fromkeys([
+            *super().get_source_files(),
+            *(relative.as_posix() for relative, _ in self.skill_sources()),
+        ]))
+
+    def get_outputs(self, include_bytecode=True):
+        outputs = super().get_outputs(include_bytecode)
+        if self.editable_mode:
+            return outputs
+        return list(dict.fromkeys([
+            *outputs,
+            *(str(target) for _, target in self.skill_sources()),
+        ]))
+
+
+setup(cmdclass={"build_py": BuildWithSkills})

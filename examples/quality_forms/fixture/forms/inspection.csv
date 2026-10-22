@@ -1,0 +1,4 @@
+inspection_id,item_code,inspected_count,defective_count,defect_category,status
+DEMO-I-001,DEMO-PART-A,40,2,surface_mark,open
+DEMO-I-002,DEMO-PART-B,25,0,none,reviewed
+DEMO-I-003,DEMO-PART-C,30,1,label_position,open

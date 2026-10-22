@@ -1,0 +1,9 @@
+{
+  "task_id": "TASK-FORMS",
+  "workspace": "forms",
+  "commit": "REPLACE_WITH_EXACT_COMMIT",
+  "base": "REPLACE_WITH_BASE_COMMIT",
+  "paths": ["forms/inspection.csv"],
+  "stage_id": "forms-stage-1",
+  "relation": "independent"
+}

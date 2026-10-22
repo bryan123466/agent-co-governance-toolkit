@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/quality-record-v2.json",
+  "title": "Synthetic quality record",
+  "description": "Fictional local prototype. Resolved and closed records require nonblank resolution; closed records also require a nonblank reviewer. A consumer must enable date-format validation for calendar-date checking.",
+  "type": "object",
+  "required": ["id", "date", "area", "severity", "description", "owner", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "date": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$", "format": "date"},
+    "area": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "severity": {"type": "string", "enum": ["minor", "major", "critical"]},
+    "description": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "owner": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "status": {"type": "string", "enum": ["open", "investigating", "resolved", "closed"]},
+    "resolution": {"type": "string"},
+    "reviewer": {"type": "string"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"enum": ["resolved", "closed"]}}, "required": ["status"]},
+      "then": {"required": ["resolution"], "properties": {"resolution": {"type": "string", "minLength": 1, "pattern": "\\S"}}}
+    },
+    {
+      "if": {"properties": {"status": {"const": "closed"}}, "required": ["status"]},
+      "then": {"required": ["reviewer"], "properties": {"reviewer": {"type": "string", "minLength": 1, "pattern": "\\S"}}}
+    }
+  ]
+}

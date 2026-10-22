@@ -1,0 +1,12 @@
+{
+  "cases": [
+    {"name": "unknown status", "record": {"id": "SYN-101", "date": "2026-10-22", "area": "Fictional assembly", "severity": "minor", "description": "Generated invalid sample.", "owner": "Demo Operator", "status": "done"}},
+    {"name": "missing owner", "record": {"id": "SYN-102", "date": "2026-10-22", "area": "Fictional assembly", "severity": "minor", "description": "Generated invalid sample.", "status": "open"}},
+    {"name": "resolved without resolution", "record": {"id": "SYN-103", "date": "2026-10-22", "area": "Fictional assembly", "severity": "minor", "description": "Generated invalid sample.", "owner": "Demo Operator", "status": "resolved"}},
+    {"name": "closed without reviewer", "record": {"id": "SYN-104", "date": "2026-10-22", "area": "Fictional assembly", "severity": "major", "description": "Generated invalid sample.", "owner": "Demo Operator", "status": "closed", "resolution": "A fictional adjustment was completed."}},
+    {"name": "closed blank resolution", "record": {"id": "SYN-105", "date": "2026-10-22", "area": "Fictional assembly", "severity": "critical", "description": "Generated invalid sample.", "owner": "Demo Operator", "status": "closed", "resolution": "   ", "reviewer": "Demo Reviewer"}},
+    {"name": "blank owner", "record": {"id": "SYN-106", "date": "2026-10-22", "area": "Fictional assembly", "severity": "minor", "description": "Generated invalid sample.", "owner": "  ", "status": "open"}},
+    {"name": "malformed date", "record": {"id": "SYN-107", "date": "22/10/2026", "area": "Fictional assembly", "severity": "minor", "description": "Generated invalid sample.", "owner": "Demo Operator", "status": "open"}},
+    {"name": "closed blank reviewer", "record": {"id": "SYN-108", "date": "2026-10-22", "area": "Fictional assembly", "severity": "minor", "description": "Generated invalid sample.", "owner": "Demo Operator", "status": "closed", "resolution": "Synthetic rework completed.", "reviewer": "\t"}}
+  ]
+}
