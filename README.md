@@ -6,6 +6,8 @@
 
 [Download and install](https://github.com/bryan123466/agent-co-governance-toolkit/releases) · [User manual](docs/en/windows-example.md) · [Architecture](docs/en/architecture.md)
 
+[Maintain and upgrade an existing project](docs/en/governance-maintenance.md)
+
 Agent Co-Governance Toolkit (AGCT) is an open-source project collaboration toolkit for **Codex users**. It organizes task progress, stage deliverables, important decisions, and continuation information from different workspaces into project records you can save, trace, and use again.
 
 Different Codex chats can advance software, hardware, algorithms, research, operations, or writing. A governance chat combines AI and tools to bring together progress, receive deliverables, and update participating workspaces with shared results when appropriate. Existing chats can join, and work already in progress can continue.
@@ -33,6 +35,7 @@ AGCT retains these relationships during everyday work. **Project continuity does
 | **Retain unfinished work** | Save selected files and continuation notes when work pauses. Return to the previous position while paused tasks remain quietly available. |
 | **Keep iterations clear** | Record relationships between earlier and later results, retain history, and clearly distinguish results already integrated, stages offered for receipt, and work being retained for later. |
 | **Reuse verified recovery methods** | For known problems the tools already support, check current conditions before applying a suitable recovery method to reduce repeated operations. |
+| **Focus each governance turn** | Read a limited, paginated selection of current work from a consistent project snapshot. Keep paused work and completed history without treating them as new obligations. |
 
 The same local tools provide these capabilities. You can use MCP tools connected to Codex or work from the command line; both read and write the same project state.
 
@@ -102,7 +105,7 @@ The complete user manual provides directory examples, copyable prompts, MCP setu
 
 AGCT uses **Python 3.11+ and Git**, with your existing **Codex** providing AI capabilities. It includes a local execution engine, CLI, MCP interface, and four project Skills: setup, task delivery, governance reconciliation, and experience recovery. Its runtime uses the Python standard library and does not require a separate model service.
 
-Each project has one local governance store and one baseline for receiving shared results. This supports independent task progress and orderly integration; concurrent writes and updates within the same workspace still need coordination. Recovery covers implemented and verified methods and cannot guarantee automatic resolution of every unknown failure. See [Architecture](docs/en/architecture.md) and [Operating scope](docs/RELEASE_BOUNDARIES.md) for implementation details.
+Each control scope has one local governance store and one baseline for receiving shared results. A product spanning independent repositories can configure a separate control for each and bring their progress together in one governance chat. Concurrent writes and updates within the same workspace still need coordination. Recovery covers implemented and verified methods and cannot guarantee automatic resolution of every unknown failure. See [Architecture](docs/en/architecture.md) and [Operating scope](docs/RELEASE_BOUNDARIES.md) for implementation details.
 
 ## Documentation and participation
 

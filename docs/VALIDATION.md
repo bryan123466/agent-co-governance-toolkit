@@ -1,5 +1,21 @@
 # Release validation / 发布验证
 
+## Current 0.2.0rc2 validation / 本次更新验证
+
+This maintenance update was verified with disposable synthetic projects and real local Git worktrees on Windows with Python 3.12. The source suite ran **143 cases: 140 passed, 0 failed, 0 errored, 3 skipped**. Two skips concern unavailable native symbolic-link privileges; the third is the separately invoked installed-wheel check. The source run explicitly enabled the standard wheel/sdist build check.
+
+The independent installed-wheel check passed, including four packaged Skills and actual stdio MCP `status`, `agenda` and `doctor` requests. A separate rc1-to-rc2 installed-wheel walkthrough preserved existing tasks, paused work, artifact records, database and checkpoint object bytes, and restored an older checkpoint without reinitializing the project. These are additional execution scopes, not extra unique tests to add to the source count.
+
+本次在隔离的合成项目与真实本地 Git 工作树中验证。完整源码测试 **143 项：140 通过、0 失败、0 错误、3 跳过**；跳过项为两项宿主原生符号链接权限用例，以及单独执行的 wheel 安装用例。标准 wheel/sdist 构建验证已启用。独立安装包验证及 rc1 到 rc2 的原状态接续均通过；这些覆盖与源码测试有重叠，不累计成虚高用例总数。
+
+New coverage includes consistent read snapshots, paginated current-work fingerprints, dependency binding changes, resumable setup, detected user edits, source-read diagnostic errors, cumulative version reception, effect reconciliation, and business HEAD/index/WIP preservation during tool integration updates. The nine operating-manual files remain byte-identical.
+
+The product ZIP excludes this evidence and test results. This source repository retains maintenance evidence in [VALIDATION_RESULTS.json](VALIDATION_RESULTS.json). Native Codex connection activation, real scheduled automation, physical multi-computer execution and a new model-decision experiment were **not** performed. Cross-platform CI must be checked against the specific public commit's Actions run; local success alone is not cross-platform evidence.
+
+新版重点覆盖一致只读快照、分页议程、依赖绑定变化、安装断点接续、已检测用户修改保全、源码读取错误诊断，以及工具更新不改变业务 HEAD/index/WIP。未运行用户真实项目、原生 Codex 自动化或实体双电脑验证。下文保留旧版本历史记录，不能作为新版新做的模型演练或新平台验证。
+
+## Historical 0.2.0rc1 evidence / 旧版历史验证
+
 **Agent Co-Governance Toolkit 0.2.0rc1 — local trial candidate.**
 
 This document reports observed results, not a guarantee of autonomous production recovery. Machine-readable case results are in [VALIDATION_RESULTS.json](VALIDATION_RESULTS.json). First-time testers can use the [trial prompt](TESTER_START.md) or [中文试用提示词](TESTER_START.zh-CN.md).

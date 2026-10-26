@@ -7,7 +7,7 @@ from pathlib import Path
 import sys
 
 ACTIONS = (
-    "init", "status", "task", "checkpoint", "restore", "artifact", "experience",
+    "init", "status", "agenda", "task", "checkpoint", "restore", "artifact", "experience",
     "workspace", "submit", "reconcile", "adopt", "doctor", "setup", "mcp",
 )
 

@@ -1,3 +1,3 @@
 """Agent Co-Governance Toolkit: one local engine, several explicit interfaces."""
 
-__version__ = "0.2.0rc1"
+__version__ = "0.2.0rc2"

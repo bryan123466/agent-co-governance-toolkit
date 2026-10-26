@@ -15,7 +15,7 @@ def invoke(project, action, arguments=None):
         raise GovernanceError("INVALID_ARGUMENT", str(exc)) from exc
     if action == "init":
         return Core.initialize(project, **args)
-    core_actions = {"status", "task", "checkpoint", "restore", "artifact", "experience"}
+    core_actions = {"status", "agenda", "task", "checkpoint", "restore", "artifact", "experience"}
     git_actions = {"workspace", "submit", "reconcile", "adopt", "doctor"}
     if action not in core_actions | git_actions:
         raise GovernanceError("UNKNOWN_ACTION", f"Unknown action: {action}")

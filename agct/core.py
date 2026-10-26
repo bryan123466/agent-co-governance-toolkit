@@ -4,7 +4,9 @@ Records describe saved evidence, never business acceptance or model internals.
 """
 from __future__ import annotations
 
+import base64
 import hashlib
+import json
 import json
 import os
 from pathlib import Path, PurePosixPath, PureWindowsPath
@@ -18,6 +20,7 @@ from .store import Store, GovernanceError, now
 MAX_FILE_BYTES = 32 * 1024 * 1024
 MAX_CHECKPOINT_BYTES = 128 * 1024 * 1024
 MAX_PATHS = 500
+CURRENT_COLLECTIONS = ('tasks', 'stages', 'operations', 'workspaces', 'artifacts', 'checkpoints')
 
 
 def digest_bytes(data):
@@ -157,7 +160,11 @@ class Core:
             return result
 
     def status(self):
-        tasks, stages, operations, workspaces = (self.store.list(x) for x in ('tasks', 'stages', 'operations', 'workspaces'))
+        return self._current_view(self.store.snapshot(CURRENT_COLLECTIONS))
+
+    @staticmethod
+    def _current_view(records):
+        tasks, stages, operations, workspaces = (records[x] for x in ('tasks', 'stages', 'operations', 'workspaces'))
         terminal = {'accepted', 'committed', 'complete', 'completed', 'superseded', 'cancelled', 'dismissed', 'finalized', 'adopted'}
         pending_stages = [s for s in stages if str(s.get('state', s.get('status', 'queued'))).lower() not in terminal]
         # Submission validates cumulative ancestry. Project that declaration here
@@ -185,17 +192,139 @@ class Core:
                     remaining.extend(old.get('supersedes', []))
         pending_stages = [s for s in pending_stages if s.get('stage_id') not in covered_pending]
         pending_operations = [o for o in operations if str(o.get('state', o.get('status', 'pending'))).lower() not in terminal]
-        artifacts = self.store.list('artifacts')
+        artifacts = records['artifacts']
         return {'tasks': tasks, 'stages': stages, 'operations': operations, 'workspaces': workspaces,
                 'actionable': {'stages': pending_stages, 'operations': pending_operations,
                                'artifacts': [a for a in artifacts if a.get('decision') not in ('ignore', 'dismiss', 'no_backup_needed') and not a.get('backup_verified')]},
                 'retained_task_state': [t for t in tasks if t['state'] in ('paused', 'waiting')],
                 'covered_pending_stages': [{'stage_id': sid, 'awaiting_successor': successor}
                                            for sid, successor in sorted(covered_pending.items())],
-                'checkpoints': self.store.list('checkpoints'), 'artifacts': artifacts,
+                'checkpoints': records['checkpoints'], 'artifacts': artifacts,
                 'history_counts': {'terminal_stages': sum(str(s.get('state', s.get('status', 'queued'))).lower() in terminal for s in stages),
                                    'terminal_operations': len(operations) - len(pending_operations)},
                 'meaning': 'Task state and checkpoint retention do not create a delivery obligation or imply business acceptance.'}
+
+    def agenda(self, limit=20, previous_fingerprint=None, cursor=None):
+        """Select a page of recorded current work; never execute or acknowledge it.
+
+        The limit bounds returned items, not database query time. Cursor state is
+        returned to the caller rather than written into the governance database.
+        """
+        if type(limit) is not int or not 1 <= limit <= 100:
+            raise GovernanceError('INVALID_ARGUMENT', 'Agenda limit must be an integer from 1 to 100.')
+        if previous_fingerprint is not None and (
+                not isinstance(previous_fingerprint, str)
+                or not re.fullmatch(r'[0-9a-f]{64}', previous_fingerprint)):
+            raise GovernanceError('INVALID_ARGUMENT', 'The previous agenda fingerprint must be a SHA-256 value.')
+        cursor_data = None
+        if cursor is not None:
+            try:
+                if not isinstance(cursor, str) or not 1 <= len(cursor) <= 1024:
+                    raise ValueError('Invalid cursor size')
+                raw = base64.b64decode(cursor + '=' * (-len(cursor) % 4), altchars=b'-_', validate=True)
+                cursor_data = json.loads(raw)
+                if (not isinstance(cursor_data, dict)
+                        or set(cursor_data) != {'version', 'offset', 'fingerprint'}
+                        or type(cursor_data['version']) is not int or cursor_data['version'] != 1
+                        or type(cursor_data['offset']) is not int or cursor_data['offset'] < 1
+                        or not isinstance(cursor_data['fingerprint'], str)
+                        or not re.fullmatch(r'[0-9a-f]{64}', cursor_data['fingerprint'])):
+                    raise ValueError('Invalid cursor contents')
+            except (ValueError, TypeError, UnicodeError) as exc:
+                raise GovernanceError('AGENDA_CURSOR_INVALID', 'Use an unchanged next_cursor from an agenda result.') from exc
+
+        records = self.store.snapshot((*CURRENT_COLLECTIONS, 'experience'))
+        current = self._current_view(records)
+        # Observation timestamps are not new work; evidence, outcomes and inputs are.
+        def content(record):
+            return {key: value for key, value in record.items()
+                    if key not in {'created_at', 'updated_at', 'accepted_at', 'completed_at'}}
+
+        def fingerprint(value):
+            return digest_bytes(json.dumps(value, ensure_ascii=False, sort_keys=True,
+                                           separators=(',', ':'), allow_nan=False).encode('utf-8'))
+
+        items, inputs = [], []
+        selected_stages, referenced_workspaces = set(), set()
+        kinds = (('operation', 'operations', 'operation_id'),
+                 ('stage', 'stages', 'stage_id'), ('artifact', 'artifacts', 'artifact_id'))
+        for kind, collection, id_key in kinds:
+            for record in sorted(current['actionable'][collection], key=lambda value: value.get(id_key, '')):
+                record_id = record.get(id_key)
+                if not isinstance(record_id, str) or not record_id:
+                    raise GovernanceError('STATE_RECORD_INVALID', 'An actionable record has no stable identity.',
+                                          {'collection': collection})
+                state = str(record.get('state', record.get('status', 'recorded')))
+                operation = record.get('kind') if kind == 'operation' else 'reconcile' if kind == 'stage' else 'artifact'
+                code = record.get('code')
+                # A recorded effect may justify inspecting this recovery rule;
+                # only the original executor can verify the actual Git effect.
+                if not code and operation == 'reconcile' and state.upper() == 'EFFECT_APPLIED' and record.get('candidate'):
+                    code = 'EFFECT_PRESENT_RECEIPT_MISSING'
+                matches = self._experience_matches(records['experience'], code, operation, record.get('task_id')) if code else []
+                suggestions = [{**content(rule), 'requires_current_evidence': True} for rule in matches]
+                item_input = {'record': content(record), 'experience_candidates': suggestions}
+                inputs.append({'kind': kind, 'id': record_id, **item_input})
+                item = {'kind': kind, 'id': kind + ':' + record_id, 'record_id': record_id,
+                        'task_id': record.get('task_id'), 'workspace': record.get('workspace'),
+                        'state': state, 'code': code, 'input_fingerprint': fingerprint(item_input),
+                        'experience_candidates': suggestions}
+                if kind == 'operation':
+                    item['next_step'] = 'Inspect the original operation and verify actual effects before continuing its missing step.'
+                    if record.get('stage_id'):
+                        selected_stages.add(record['stage_id'])
+                elif kind == 'stage':
+                    item['next_step'] = 'Review the frozen delivery and its current reconciliation plan.'
+                    selected_stages.add(record_id)
+                else:
+                    item['next_step'] = 'Review the retained artifact relationship, decision and backup evidence.'
+                items.append(item)
+                referenced_workspaces.update(record[name] for name in ('workspace', 'baseline')
+                                             if isinstance(record.get(name), str))
+
+        # A received predecessor may affect the next delta. Include only such
+        # dependencies, not unrelated completed history, in the current fingerprint.
+        stage_index = {stage.get('stage_id'): stage for stage in current['stages']}
+        dependencies, remaining = {}, list(selected_stages)
+        while remaining:
+            stage_id = remaining.pop()
+            if stage_id in dependencies or stage_id not in stage_index:
+                continue
+            stage = stage_index[stage_id]
+            dependencies[stage_id] = content(stage)
+            referenced_workspaces.update(stage[name] for name in ('workspace', 'accepted_baseline')
+                                         if isinstance(stage.get(name), str))
+            remaining.extend(stage.get('supersedes', []))
+        active_tasks = [content(task) for task in current['tasks'] if task.get('state') != 'complete']
+        workspace_inputs = [content(workspace) for workspace in current['workspaces']
+                            if workspace.get('name') in referenced_workspaces
+                            or workspace.get('path') in referenced_workspaces]
+        input_fingerprint = fingerprint({'project': str(self.root), 'items': inputs,
+                                         'tasks': active_tasks, 'workspaces': workspace_inputs,
+                                         'stage_dependencies': dependencies})
+        if cursor_data and cursor_data['fingerprint'] != input_fingerprint:
+            raise GovernanceError('AGENDA_CURSOR_STALE', 'Recorded work changed; read a fresh first page.',
+                                  {'current_fingerprint': input_fingerprint})
+        offset = cursor_data['offset'] if cursor_data else 0
+        if cursor_data and offset >= len(items):
+            raise GovernanceError('AGENDA_CURSOR_INVALID', 'The cursor offset is outside the current agenda.')
+        page = items[offset:offset + limit]
+        end = offset + len(page)
+        next_cursor = None
+        if end < len(items):
+            next_cursor = base64.urlsafe_b64encode(json.dumps(
+                {'version': 1, 'offset': end, 'fingerprint': input_fingerprint},
+                sort_keys=True, separators=(',', ':'),
+            ).encode('utf-8')).decode('ascii').rstrip('=')
+        counts = {collection: len(current['actionable'][collection]) for _, collection, _ in kinds}
+        counts.update(retained_tasks=len(current['retained_task_state']),
+                      covered_stages=len(current['covered_pending_stages']))
+        return {'items': page, 'counts': counts, 'total': len(items), 'returned': len(page),
+                'offset': offset, 'truncated': len(items) - end, 'next_cursor': next_cursor,
+                'fingerprint': input_fingerprint,
+                'changed': previous_fingerprint is None or previous_fingerprint != input_fingerprint,
+                'selection_only': True, 'effects_executed': False, 'project_complete': None,
+                'meaning': 'This is a bounded selection of recorded work, not an execution, retry, acknowledgment or proof of project completion. Verify live conditions before acting.'}
 
     def _snapshot(self, data):
         digest = digest_bytes(data)
@@ -436,7 +565,11 @@ class Core:
         return result
 
     def match_experience(self, code, operation, task_id=None):
-        matches = [r for r in self.store.list('experience') if r['enabled'] and r['version'] == '1'
-                   and r['code'] == code and r['operation'] == operation and r['task_id'] in (None, task_id)]
+        matches = self._experience_matches(self.store.list('experience'), code, operation, task_id)
         return {'matches': matches, 'code': code, 'operation': operation, 'task_id': task_id,
                 'execution': 'A match is a candidate action; the executor must verify current evidence before applying it.'}
+
+    @staticmethod
+    def _experience_matches(rules, code, operation, task_id):
+        return [r for r in rules if r['enabled'] and r['version'] == '1'
+                   and r['code'] == code and r['operation'] == operation and r['task_id'] in (None, task_id)]

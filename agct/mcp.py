@@ -16,6 +16,7 @@ from .contracts import SCHEMAS, validate
 
 DESCRIPTIONS = {
     "status": "Read current tasks, deliveries and actionable issues without creating state.",
+    "agenda": "Read a bounded, paginated current-work selection for the existing agent. No execution, retry, scheduling or completion claim.",
     "doctor": "Read runtime prerequisites and project support; no installation or repair.",
     "task": "Create or update a task's retained current state. This does not declare a delivery.",
     "checkpoint": "Save exact files and Git work layers for later continuation; not a submission.",
@@ -31,7 +32,7 @@ DESCRIPTIONS = {
 
 def tools_list():
     return [{"name": "agct_" + action, "description": DESCRIPTIONS[action], "inputSchema": definition,
-             "annotations": {"readOnlyHint": action in {"status", "doctor"}, "openWorldHint": False}}
+             "annotations": {"readOnlyHint": action in {"status", "agenda", "doctor"}, "openWorldHint": False}}
             for action, definition in SCHEMAS.items()]
 
 

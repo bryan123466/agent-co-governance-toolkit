@@ -484,6 +484,7 @@ class Integration:
 
     def doctor(self):
         import platform
+        from .setup import runtime_info
         try:
             version = out(self.root, "--version")
             git_status = "AVAILABLE"
@@ -497,4 +498,5 @@ class Integration:
             except GovernanceError as exc:
                 checks.append({"workspace": ws["name"], "status": "ACTION_REQUIRED", "code": exc.code})
         return {"toolkit_version": __version__, "python": platform.python_version(), "platform": platform.system(), "git": {"status": git_status, "version": version}, "workspaces": checks,
+                "runtime": runtime_info(self.root),
                 "native_codex_connection": "VERIFY_IN_TARGET_HOST", "remote_push_supported": False, "multi_host_writer_supported": False}

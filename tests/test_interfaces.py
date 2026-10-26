@@ -48,10 +48,12 @@ class ProtocolTests(unittest.TestCase):
         self.assertEqual(reply["result"]["protocolVersion"], "2025-11-25")
         reply = self.server.handle(request("tools/list"))
         tools = reply["result"]["tools"]
-        self.assertEqual(len(tools), 11)
+        self.assertEqual(len(tools), 12)
         for tool in tools:
             self.assertFalse(tool["inputSchema"]["additionalProperties"])
             self.assertNotIn("project", tool["inputSchema"]["properties"])
+        agenda = next(tool for tool in tools if tool["name"] == "agct_agenda")
+        self.assertTrue(agenda["annotations"]["readOnlyHint"])
         self.assertFalse(self.calls)
 
     def test_requires_initialize_and_rejects_unknown_method(self):
@@ -83,6 +85,9 @@ class ProtocolTests(unittest.TestCase):
             ("agct_checkpoint", {"task_id": "x", "workspace": "w", "paths": ["a", "a"], "next_step": "continue"}),
             ("agct_checkpoint", {"task_id": "x"}),
             ("agct_status", []),
+            ("agct_agenda", {"limit": True}),
+            ("agct_agenda", {"limit": 101}),
+            ("agct_agenda", {"limit": 1.5}),
         ]
         for name, arguments in cases:
             self.assertEqual(self.server.handle(request("tools/call", {"name": name, "arguments": arguments}))["error"]["code"], -32602)
@@ -191,7 +196,7 @@ class SetupTests(unittest.TestCase):
         self.assertEqual(process.returncode, 0, process.stderr)
         replies = [json.loads(line) for line in process.stdout.splitlines()]
         self.assertEqual(len(replies), 2)
-        self.assertEqual(len(replies[1]["result"]["tools"]), 11)
+        self.assertEqual(len(replies[1]["result"]["tools"]), 12)
         self.assertFalse((self.root / ".codex").exists())
 
     def test_symlinked_install_directory_is_refused(self):

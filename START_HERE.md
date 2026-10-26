@@ -4,6 +4,8 @@
 
 完整产品介绍：[English](README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md)
 
+0.2.0rc2 preserves the existing installation workflow. Maintenance and safe continuation: [English](docs/en/governance-maintenance.md) · [简体中文](docs/zh-CN/governance-maintenance.md) · [繁體中文](docs/zh-TW/governance-maintenance.md)。本版沿用原操作手册，新增维护补充，不需要重建已有项目。原操作手冊繼續適用，更新工具時保留既有專案狀態。
+
 <a id="zh-CN"></a>
 
 **中文从这里开始：[Windows 完整操作流程](docs/zh-CN/windows-example.md)**

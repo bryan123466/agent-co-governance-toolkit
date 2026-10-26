@@ -13,6 +13,7 @@ PATHS = {"type": "array", "items": string("Exact workspace-relative file path"),
 BOOL = {"type": "boolean"}
 SCHEMAS = {
     "status": schema(),
+    "agenda": schema({"limit": {"type": "integer", "minimum": 1, "maximum": 100}, "previous_fingerprint": string(), "cursor": string()}),
     "doctor": schema(),
     "task": schema({"task_id": string(), "title": string(), "workstream": string(), "state": string(enum=["active", "paused", "waiting", "complete"])}, ["task_id"]),
     "checkpoint": schema({"task_id": string(), "workspace": string(), "paths": PATHS, "next_step": string(), "decision": string(), "paused": BOOL}, ["task_id", "workspace", "paths", "next_step"]),
@@ -43,6 +44,11 @@ def validate(value, definition, location="arguments"):
         raise ValueError(f"{location} must be a string")
     elif kind == "boolean" and not isinstance(value, bool):
         raise ValueError(f"{location} must be a boolean")
+    elif kind == "integer":
+        if isinstance(value, bool) or not isinstance(value, int):
+            raise ValueError(f"{location} must be an integer")
+        if value < definition.get("minimum", value) or value > definition.get("maximum", value):
+            raise ValueError(f"{location} is outside the supported range")
     elif kind == "array":
         if not isinstance(value, list):
             raise ValueError(f"{location} must be an array")

@@ -63,12 +63,17 @@ class Store:
             raise GovernanceError('UNSAFE_METADATA', 'The state database cannot be a symbolic link.')
 
     @contextmanager
-    def _connect(self):
+    def _connect(self, readonly=False):
         if _linked(self.directory) or _linked(self.path):
             raise GovernanceError('UNSAFE_METADATA', 'Metadata changed to a symbolic link or junction.')
-        connection = sqlite3.connect(self.path.as_uri() + '?mode=rw', uri=True, timeout=0)
+        mode = 'ro' if readonly else 'rw'
+        connection = sqlite3.connect(self.path.as_uri() + '?mode=' + mode, uri=True, timeout=0)
         try:
-            connection.execute('PRAGMA synchronous=FULL')
+            if readonly:
+                connection.execute('PRAGMA query_only=ON')
+                connection.execute('BEGIN')
+            else:
+                connection.execute('PRAGMA synchronous=FULL')
             with connection:
                 yield connection
         finally:
@@ -122,7 +127,7 @@ class Store:
             self._mutex.release()
 
     def get(self, collection, key, default=None):
-        with self._connect() as db:
+        with self._connect(readonly=True) as db:
             row = db.execute('SELECT value FROM records WHERE collection=? AND key=?', (collection, key)).fetchone()
         return json.loads(row[0]) if row else default
 
@@ -135,9 +140,27 @@ class Store:
         return value
 
     def list(self, collection):
-        with self._connect() as db:
+        with self._connect(readonly=True) as db:
             rows = db.execute('SELECT value FROM records WHERE collection=? ORDER BY key', (collection,)).fetchall()
         return [json.loads(row[0]) for row in rows]
+
+    def snapshot(self, collections):
+        """Read related collections at one durable database point, without a writer lock."""
+        names = tuple(dict.fromkeys(collections))
+        if any(not isinstance(name, str) for name in names):
+            raise ValueError('Snapshot collection names must be strings.')
+        result = {name: [] for name in names}
+        if not names:
+            return result
+        placeholders = ','.join('?' for _ in names)
+        with self._connect(readonly=True) as db:
+            rows = db.execute(
+                'SELECT collection,value FROM records WHERE collection IN (' + placeholders + ') ORDER BY collection,key',
+                names,
+            ).fetchall()
+        for collection, value in rows:
+            result[collection].append(json.loads(value))
+        return result
 
     def event(self, kind, payload):
         with self.guard(), self._connect() as db:
@@ -146,6 +169,6 @@ class Store:
             return cursor.lastrowid
 
     def events(self):
-        with self._connect() as db:
+        with self._connect(readonly=True) as db:
             rows = db.execute('SELECT sequence,created_at,kind,payload FROM events ORDER BY sequence').fetchall()
         return [dict(sequence=r[0], created_at=r[1], kind=r[2], payload=json.loads(r[3])) for r in rows]

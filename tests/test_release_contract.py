@@ -134,12 +134,23 @@ class InstalledWheelContractTests(unittest.TestCase):
             frames = [
                 {"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVersion": "2025-11-25", "capabilities": {}, "clientInfo": {"name": "wheel-contract", "version": "1"}}},
                 {"jsonrpc": "2.0", "id": 2, "method": "tools/call", "params": {"name": "agct_status"}},
+                {"jsonrpc": "2.0", "id": 3, "method": "tools/call", "params": {"name": "agct_agenda", "arguments": {"limit": 1}}},
+                {"jsonrpc": "2.0", "id": 4, "method": "tools/call", "params": {"name": "agct_doctor"}},
             ]
             process = subprocess.run([config["command"], *config["args"]], input="\n".join(json.dumps(frame) for frame in frames) + "\n", text=True, encoding="utf-8", capture_output=True, cwd=root, env=environment, timeout=20)
             self.assertEqual(process.returncode, 0, process.stderr)
             replies = [json.loads(line) for line in process.stdout.splitlines()]
             self.assertFalse(replies[1]["result"]["isError"])
             self.assertIn("tasks", replies[1]["result"]["structuredContent"]["result"])
+            agenda = replies[2]["result"]["structuredContent"]["result"]
+            self.assertTrue(agenda["selection_only"])
+            self.assertFalse(agenda["effects_executed"])
+            self.assertEqual(agenda["total"], 0)
+            runtime = replies[3]["result"]["structuredContent"]["result"]["runtime"]
+            self.assertEqual(runtime["setup_status"], "installed")
+            self.assertEqual(Path(runtime["loaded_runtime"]["module_root"]), installed / "agct")
+            self.assertTrue(runtime["managed_runtime_matches_disk"])
+            self.assertFalse(runtime["loaded_code_verified"])
 
 
 @unittest.skipUnless(os.environ.get("AGCT_TEST_SOURCE_BUILD") == "1", "Opt in to the independent source build with AGCT_TEST_SOURCE_BUILD=1")

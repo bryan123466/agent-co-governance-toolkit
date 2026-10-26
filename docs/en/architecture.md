@@ -17,13 +17,15 @@ You set the direction, divide responsibilities, and decide whether a result meet
 | Project Skills | Explain when and how the chats should save progress, deliver work, and handle a known problem. |
 | Optional host scheduling | Wake the governance chat at configured times to perform the same workflow. |
 
+The toolkit keeps four things distinct: the installed package supplies tools and Skills; the control project's `.agct` directory retains durable task state; shared progress is read from those records; and business deliverables remain in their Git workspaces. Updating the package or Skills, or reading `status`, does not merge business Git history or advance a workspace's `HEAD`. Bringing received business results into a working workspace is an explicit `adopt` operation. See [governance maintenance](governance-maintenance.md) for package updates and recovery.
+
 ## From unfinished work to the next stage
 
 1. **Work on the task.** A professional chat uses its registered workspace and stable task record.
 2. **Save a useful pause point.** A checkpoint records selected files already saved to disk and where to continue. Within its selected scope, a Git checkpoint keeps the committed version, staged changes, working files, and new files distinguishable.
 3. **Offer a ready stage.** The chat identifies the Git commit, its starting commit, and the complete changed-path list. Later edits in that workspace do not silently change the offered stage.
-4. **Bring it into the shared project.** Governance prepares a plan against the current receiving baseline, checks its scope, and executes it. If the baseline changes first, it prepares a new plan using the current facts.
-5. **Update workspaces that are ready.** A separate update plan preserves supported local work. A busy workspace or a concrete conflict keeps its own next step while other independent tasks continue.
+4. **Bring it into the shared project.** Governance prepares a plan against the current receiving baseline, checks its scope, and executes it. Before replacing a plan, it checks the actual effects of unfinished operations and continues supported missing steps. A new plan is needed when an external change invalidates the old plan and there is no existing operation that can safely continue.
+5. **Adopt business results where needed.** An explicit `adopt` plan brings received business changes into a selected workspace while preserving supported local work. Installing tools or Skills does not require every worktree to adopt business changes. A busy workspace or a concrete conflict keeps its own next step while other independent tasks continue.
 6. **Continue.** The records show what was collected, what is still in progress, and what should happen next. You still decide whether the result satisfies the business or professional requirements.
 
 ## Keep history without repeating old work
