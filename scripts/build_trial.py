@@ -24,7 +24,7 @@ EXTENSIONS = {".py", ".md", ".json", ".toml", ".html", ".css", ".js", ".yaml", "
 # are not allowed. A changed or additional binary must be reviewed explicitly.
 REVIEWED_BINARY_ASSETS = {
     "docs/assets/workspace-sidebar-example.png": "dfc75af11cf1a2950f16479b70e95346b97fb0a06f73fc0fbdfca6dbacfaee22",
-    "docs/assets/social-preview.png": "146363c09e7d4cf1cf8763c3c9ce021621f0ee204a436eda01ac1536bf5163b3",
+    "docs/assets/social-preview.png": "8763f806449c8aa1ee5cb7e4a3680bd2f4d3c96ba3c0a08e5bd107bf51b7db5a",
 }
 EXCLUDED = {"__pycache__", ".taskcarry", ".venv", ".git", "node_modules", "dist", "build", "local"}
 SKILLS = {"taskcarry-project-setup", "taskcarry-task-delivery", "taskcarry-governance-reconcile", "taskcarry-experience-recovery"}

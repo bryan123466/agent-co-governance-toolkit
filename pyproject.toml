@@ -5,13 +5,13 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "taskcarry"
 version = "0.2.0rc4"
-description = "Local-first project memory and workspace collaboration for AI tools"
+description = "Local-first project memory, collaboration and workflow governance for AI tools"
 readme = "README.md"
 requires-python = ">=3.11"
 license = {text = "MIT"}
 authors = [{name = "TaskCarry contributors"}]
 dependencies = []
-keywords = ["ai-agents", "project-memory", "workspace-coordination", "mcp", "git-worktree", "local-first"]
+keywords = ["ai-agents", "project-memory", "workspace-coordination", "project-governance", "workflow-governance", "multi-agent-collaboration", "human-in-the-loop", "mcp", "git-worktree", "local-first"]
 
 [project.urls]
 Homepage = "https://github.com/bryan123466/taskcarry"

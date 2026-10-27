@@ -6,7 +6,7 @@
 
 [Download TaskCarry](https://github.com/bryan123466/taskcarry/releases/tag/v0.2.0rc4) · [Start with the user manual](docs/en/windows-example.md) · [See the architecture](docs/en/architecture.md)
 
-Keep a long-running project moving across AI conversations, workspaces, and pauses. TaskCarry saves the task context, selected work, deliverable history, and next steps that help you pick up where you left off.
+TaskCarry provides **project memory, workspace collaboration, and project workflow governance** for people working with AI tools. Bring ready stages into a shared project, preserve unfinished work, and resume supported interrupted operations from recorded and verified results. Task context, selected files, deliverable history, and next steps stay with the project across conversations and pauses.
 
 Use it when one project has outgrown a single conversation: software and documentation advancing together, a research project with several workstreams, or a product with development, operations, and writing happening in parallel. Your AI tool helps do the work; TaskCarry gives that work a durable local record and a way to bring results together.
 
@@ -25,17 +25,28 @@ Git already keeps file history. Project instructions such as AGENTS.md already e
 
 For a short task in one chat, your existing tools may be enough. TaskCarry becomes useful when you repeatedly need to answer: **Where did we stop? Which result is current? What has already joined the project?**
 
-## What stays with your project?
+## Remember the project. Coordinate results. Govern progress.
 
-| Capability | What you can do |
+### Remember the project
+
+Keep task goals, recorded decisions, current position, and next steps outside chat context. Save selected files and continuation notes when a task pauses, and read a focused agenda without losing paused work or completed history. Material references record where larger files live and whether a specified backup matches, so every file need not go into Git.
+
+### Coordinate results
+
+Give parallel tasks independent workspaces, then bring ready results into a shared project version. A useful stage can be delivered while its task continues. Explicit version relationships and matching change history show when a later stage replaces an earlier one, while keeping independent results available.
+
+### Govern how the project moves forward
+
+Project workflow governance connects the work people and AI produce with clear plans, checked updates, and recorded outcomes.
+
+| Capability | What it helps you do |
 |---|---|
-| **Project memory** | Retain task goals, recorded decisions, current position, and next steps outside chat context. |
-| **Saved pause points** | Keep selected saved files and continuation notes without pretending the task is finished. |
-| **Multiple workspaces** | Let parallel tasks use separate working directories, then collect their ready results into a shared project version. |
-| **Stage-by-stage delivery** | Contribute a useful stage while the rest of a task continues. Track explicit relationships between later and earlier stages. |
-| **Clear current work** | Read a focused, paginated agenda while keeping paused work and completed history available. |
-| **Interrupted-work recovery** | Check recorded and actual effects, reuse supported recovery methods, and continue missing steps without blindly repeating completed work. |
-| **Material references** | Record where larger files live and whether a specified backup matches, without putting every file into Git. |
+| **Reviewable integration plans** | See which stages and files will join the project before carrying out the update. |
+| **Workspace binding and conflict checks** | Check the registered workspace and expected state, coordinate the toolkit's own writes, and identify concrete conflicts. |
+| **Work-in-progress preservation** | Retain supported local commits, staged changes, working files, and new files when adopting shared results. |
+| **Interrupted-operation recovery** | Check what actually happened, reuse a recovery method when its conditions match, and complete supported missing steps without blindly repeating finished work. |
+
+This governance focuses on project deliverables and their workflow. Host permissions and Agent authentication remain with your AI platform and operating environment; [the architecture](docs/en/architecture.md) explains how these responsibilities fit together.
 
 Memory comes from the tasks, notes, files, and deliveries you or your AI assistant explicitly connect. TaskCarry does not automatically collect all private conversations or capture unsaved editor content.
 

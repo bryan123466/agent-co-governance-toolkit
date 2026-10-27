@@ -4,6 +4,14 @@
 
 When several local AI workspaces advance a project, each needs to know what to do next without losing its earlier work. TaskCarry gives them shared task records and a governance chat that brings ready results together. Files and progress remain on your computer; the project does not depend on one chat remembering everything. Codex is the first documented host setup; other local AI tools can use the same CLI/MCP interfaces after their connection and capabilities are verified.
 
+## Project workflow governance
+
+TaskCarry combines project memory, workspace collaboration, and governance of the work people and AI produce together. Its focus is how a task keeps its current position, how a stage joins the shared project, and how an interrupted operation continues. This provides a practical workflow for a long-running project across multiple chats or Agents.
+
+The governance chat interprets supplied task information and reviews the proposed integration plan. The tools bind that plan to registered workspaces, specific versions, changed paths, and expected state. They record actual results, preserve supported unfinished work, and check applicable recovery methods before continuing missing steps. People retain project direction, priorities, business acceptance, and external-delivery decisions.
+
+Workspace identity here means the registered directory and repository, not authentication of an Agent or a person. Toolkit locks coordinate its own writes; other editors and Git commands still need to respect the workspace's writing responsibility. AI-platform permissions, identity security, and operating-system isolation remain with the host environment. See [security and project data](../../SECURITY.md) for that scope.
+
 ## Who does what
 
 You set the direction, divide responsibilities, and decide whether a result meets your needs. Professional chats work in their own registered directories. The governance chat uses AI to interpret their task records and deliverables, then calls the tools to save state, collect stages, and update workspaces.
