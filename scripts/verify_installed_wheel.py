@@ -11,15 +11,15 @@ sys.path.insert(0, str(ROOT))
 
 
 def run(directory, output=None):
-    wheels = list(Path(directory).resolve().glob("agent_co_governance_toolkit-*.whl"))
+    wheels = list(Path(directory).resolve().glob("taskcarry-*.whl"))
     if len(wheels) != 1:
-        raise SystemExit("Use a directory containing exactly one AGCT wheel")
-    os.environ["AGCT_TEST_WHEEL"] = str(wheels[0])
+        raise SystemExit("Use a directory containing exactly one TaskCarry wheel")
+    os.environ["TASKCARRY_TEST_WHEEL"] = str(wheels[0])
     # Import after setting the environment so unittest's skip condition is real.
     suite = unittest.defaultTestLoader.loadTestsFromName(
         "tests.test_release_contract.InstalledWheelContractTests")
     result = unittest.TextTestRunner(verbosity=2).run(suite)
-    evidence = {"schema": "agct.installed-wheel-evidence.v1", "wheel": wheels[0].name,
+    evidence = {"schema": "taskcarry.installed-wheel-evidence.v1", "wheel": wheels[0].name,
                 "tests_run": result.testsRun, "failures": len(result.failures),
                 "errors": len(result.errors), "skipped": len(result.skipped),
                 "successful": result.wasSuccessful() and result.testsRun == 1 and not result.skipped}

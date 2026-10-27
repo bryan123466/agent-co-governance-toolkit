@@ -31,7 +31,7 @@ DESCRIPTIONS = {
 
 
 def tools_list():
-    return [{"name": "agct_" + action, "description": DESCRIPTIONS[action], "inputSchema": definition,
+    return [{"name": "taskcarry_" + action, "description": DESCRIPTIONS[action], "inputSchema": definition,
              "annotations": {"readOnlyHint": action in {"status", "agenda", "doctor"}, "openWorldHint": False}}
             for action, definition in SCHEMAS.items()]
 
@@ -69,7 +69,7 @@ class Server:
             from . import __version__
             result = {"protocolVersion": version if version in PROTOCOL_VERSIONS else PROTOCOL_VERSIONS[0],
                       "capabilities": {"tools": {"listChanged": False}},
-                      "serverInfo": {"name": "agent-co-governance-toolkit", "version": __version__},
+                      "serverInfo": {"name": "taskcarry", "version": __version__},
                       "instructions": "Project root is fixed by server startup. Use exact task and file evidence. Plan before execute. Tool availability is not permission to expand user scope."}
         elif method == "ping":
             result = {}
@@ -81,9 +81,9 @@ class Server:
             result = {"tools": tools_list()}
         elif method == "tools/call":
             name = params.get("name")
-            if not isinstance(name, str) or name not in {"agct_" + a for a in SCHEMAS}:
+            if not isinstance(name, str) or name not in {"taskcarry_" + a for a in SCHEMAS}:
                 return rpc_error(request_id, -32602, "Unknown tool")
-            action = name[len("agct_"):]
+            action = name[len("taskcarry_"):]
             arguments = params.get("arguments", {})
             try:
                 validate(arguments, SCHEMAS[action])

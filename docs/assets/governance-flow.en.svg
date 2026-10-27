@@ -1,5 +1,54 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="580" viewBox="0 0 1200 580" role="img" aria-labelledby="title description" xml:lang="en">
-<title id="title">Keep a place to continue every piece of work.</title><desc id="description">Pause when needed, contribute a completed stage, and build on shared progress.</desc>
-<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#6a969b"/></marker></defs>
-<rect width="1200" height="580" rx="20" fill="#f3f7f7"/>
-<g font-family="Segoe UI, Noto Sans CJK SC, Microsoft JhengHei, Microsoft YaHei, sans-serif"><text x="42" y="50" text-anchor="start" font-size="30" fill="#19384b" font-weight="700">Keep a place to continue every piece of work.</text><text x="42" y="82" text-anchor="start" font-size="18" fill="#58717d" font-weight="400">Pause when needed, contribute a completed stage, and build on shared progress.</text><text x="140" y="132" text-anchor="middle" font-size="17" fill="#0b776e" font-weight="700">01</text><rect x="40" y="151" width="200" height="135" rx="14" fill="#ffffff" stroke="#cbdcde"/><text x="140.0" y="186" text-anchor="middle" font-size="20" fill="#19384b" font-weight="700">Do the work</text><text x="140.0" y="218" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Advance tasks in</text><text x="140.0" y="242" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">separate workspaces</text><path d="M240 218H272" fill="none" stroke="#6a969b" stroke-width="2.2" marker-end="url(#arrow)"/><text x="372" y="132" text-anchor="middle" font-size="17" fill="#0b776e" font-weight="700">02</text><rect x="272" y="151" width="200" height="135" rx="14" fill="#ffffff" stroke="#cbdcde"/><text x="372.0" y="186" text-anchor="middle" font-size="20" fill="#19384b" font-weight="700">Save progress</text><text x="372.0" y="218" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Select saved files</text><text x="372.0" y="242" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Record the next step</text><path d="M472 218H504" fill="none" stroke="#6a969b" stroke-width="2.2" marker-end="url(#arrow)"/><text x="604" y="132" text-anchor="middle" font-size="17" fill="#0b776e" font-weight="700">03</text><rect x="504" y="151" width="200" height="135" rx="14" fill="#ffffff" stroke="#cbdcde"/><text x="604.0" y="186" text-anchor="middle" font-size="20" fill="#19384b" font-weight="700">Prepare a stage</text><text x="604.0" y="218" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Identify task and version</text><text x="604.0" y="242" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Offer stable work</text><path d="M704 218H736" fill="none" stroke="#6a969b" stroke-width="2.2" marker-end="url(#arrow)"/><text x="836" y="132" text-anchor="middle" font-size="17" fill="#0b776e" font-weight="700">04</text><rect x="736" y="151" width="200" height="135" rx="14" fill="#19384b" stroke="#cbdcde"/><text x="836.0" y="186" text-anchor="middle" font-size="20" fill="#ffffff" font-weight="700">Bring it together</text><text x="836.0" y="218" text-anchor="middle" font-size="16" fill="#d9ecec" font-weight="400">Check files and effects</text><text x="836.0" y="242" text-anchor="middle" font-size="16" fill="#d9ecec" font-weight="400">Retain stage history</text><path d="M936 218H968" fill="none" stroke="#6a969b" stroke-width="2.2" marker-end="url(#arrow)"/><text x="1068" y="132" text-anchor="middle" font-size="17" fill="#0b776e" font-weight="700">05</text><rect x="968" y="151" width="200" height="135" rx="14" fill="#ffffff" stroke="#cbdcde"/><text x="1068.0" y="186" text-anchor="middle" font-size="20" fill="#19384b" font-weight="700">Keep working</text><text x="1068.0" y="218" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Update when ready</text><text x="1068.0" y="242" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Preserve local work</text><path d="M1068 286V330H140V286" fill="none" stroke="#6a969b" stroke-width="2.2" marker-end="url(#arrow)"/><text x="600" y="357" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Bring new progress back into the shared workflow</text><rect x="65" y="390" width="510" height="120" rx="14" fill="#ffffff" stroke="#cbdcde"/><text x="320.0" y="425" text-anchor="middle" font-size="20" fill="#19384b" font-weight="700">Pause without losing your place</text><text x="320.0" y="457" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Keep saved work and a next step</text><text x="320.0" y="481" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Resume the same task later</text><rect x="625" y="390" width="510" height="120" rx="14" fill="#ffffff" stroke="#cbdcde"/><text x="880.0" y="425" text-anchor="middle" font-size="20" fill="#19384b" font-weight="700">Reuse a supported recovery method</text><text x="880.0" y="457" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Check what already happened</text><text x="880.0" y="481" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Finish missing steps when applicable</text><text x="600" y="552" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Tools organize completed stages. People decide project direction, tradeoffs, and final acceptance.</text></g></svg>
+  <title id="title">TaskCarry · Save progress. Share stages. Resume work.</title>
+  <desc id="description">A local workflow that carries work across conversations and workspaces.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0 0L8 4L0 8Z" fill="#6a969b" />
+    </marker>
+  </defs>
+  <rect width="1200" height="580" rx="20" fill="#f3f7f7" />
+  <g font-family="Segoe UI, Noto Sans CJK SC, Microsoft JhengHei, Microsoft YaHei, sans-serif">
+    <text x="42" y="50" text-anchor="start" font-size="29" fill="#19384b" font-weight="700">TaskCarry · Save progress. Share stages. Resume work.</text>
+    <text x="42" y="82" text-anchor="start" font-size="18" fill="#58717d" font-weight="400">A local workflow that carries work across conversations and workspaces.</text>
+    <text x="140" y="132" text-anchor="middle" font-size="17" fill="#0b776e" font-weight="700">01</text>
+    <rect x="40" y="151" width="200" height="135" rx="14" fill="#ffffff" stroke="#cbdcde" />
+    <text x="140.0" y="186" text-anchor="middle" font-size="20" fill="#19384b" font-weight="700">Do the work</text>
+    <text x="140.0" y="218" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Advance tasks in</text>
+    <text x="140.0" y="242" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">separate workspaces</text>
+    <path d="M240 218H272" fill="none" stroke="#6a969b" stroke-width="2.2" marker-end="url(#arrow)" />
+    <text x="372" y="132" text-anchor="middle" font-size="17" fill="#0b776e" font-weight="700">02</text>
+    <rect x="272" y="151" width="200" height="135" rx="14" fill="#ffffff" stroke="#cbdcde" />
+    <text x="372.0" y="186" text-anchor="middle" font-size="20" fill="#19384b" font-weight="700">Save progress</text>
+    <text x="372.0" y="218" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Select saved files</text>
+    <text x="372.0" y="242" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Record the next step</text>
+    <path d="M472 218H504" fill="none" stroke="#6a969b" stroke-width="2.2" marker-end="url(#arrow)" />
+    <text x="604" y="132" text-anchor="middle" font-size="17" fill="#0b776e" font-weight="700">03</text>
+    <rect x="504" y="151" width="200" height="135" rx="14" fill="#ffffff" stroke="#cbdcde" />
+    <text x="604.0" y="186" text-anchor="middle" font-size="20" fill="#19384b" font-weight="700">Prepare a stage</text>
+    <text x="604.0" y="218" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Identify task and version</text>
+    <text x="604.0" y="242" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Offer stable work</text>
+    <path d="M704 218H736" fill="none" stroke="#6a969b" stroke-width="2.2" marker-end="url(#arrow)" />
+    <text x="836" y="132" text-anchor="middle" font-size="17" fill="#0b776e" font-weight="700">04</text>
+    <rect x="736" y="151" width="200" height="135" rx="14" fill="#19384b" stroke="#cbdcde" />
+    <text x="836.0" y="186" text-anchor="middle" font-size="20" fill="#ffffff" font-weight="700">Bring it together</text>
+    <text x="836.0" y="218" text-anchor="middle" font-size="16" fill="#d9ecec" font-weight="400">Check files and effects</text>
+    <text x="836.0" y="242" text-anchor="middle" font-size="16" fill="#d9ecec" font-weight="400">Retain stage history</text>
+    <path d="M936 218H968" fill="none" stroke="#6a969b" stroke-width="2.2" marker-end="url(#arrow)" />
+    <text x="1068" y="132" text-anchor="middle" font-size="17" fill="#0b776e" font-weight="700">05</text>
+    <rect x="968" y="151" width="200" height="135" rx="14" fill="#ffffff" stroke="#cbdcde" />
+    <text x="1068.0" y="186" text-anchor="middle" font-size="20" fill="#19384b" font-weight="700">Keep working</text>
+    <text x="1068.0" y="218" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Update when ready</text>
+    <text x="1068.0" y="242" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Preserve local work</text>
+    <path d="M1068 286V330H140V286" fill="none" stroke="#6a969b" stroke-width="2.2" marker-end="url(#arrow)" />
+    <text x="600" y="357" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Bring new progress back into the shared workflow</text>
+    <rect x="65" y="390" width="510" height="120" rx="14" fill="#ffffff" stroke="#cbdcde" />
+    <text x="320.0" y="425" text-anchor="middle" font-size="20" fill="#19384b" font-weight="700">Pause without losing your place</text>
+    <text x="320.0" y="457" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Keep saved work and a next step</text>
+    <text x="320.0" y="481" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Resume the same task later</text>
+    <rect x="625" y="390" width="510" height="120" rx="14" fill="#ffffff" stroke="#cbdcde" />
+    <text x="880.0" y="425" text-anchor="middle" font-size="20" fill="#19384b" font-weight="700">Reuse a supported recovery method</text>
+    <text x="880.0" y="457" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Check what already happened</text>
+    <text x="880.0" y="481" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Finish missing steps when applicable</text>
+    <text x="600" y="552" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">Tools organize completed stages. People decide project direction, tradeoffs, and final acceptance.</text>
+  </g>
+</svg>

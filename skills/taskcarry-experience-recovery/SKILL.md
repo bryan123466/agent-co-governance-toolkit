@@ -1,13 +1,13 @@
 ---
-name: agct-experience-recovery
-description: Diagnose a concrete AGCT failure and apply or propose a condition-bound recovery. Use after an actual tool failure or interrupted operation, not for routine historical rechecking.
+name: taskcarry-experience-recovery
+description: Diagnose a concrete TaskCarry failure and apply or propose a condition-bound recovery. Use after an actual tool failure or interrupted operation, not for routine historical rechecking.
 ---
 
 # Conditional recovery / 条件经验恢复
 
 Start with the current error code, operation journal and actual Git/file effects. If an effect already happened, preserve that fact and repair only missing bookkeeping. Do not infer absence from a missing receipt, erase old evidence, or repeat the complete workflow.
 
-AGCT's experience rules are data, not shell programs. `verify_and_finalize` lets the receiving executor verify an already-applied Git effect and finish its receipt. `refresh_plan` is planning advice: where a saved operation proves that no effect was applied and has no candidate or stash, the agenda can return a structured `plan_request` with `execute: false`. It never silently replaces or executes a plan. Review the original failure and changed conditions, request the new plan, then review its exact scope before execution. Bind rules to the observed code and operation; add task scope when the evidence is task-specific. Enabled/version checks and applicability must hold before use.
+TaskCarry's experience rules are data, not shell programs. `verify_and_finalize` lets the receiving executor verify an already-applied Git effect and finish its receipt. `refresh_plan` is planning advice: where a saved operation proves that no effect was applied and has no candidate or stash, the agenda can return a structured `plan_request` with `execute: false`. It never silently replaces or executes a plan. Review the original failure and changed conditions, request the new plan, then review its exact scope before execution. Bind rules to the observed code and operation; add task scope when the evidence is task-specific. Enabled/version checks and applicability must hold before use.
 
 For receipt recovery, repeat the original bounded governance call so the engine verifies effects and uses an applicable rule. Inspect the returned experience-use and completion evidence. A matching rule, or reading its suggestion, is not proof of a repair. If the effect cannot be established or the condition changed, retain the actionable issue and identify the missing fact. Repeating an unchanged preparation failure is not progress; resolve its concrete conflict or retain its next condition. Do not discard the journal to restart a transaction.
 

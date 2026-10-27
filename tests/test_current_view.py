@@ -9,15 +9,15 @@ import threading
 import unittest
 from unittest import mock
 
-from agct.core import Core
-from agct.gitops import commit, git
-from agct.integration import Integration
-from agct.store import GovernanceError, Store
+from taskcarry.core import Core
+from taskcarry.gitops import commit, git
+from taskcarry.integration import Integration
+from taskcarry.store import GovernanceError, Store
 
 
 class CurrentViewTests(unittest.TestCase):
     def setUp(self):
-        self.temp = tempfile.TemporaryDirectory(prefix='agct-current-view-')
+        self.temp = tempfile.TemporaryDirectory(prefix='taskcarry-current-view-')
         self.root = Path(self.temp.name)
         self.project = self.root / 'control'
         Core.initialize(self.project, 'Synthetic current view')
@@ -129,7 +129,7 @@ class CurrentViewTests(unittest.TestCase):
         thread = threading.Thread(target=writer)
         thread.start()
         try:
-            with mock.patch('agct.store.sqlite3.connect', side_effect=connect):
+            with mock.patch('taskcarry.store.sqlite3.connect', side_effect=connect):
                 observed = self.core.status()
         finally:
             thread.join(6)

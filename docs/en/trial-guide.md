@@ -10,7 +10,7 @@ Extract the release source, open a terminal in it, and run `python -m venv .venv
 
 ```text
 python -m pip install .
-python -m agct --help
+python -m taskcarry --help
 ```
 
 Installation may require locally cached or downloaded Python build tooling. The installed toolkit runtime uses the standard library. Git must be installed separately for integration workflows. Do not use an administrator terminal merely to work around a project permission error.
@@ -18,12 +18,12 @@ Installation may require locally cached or downloaded Python build tooling. The 
 ## 2. Create and initialize the fictional project
 
 ```text
-python examples/quality_forms/bootstrap.py --destination ../agct-quality-demo
-python -m agct --project ../agct-quality-demo/control init --input ../agct-quality-demo/requests/init.json
-python -m agct --project ../agct-quality-demo/control workspace --input ../agct-quality-demo/requests/workspace-baseline.json
-python -m agct --project ../agct-quality-demo/control workspace --input ../agct-quality-demo/requests/workspace-forms.json
-python -m agct --project ../agct-quality-demo/control task --input ../agct-quality-demo/requests/task-forms.json
-python -m agct --project ../agct-quality-demo/control doctor
+python examples/quality_forms/bootstrap.py --destination ../taskcarry-quality-demo
+python -m taskcarry --project ../taskcarry-quality-demo/control init --input ../taskcarry-quality-demo/requests/init.json
+python -m taskcarry --project ../taskcarry-quality-demo/control workspace --input ../taskcarry-quality-demo/requests/workspace-baseline.json
+python -m taskcarry --project ../taskcarry-quality-demo/control workspace --input ../taskcarry-quality-demo/requests/workspace-forms.json
+python -m taskcarry --project ../taskcarry-quality-demo/control task --input ../taskcarry-quality-demo/requests/task-forms.json
+python -m taskcarry --project ../taskcarry-quality-demo/control doctor
 ```
 
 Review and quality workers have matching `workspace-review.json`, `task-review.json`, `workspace-quality.json`, and `task-quality.json` files. Register only the workers you intend to exercise. The baseline and workers are distinct Git worktrees; the control directory stores governance state.
@@ -33,8 +33,8 @@ Review and quality workers have matching `workspace-review.json`, `task-review.j
 Edit the forms worker's `forms/inspection.csv` using fictional values. Save the file. Then run:
 
 ```text
-python -m agct --project ../agct-quality-demo/control checkpoint --input ../agct-quality-demo/requests/checkpoint-forms.json
-python -m agct --project ../agct-quality-demo/control status
+python -m taskcarry --project ../taskcarry-quality-demo/control checkpoint --input ../taskcarry-quality-demo/requests/checkpoint-forms.json
+python -m taskcarry --project ../taskcarry-quality-demo/control status
 ```
 
 Inspect the returned checkpoint identifier. The request pauses the task and records the next step. It does not create a delivered stage. Unsaved editor buffers are outside the snapshot.
@@ -46,16 +46,16 @@ To test restoration, create a JSON request containing `checkpoint_id` and an abs
 Once a small synthetic edit is ready:
 
 ```text
-git -C ../agct-quality-demo/workers/forms add -- forms/inspection.csv
-git -C ../agct-quality-demo/workers/forms commit -m "Improve fictional inspection form"
-git -C ../agct-quality-demo/workers/forms rev-parse HEAD
+git -C ../taskcarry-quality-demo/workers/forms add -- forms/inspection.csv
+git -C ../taskcarry-quality-demo/workers/forms commit -m "Improve fictional inspection form"
+git -C ../taskcarry-quality-demo/workers/forms rev-parse HEAD
 ```
 
 Open `requests/submit-forms-template.json`, replace `REPLACE_WITH_YOUR_NEW_COMMIT` with that exact commit, and save it as `requests/submit-forms.json`. Its `base` came from the fictional baseline; its `paths` must exactly match the changed files between base and commit. Add a new field-dictionary path only if you actually committed it.
 
 ```text
-python -m agct --project ../agct-quality-demo/control submit --input ../agct-quality-demo/requests/submit-forms.json
-python -m agct --project ../agct-quality-demo/control reconcile --input ../agct-quality-demo/requests/reconcile-plan.json
+python -m taskcarry --project ../taskcarry-quality-demo/control submit --input ../taskcarry-quality-demo/requests/submit-forms.json
+python -m taskcarry --project ../taskcarry-quality-demo/control reconcile --input ../taskcarry-quality-demo/requests/reconcile-plan.json
 ```
 
 Read the plan. Make a new JSON file with `baseline: "baseline"`, `execute: true`, and the returned `plan_id`. Invoke `reconcile --input` with that execution file. Inspect both the result envelope and the baseline Git log. Do not edit a stored plan to force an outdated plan to pass.
@@ -75,23 +75,23 @@ For cumulative stages use `relation: "cumulative"` and a `supersedes` list. The 
 Create `setup-preview.json` containing `{"mode":"preview"}`. Then run:
 
 ```text
-python -m agct --project ../agct-quality-demo/control setup --input setup-preview.json
+python -m taskcarry --project ../taskcarry-quality-demo/control setup --input setup-preview.json
 ```
 
 Preview must not change files. If the listed managed paths are appropriate, create `setup-install.json` containing `{"mode":"install"}` and run the same command with that file. Setup writes:
 
-- `.agents/skills/agct-project-setup/SKILL.md`
-- `.agents/skills/agct-task-delivery/SKILL.md`
-- `.agents/skills/agct-governance-reconcile/SKILL.md`
-- `.agents/skills/agct-experience-recovery/SKILL.md`
-- `.agct/codex.mcp.toml`
-- `.agct/setup-manifest.json`
+- `.agents/skills/taskcarry-project-setup/SKILL.md`
+- `.agents/skills/taskcarry-task-delivery/SKILL.md`
+- `.agents/skills/taskcarry-governance-reconcile/SKILL.md`
+- `.agents/skills/taskcarry-experience-recovery/SKILL.md`
+- `.taskcarry/codex.mcp.toml`
+- `.taskcarry/setup-manifest.json`
 
 All are relative to the supplied project. Open **that project directory** as the Codex task's working directory so its project-local Skills can be discovered. Worker paths are supplied through the registered workspace records; keep each worker's assigned edit scope explicit.
 
 The TOML file is a **configuration fragment**, not an already activated connection. It contains a project-bound stdio server command. Review it and add the entry through the supported MCP configuration mechanism in your installed Codex version. The helper does not overwrite `.codex/config.toml`, `AGENTS.md`, or user-global configuration. Follow the [official MCP documentation](https://developers.openai.com/codex/mcp) for the host interface.
 
-Restart or refresh the tool connection if your host requires it, then ask Codex to call `agct_doctor` and `agct_status`. An ordinary CLI or protocol test does not prove this desktop connection works; preserve that distinction in your feedback.
+Restart or refresh the tool connection if your host requires it, then ask Codex to call `taskcarry_doctor` and `taskcarry_status`. An ordinary CLI or protocol test does not prove this desktop connection works; preserve that distinction in your feedback.
 
 Suggested worker prompt:
 
@@ -117,7 +117,7 @@ Project setup can update previously managed files only when its ownership and co
 
 Create `setup-uninstall.json` containing `{"mode":"uninstall"}` and invoke `setup --input` with it in the same project. The helper removes eligible unmodified managed files and reports modified files to preserve. It keeps core task state and snapshots. Remove a manually activated MCP configuration entry separately, after reviewing its identity; it remains user-managed.
 
-You can then uninstall the package from the dedicated environment with `python -m pip uninstall agent-co-governance-toolkit`, or retire that dedicated environment. Keep any checkpoints or evidence you still need. Do not use a cleanup command that deletes a parent directory containing unrelated work.
+You can then uninstall the package from the dedicated environment with `python -m pip uninstall taskcarry`, or retire that dedicated environment. Keep any checkpoints or evidence you still need. Do not use a cleanup command that deletes a parent directory containing unrelated work.
 
 ## Feedback
 

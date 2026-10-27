@@ -6,10 +6,10 @@ from setuptools.command.build_py import build_py
 
 
 SKILL_NAMES = (
-    "agct-project-setup",
-    "agct-task-delivery",
-    "agct-governance-reconcile",
-    "agct-experience-recovery",
+    "taskcarry-project-setup",
+    "taskcarry-task-delivery",
+    "taskcarry-governance-reconcile",
+    "taskcarry-experience-recovery",
 )
 SOURCE_ROOT = Path(__file__).resolve().parent
 
@@ -23,7 +23,7 @@ class BuildWithSkills(build_py):
             source = SOURCE_ROOT / relative
             if not source.is_file() or source.is_symlink():
                 raise RuntimeError(f"Missing canonical public skill: {relative.as_posix()}")
-            yield relative, Path(self.build_lib) / "agct" / "skill_data" / name / "SKILL.md"
+            yield relative, Path(self.build_lib) / "taskcarry" / "skill_data" / name / "SKILL.md"
 
     def run(self):
         super().run()

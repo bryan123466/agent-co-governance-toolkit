@@ -2,13 +2,13 @@
 
 [Complete Windows workflow](windows-example.md) · [Overview and options](operation-manual.md) · [简体中文](../zh-CN/getting-started.md) · [繁體中文](../zh-TW/getting-started.md)
 
-Keep your existing Codex chats, or add independent chats for work that needs to proceed in parallel. A governance chat uses the task and file information you provide to organize progress, bring ready stages together, and establish a clear starting point for continued work.
+Keep your existing local AI working chats, or add independent chats for work that needs to proceed in parallel. Governance uses the task and file information you provide to organize progress and collect ready stages. The concrete walkthrough uses Codex; other hosts need their own CLI/MCP connection and instruction-loading verification.
 
 Follow the [complete Windows workflow](windows-example.md) for installation, copyable prompts, and commands. This page explains how you will use the project afterward.
 
 ## Prepare the directories and two project inputs
 
-Before first initialization, create `CoGov`, `CoGov/control` and `CoGov/toolkit`. Extract the package directly into `toolkit`, with `START_HERE.md` and `packages/` immediately inside it. Open a governance chat in `control` and follow the main walkthrough.
+Before first initialization, create `TaskCarry`, `TaskCarry/control` and `TaskCarry/toolkit`. Extract the package directly into `toolkit`, with `START_HERE.md` and `packages/` immediately inside it. Open a governance chat in `control` and follow the main walkthrough.
 
 Provide:
 
@@ -17,7 +17,7 @@ Provide:
 
 Normal operation requires Python 3.11+ and Git. Governance creates the dedicated `runtime` and installs the package. `control` is an ordinary governance directory, not a specialist Git workspace. One root belongs to one real project.
 
-Governance determines whether to establish a first baseline or continue prior work from the actual context; you do not choose a route. **An empty CoGov directory does not prove there are no earlier outputs.** If the context is unclear, governance briefly checks for prior work or obtains the original chat's summary through section 3.1 of the main walkthrough before treating anything as a fresh empty project.
+Governance determines whether to establish a first baseline or continue prior work from the actual context; you do not choose a route. **An empty TaskCarry directory does not prove there are no earlier outputs.** If the context is unclear, governance briefly checks for prior work or obtains the original chat's summary through section 3.1 of the main walkthrough before treating anything as a fresh empty project.
 
 ## Add specialists when needed
 
@@ -35,8 +35,8 @@ Suitable workspaces can stay in place. When several old chats share a directory,
 ## After connection
 
 1. [Governance MCP](windows-example.md#mcp) supplies direct tool calls; the CLI is a fallback to the same engine.
-2. [Review the current work](windows-example.md#delivery): which results are already collected, which stages are ready, and which tasks remain unfinished or waiting. Keep progress and next steps for unfinished work; connecting the toolkit does not require declaring it complete.
-3. [Configure scheduling if useful](windows-example.md#automation). The host wakes governance to read the actual registered set without a fixed chat count.
+2. [Run the first bounded governance pass](windows-example.md#delivery) in the current chat. It reports installation, connection, registered work, actual results and your next step. Without deliverables, it reports readiness without creating sample work. Unfinished tasks keep their progress and next steps.
+3. [Configure scheduling if useful](windows-example.md#automation), reusing the first pass rather than repeating it. The host wakes governance to use the same Skill and tools; daily results continue in the chat.
 4. Continue your work. When pausing, save the files and next step you want to retain. Offer a stable stage to governance when it is ready, then update eligible workspaces as needed. The toolkit calls a saved progress record a checkpoint.
 
 History and pause points remain available. When returning to an installed project, continue from its current state rather than initializing again. [Private Git, backups and multiple computers](remote-and-multicomputer.md) remain optional; unused options are not a backlog.

@@ -36,7 +36,7 @@ class EvidenceResult(unittest.TextTestResult):
 def run(output):
     suite = unittest.defaultTestLoader.discover(str(ROOT / "tests"))
     result = unittest.TextTestRunner(verbosity=2, resultclass=EvidenceResult).run(suite)
-    evidence = {"schema": "agct.test-evidence.v1", "recorded_at": datetime.now(timezone.utc).isoformat(),
+    evidence = {"schema": "taskcarry.test-evidence.v1", "recorded_at": datetime.now(timezone.utc).isoformat(),
                 "platform": platform.system(), "python": platform.python_version(), "tests_run": result.testsRun,
                 "passed": sum(x["outcome"] == "PASS" for x in result.records), "skipped": len(result.skipped),
                 "failures": len(result.failures), "errors": len(result.errors), "successful": result.wasSuccessful(), "tests": result.records}

@@ -46,7 +46,7 @@ def validate_relative_path(root, value, allow_missing=True):
         low = part.casefold()
         if re.fullmatch(r'(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\..*)?', low):
             raise GovernanceError('UNSAFE_PATH', 'Reserved device filenames are not portable file paths.')
-        if low in ('.git', '.agct') or ':' in part or part.endswith((' ', '.')):
+        if low in ('.git', '.taskcarry') or ':' in part or part.endswith((' ', '.')):
             raise GovernanceError('RESERVED_PATH', 'Repository and governance metadata cannot be captured.')
         if (low in ('.env', 'credentials', 'credentials.json', 'id_rsa', 'id_ed25519')
                 or low.startswith('.env.') and low not in ('.env.example', '.env.sample', '.env.template')
@@ -120,7 +120,7 @@ class Core:
             raise GovernanceError('SCHEMA_VERSION_UNSUPPORTED', 'Use a compatible toolkit version for this project state.')
 
     @classmethod
-    def initialize(cls, project, name='Agent Co-Governance Toolkit project'):
+    def initialize(cls, project, name='TaskCarry project'):
         store = Store(project, create=True)
         with store.guard():
             config = store.get('config', 'project')
@@ -488,7 +488,7 @@ class Core:
             destination.mkdir(parents=True, exist_ok=True)
             if checkpoint['git']:
                 git(destination, 'init', '--quiet')
-                git(destination, 'config', 'user.name', 'AGCT synthetic restore')
+                git(destination, 'config', 'user.name', 'TaskCarry synthetic restore')
                 git(destination, 'config', 'user.email', 'restore@example.invalid')
                 for record in checkpoint['files']:
                     if record['head']:
@@ -496,7 +496,7 @@ class Core:
                         oid = git(destination, 'hash-object', '-w', '--stdin', input_bytes=data).stdout.decode().strip()
                         git(destination, 'update-index', '--add', '--cacheinfo', record['head']['mode'], oid, record['path'])
                 git(destination, 'commit', '--allow-empty', '--quiet', '-m',
-                    'AGCT synthetic restore baseline; original HEAD: ' + str(checkpoint['original_head']))
+                    'TaskCarry synthetic restore baseline; original HEAD: ' + str(checkpoint['original_head']))
                 for record in checkpoint['files']:
                     if record['index']:
                         oid = git(destination, 'hash-object', '-w', '--stdin', input_bytes=contents[(record['path'], 'index')]).stdout.decode().strip()
@@ -521,7 +521,7 @@ class Core:
             raise GovernanceError('INVALID_DECISION', 'Artifact decision must be ignore, dismiss, no_backup_needed or retain.')
         self._task(task_id)
         raw = Path(path).expanduser().absolute()
-        if any(part.casefold() in ('.git', '.agct') for part in raw.parts):
+        if any(part.casefold() in ('.git', '.taskcarry') for part in raw.parts):
             raise GovernanceError('RESERVED_PATH', 'Git and governance metadata cannot become artifacts.')
         # Artifact reads are explicitly named, but metadata/secret/link exclusions still apply.
         for ancestor in (raw, *raw.parents):

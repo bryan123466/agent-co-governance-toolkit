@@ -9,16 +9,16 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from agct.core import Core
-from agct.gitops import commit, git, out
-from agct.integration import Integration
-from agct.setup import configure, skill_sources
-from agct.store import GovernanceError
+from taskcarry.core import Core
+from taskcarry.gitops import commit, git, out
+from taskcarry.integration import Integration
+from taskcarry.setup import configure, skill_sources
+from taskcarry.store import GovernanceError
 
 
 class GovernanceLifecycleTests(unittest.TestCase):
     def setUp(self):
-        self.temp = tempfile.TemporaryDirectory(prefix="agct-lifecycle-")
+        self.temp = tempfile.TemporaryDirectory(prefix="taskcarry-lifecycle-")
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
         self.control = self.root / "control"
@@ -33,7 +33,7 @@ class GovernanceLifecycleTests(unittest.TestCase):
             "README.md": "Synthetic collaborative project\n",
             "form.txt": "name\nstatus\n",
             "rules.txt": "revision one\n",
-            ".gitignore": ".agct/\n",
+            ".gitignore": ".taskcarry/\n",
         }, "Synthetic common baseline")
         self.engine.workspace("baseline", self.baseline)
         self.workers = {}
@@ -133,9 +133,9 @@ class GovernanceLifecycleTests(unittest.TestCase):
     def test_interrupted_effect_uses_existing_experience_without_duplicate_commit(self):
         self.submit("forms", "agent-1", {"form.txt": "name\nstatus\nreviewed\n"}, "recoverable-stage")
         plan = self.engine.reconcile("baseline")["plan"]
-        (self.control / ".agct" / "SYNTHETIC_TEST_ONLY").write_text("synthetic", encoding="utf-8")
+        (self.control / ".taskcarry" / "SYNTHETIC_TEST_ONLY").write_text("synthetic", encoding="utf-8")
         workers_before = {name: self.git_layers(path) for name, path in self.workers.items()}
-        with patch.dict(os.environ, {"AGCT_TEST_FAULTS": "1"}):
+        with patch.dict(os.environ, {"TASKCARRY_TEST_FAULTS": "1"}):
             with self.assertRaises(GovernanceError) as caught:
                 self.engine.reconcile("baseline", True, plan["plan_id"], fault="after_effect")
         self.assertEqual(caught.exception.code, "INJECTED_INTERRUPTION")
@@ -184,7 +184,7 @@ class GovernanceLifecycleTests(unittest.TestCase):
             destination.parent.mkdir(parents=True, exist_ok=True)
             destination.write_bytes(source.read_bytes() + b"\nSynthetic lifecycle verification revision.\n")
             replacements.append(destination)
-        with patch("agct.setup.skill_sources", return_value=replacements):
+        with patch("taskcarry.setup.skill_sources", return_value=replacements):
             preview = configure(self.control, "preview")
             self.assertFalse(preview["conflicts"])
             configure(self.control, "install")

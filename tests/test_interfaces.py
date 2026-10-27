@@ -11,8 +11,8 @@ import tempfile
 import tomllib
 import unittest
 
-from agct.mcp import MAX_LINE_BYTES, Server, serve, tools_list
-from agct.setup import SetupError, configure
+from taskcarry.mcp import MAX_LINE_BYTES, Server, serve, tools_list
+from taskcarry.setup import SetupError, configure
 
 REPOSITORY = Path(__file__).resolve().parents[1]
 
@@ -52,7 +52,7 @@ class ProtocolTests(unittest.TestCase):
         for tool in tools:
             self.assertFalse(tool["inputSchema"]["additionalProperties"])
             self.assertNotIn("project", tool["inputSchema"]["properties"])
-        agenda = next(tool for tool in tools if tool["name"] == "agct_agenda")
+        agenda = next(tool for tool in tools if tool["name"] == "taskcarry_agenda")
         self.assertTrue(agenda["annotations"]["readOnlyHint"])
         self.assertFalse(self.calls)
 
@@ -64,7 +64,7 @@ class ProtocolTests(unittest.TestCase):
 
     def test_fixed_root_and_unicode_tool_result(self):
         self.server.handle(initialize())
-        result = self.server.handle(request("tools/call", {"name": "agct_task", "arguments": {"task_id": "任务-1", "title": "Quality form"}}))["result"]
+        result = self.server.handle(request("tools/call", {"name": "taskcarry_task", "arguments": {"task_id": "任务-1", "title": "Quality form"}}))["result"]
         self.assertFalse(result["isError"])
         self.assertEqual(self.calls[0][0], self.root.resolve())
         self.assertEqual(result["structuredContent"]["result"]["arguments"]["task_id"], "任务-1")
@@ -72,7 +72,7 @@ class ProtocolTests(unittest.TestCase):
     def test_project_override_and_fault_injection_are_not_tools(self):
         self.server.handle(initialize())
         for arguments in ({"project": str(self.root.parent)}, {"baseline": "baseline", "fault": "after_effect"}):
-            tool = "agct_status" if "project" in arguments else "agct_reconcile"
+            tool = "taskcarry_status" if "project" in arguments else "taskcarry_reconcile"
             reply = self.server.handle(request("tools/call", {"name": tool, "arguments": arguments}))
             self.assertEqual(reply["error"]["code"], -32602)
         self.assertFalse(self.calls)
@@ -80,14 +80,14 @@ class ProtocolTests(unittest.TestCase):
     def test_malformed_schema_values_do_not_reach_engine(self):
         self.server.handle(initialize())
         cases = [
-            ("agct_task", {"task_id": "x", "state": "maybe"}),
-            ("agct_reconcile", {"baseline": "baseline", "execute": 1}),
-            ("agct_checkpoint", {"task_id": "x", "workspace": "w", "paths": ["a", "a"], "next_step": "continue"}),
-            ("agct_checkpoint", {"task_id": "x"}),
-            ("agct_status", []),
-            ("agct_agenda", {"limit": True}),
-            ("agct_agenda", {"limit": 101}),
-            ("agct_agenda", {"limit": 1.5}),
+            ("taskcarry_task", {"task_id": "x", "state": "maybe"}),
+            ("taskcarry_reconcile", {"baseline": "baseline", "execute": 1}),
+            ("taskcarry_checkpoint", {"task_id": "x", "workspace": "w", "paths": ["a", "a"], "next_step": "continue"}),
+            ("taskcarry_checkpoint", {"task_id": "x"}),
+            ("taskcarry_status", []),
+            ("taskcarry_agenda", {"limit": True}),
+            ("taskcarry_agenda", {"limit": 101}),
+            ("taskcarry_agenda", {"limit": 1.5}),
         ]
         for name, arguments in cases:
             self.assertEqual(self.server.handle(request("tools/call", {"name": name, "arguments": arguments}))["error"]["code"], -32602)
@@ -95,8 +95,8 @@ class ProtocolTests(unittest.TestCase):
 
     def test_notification_cannot_mutate_and_unknown_tool_is_rpc_error(self):
         self.server.handle(initialize())
-        self.assertIsNone(self.server.handle({"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "agct_task", "arguments": {"task_id": "x"}}}))
-        self.assertEqual(self.server.handle(request("tools/call", {"name": "agct_shell"}))["error"]["code"], -32602)
+        self.assertIsNone(self.server.handle({"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "taskcarry_task", "arguments": {"task_id": "x"}}}))
+        self.assertEqual(self.server.handle(request("tools/call", {"name": "taskcarry_shell"}))["error"]["code"], -32602)
         self.assertFalse(self.calls)
 
     def test_tool_failure_is_not_protocol_failure(self):
@@ -108,13 +108,13 @@ class ProtocolTests(unittest.TestCase):
 
         self.server.invoke = fail
         self.server.handle(initialize())
-        reply = self.server.handle(request("tools/call", {"name": "agct_status"}))["result"]
+        reply = self.server.handle(request("tools/call", {"name": "taskcarry_status"}))["result"]
         self.assertTrue(reply["isError"])
         self.assertEqual(reply["structuredContent"]["error"]["code"], "BASELINE_CHANGED")
 
     def test_old_version_omits_structured_results(self):
         self.server.handle(initialize("2024-11-05"))
-        reply = self.server.handle(request("tools/call", {"name": "agct_status"}))["result"]
+        reply = self.server.handle(request("tools/call", {"name": "taskcarry_status"}))["result"]
         self.assertNotIn("structuredContent", reply)
         self.assertFalse(reply["isError"])
 
@@ -160,35 +160,35 @@ class SetupTests(unittest.TestCase):
 
     def test_uninstall_preserves_changed_skills_and_project_files(self):
         configure(self.root, mode="install")
-        changed = self.root / ".agents/skills/agct-task-delivery/SKILL.md"
+        changed = self.root / ".agents/skills/taskcarry-task-delivery/SKILL.md"
         changed.write_text("User modified instructions", encoding="utf-8")
         (self.root / "deliverable.md").write_text("Keep", encoding="utf-8")
         result = configure(self.root, mode="uninstall")
-        self.assertEqual(result["preserved_modified"], [".agents/skills/agct-task-delivery/SKILL.md"])
+        self.assertEqual(result["preserved_modified"], [".agents/skills/taskcarry-task-delivery/SKILL.md"])
         self.assertEqual(changed.read_text(encoding="utf-8"), "User modified instructions")
         self.assertTrue((self.root / "deliverable.md").exists())
-        self.assertFalse((self.root / ".agct/codex.mcp.toml").exists())
+        self.assertFalse((self.root / ".taskcarry/codex.mcp.toml").exists())
 
     def test_unmanaged_destination_conflict_causes_no_install(self):
-        target = self.root / ".agents/skills/agct-project-setup/SKILL.md"
+        target = self.root / ".agents/skills/taskcarry-project-setup/SKILL.md"
         target.parent.mkdir(parents=True)
         target.write_text("Existing user skill", encoding="utf-8")
         with self.assertRaises(SetupError) as raised:
             configure(self.root, mode="install")
         self.assertEqual(raised.exception.code, "SETUP_CONFLICT")
         self.assertEqual(target.read_text(encoding="utf-8"), "Existing user skill")
-        self.assertFalse((self.root / ".agct/codex.mcp.toml").exists())
+        self.assertFalse((self.root / ".taskcarry/codex.mcp.toml").exists())
 
     def test_manifest_cannot_authorize_deleting_arbitrary_project_file(self):
-        (self.root / ".agct").mkdir()
-        (self.root / ".agct/setup-manifest.json").write_text(json.dumps({"format": 1, "files": {"important.txt": "0" * 64}}), encoding="utf-8")
+        (self.root / ".taskcarry").mkdir()
+        (self.root / ".taskcarry/setup-manifest.json").write_text(json.dumps({"format": 1, "files": {"important.txt": "0" * 64}}), encoding="utf-8")
         with self.assertRaises(SetupError) as raised:
             configure(self.root, mode="uninstall")
         self.assertEqual(raised.exception.code, "SETUP_MANIFEST_INVALID")
 
     def test_generated_fragment_launches_real_subprocess_from_other_directory(self):
         configure(self.root, mode="install")
-        config = tomllib.loads((self.root / ".agct/codex.mcp.toml").read_text(encoding="utf-8"))["mcp_servers"]["agct"]
+        config = tomllib.loads((self.root / ".taskcarry/codex.mcp.toml").read_text(encoding="utf-8"))["mcp_servers"]["taskcarry"]
         environment = os.environ.copy()
         environment.update(config["env"])
         frames = "\n".join(json.dumps(item) for item in [initialize(), request("tools/list", request_id=2)]) + "\n"
@@ -223,7 +223,7 @@ class CliSubprocessTests(unittest.TestCase):
         self.tmp.cleanup()
 
     def run_cli(self, *args):
-        return subprocess.run([sys.executable, "-m", "agct", "--project", str(self.root), *args], capture_output=True, text=True, encoding="utf-8", env=self.environment, cwd=self.root, timeout=20)
+        return subprocess.run([sys.executable, "-m", "taskcarry", "--project", str(self.root), *args], capture_output=True, text=True, encoding="utf-8", env=self.environment, cwd=self.root, timeout=20)
 
     def test_invalid_json_and_action_have_machine_readable_errors(self):
         for args in (("status", "--json", "[1]"), ("status", "--json", "{"), ("shell",)):
@@ -239,7 +239,7 @@ class CliSubprocessTests(unittest.TestCase):
         self.assertEqual(json.loads(result.stdout)["result"]["mode"], "preview")
         result = self.run_cli("setup", "--input", str(arguments), "--json", "{}")
         self.assertEqual(result.returncode, 1)
-        self.assertFalse((self.root / ".agct").exists())
+        self.assertFalse((self.root / ".taskcarry").exists())
 
     def test_real_engine_roundtrip_in_independent_processes(self):
         initialized = self.run_cli("init", "--json", '{"name":"Synthetic interface test"}')
@@ -250,8 +250,8 @@ class CliSubprocessTests(unittest.TestCase):
         self.assertEqual(status.returncode, 0, status.stdout + status.stderr)
         self.assertIn("form-review", status.stdout)
         self.assertIn("paused", status.stdout)
-        frames = "\n".join(json.dumps(item) for item in [initialize(), request("tools/call", {"name": "agct_status"}, request_id=2)]) + "\n"
-        process = subprocess.run([sys.executable, "-m", "agct", "--project", str(self.root), "mcp"], input=frames, text=True, encoding="utf-8", capture_output=True, env=self.environment, cwd=self.root, timeout=20)
+        frames = "\n".join(json.dumps(item) for item in [initialize(), request("tools/call", {"name": "taskcarry_status"}, request_id=2)]) + "\n"
+        process = subprocess.run([sys.executable, "-m", "taskcarry", "--project", str(self.root), "mcp"], input=frames, text=True, encoding="utf-8", capture_output=True, env=self.environment, cwd=self.root, timeout=20)
         replies = [json.loads(line) for line in process.stdout.splitlines()]
         self.assertEqual(process.returncode, 0, process.stderr)
         self.assertFalse(replies[1]["result"]["isError"])

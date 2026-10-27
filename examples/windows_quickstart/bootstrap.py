@@ -1,7 +1,7 @@
 """Create a neutral new-project scaffold without inventing tasks or roles.
 
-Run with the Python environment that already has AGCT installed. The default
-layout is `C:/CoGov`; --root selects a separate disposable validation location.
+Run with the Python environment that already has TaskCarry installed. The default
+layout is `C:/TaskCarry`; --root selects a separate disposable validation location.
 An existing completely empty control directory is allowed. Existing toolkit/runtime
 directories are left alone. No remote, scheduled task,
 active Codex configuration, or global Git configuration is created or changed.
@@ -53,8 +53,8 @@ def git(repository: Path, *arguments: str) -> str:
 
 def generate(root: Path, agents: int = 0, name: str = "Project") -> dict:
     # Import the installed toolkit; do not install dependencies or alter sys.path.
-    from agct.api import invoke
-    from agct.setup import configure, skill_sources
+    from taskcarry.api import invoke
+    from taskcarry.setup import configure, skill_sources
 
     if type(agents) is not int or agents < 0:
         raise ValueError("agents must be a nonnegative integer.")
@@ -96,7 +96,7 @@ def generate(root: Path, agents: int = 0, name: str = "Project") -> dict:
             control.mkdir(exist_ok=False)
         for directory in (repository, workspaces):
             directory.mkdir(exist_ok=False)
-        files = {"README.md": f"# {name}\n\nA new project managed with Agent Co-Governance Toolkit.\n\n"
+        files = {"README.md": f"# {name}\n\nA new project managed with TaskCarry.\n\n"
                  "The initial commit contains only this neutral scaffold.\n"
                  "Define the actual goal and scope in PROJECT_CONTEXT.md using the user's instructions.\n",
                  "PROJECT_CONTEXT.md": CONTEXT}
@@ -108,7 +108,7 @@ def generate(root: Path, agents: int = 0, name: str = "Project") -> dict:
         git(repository, "init", "-b", "main")
         git(repository, "config", "--local", "core.autocrlf", "false")
         git(repository, "add", "--", *files)
-        git(repository, "-c", "user.name=AGCT Bootstrap", "-c", "user.email=bootstrap@example.invalid",
+        git(repository, "-c", "user.name=TaskCarry Bootstrap", "-c", "user.email=bootstrap@example.invalid",
             "commit", "-m", "Create neutral project scaffold")
         seed = git(repository, "rev-parse", "HEAD")
         baseline = workspaces / "baseline"
@@ -127,7 +127,7 @@ def generate(root: Path, agents: int = 0, name: str = "Project") -> dict:
                 f"Control: `{control}`", f"Initial commit: `{seed}`", "",
                 "The baseline is integration-only. Workers use the same CONTROL.",
                 "Create task IDs and responsibilities from the user's actual project before checkpoint or submit.",
-                "The initial commit uses a temporary AGCT Bootstrap identity; no Git user identity was saved.",
+                "The initial commit uses a temporary TaskCarry Bootstrap identity; no Git user identity was saved.",
                 "Professional commits must use the user's configured Git identity.",
                 "No MCP connection or automation has been activated.", "",
                 "| Workspace | Branch | Responsibility |", "|---|---|---|",
@@ -154,7 +154,7 @@ def generate(root: Path, agents: int = 0, name: str = "Project") -> dict:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--root", type=Path, default=Path("C:/CoGov"))
+    parser.add_argument("--root", type=Path, default=Path("C:/TaskCarry"))
     parser.add_argument("--agents", type=int, default=0,
                         help="Pre-create N worker workspaces without assigning tasks; N must be nonnegative (default: 0)")
     parser.add_argument("--name", default="Project", help="Actual project name (default: Project)")

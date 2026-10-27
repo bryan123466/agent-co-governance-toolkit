@@ -9,13 +9,13 @@ import tempfile
 import unittest
 from unittest import mock
 
-from agct.core import Core, git, validate_relative_path
-from agct.store import GovernanceError, Store
+from taskcarry.core import Core, git, validate_relative_path
+from taskcarry.store import GovernanceError, Store
 
 
 class CoreTests(unittest.TestCase):
     def setUp(self):
-        self.temp = tempfile.TemporaryDirectory(prefix='agct-core-')
+        self.temp = tempfile.TemporaryDirectory(prefix='taskcarry-core-')
         self.root = Path(self.temp.name)
         self.project = self.root / 'governance'
         Core.initialize(self.project, 'Synthetic quality forms')
@@ -93,7 +93,7 @@ class CoreTests(unittest.TestCase):
         with self.core.store.guard():
             with self.core.store.guard():
                 self.core.store.put('checks', 'test', {'value': 1})
-            command = "from agct.store import Store,GovernanceError;import sys\ns=Store(sys.argv[1])\ntry:\n with s.guard(): print('unexpected')\nexcept GovernanceError as e: print(e.code)"
+            command = "from taskcarry.store import Store,GovernanceError;import sys\ns=Store(sys.argv[1])\ntry:\n with s.guard(): print('unexpected')\nexcept GovernanceError as e: print(e.code)"
             process = subprocess.run([sys.executable, '-c', command, str(self.project)], capture_output=True, text=True)
             self.assertEqual(0, process.returncode, process.stderr)
             self.assertEqual('BUSY', process.stdout.strip())
@@ -102,7 +102,7 @@ class CoreTests(unittest.TestCase):
 
     def test_path_escape_metadata_and_secrets_rejected(self):
         for path, code in [('../outside.txt', 'UNSAFE_PATH'), ('C:/outside.txt', 'UNSAFE_PATH'),
-                           ('.git/config', 'RESERVED_PATH'), ('.agct/state.sqlite3', 'RESERVED_PATH'),
+                           ('.git/config', 'RESERVED_PATH'), ('.taskcarry/state.sqlite3', 'RESERVED_PATH'),
                            ('.env', 'SECRET_PATH'), ('keys/id_rsa', 'SECRET_PATH')]:
             self.assertCode(code, validate_relative_path, self.workspace, path)
 
@@ -170,7 +170,7 @@ class CoreTests(unittest.TestCase):
         (self.workspace / 'f.txt').write_bytes(b'saved')
         checkpoint = self.core.checkpoint('forms', self.workspace, ['f.txt'], 'Continue')
         digest = checkpoint['files'][0]['worktree']['sha256']
-        (self.project / '.agct' / 'objects' / digest).write_bytes(b'corrupt')
+        (self.project / '.taskcarry' / 'objects' / digest).write_bytes(b'corrupt')
         destination = self.root / 'untouched'
         self.assertCode('SNAPSHOT_CORRUPT', self.core.restore, checkpoint['checkpoint_id'], destination)
         self.assertFalse(destination.exists())
@@ -207,7 +207,7 @@ class CoreTests(unittest.TestCase):
             self.assertEqual(original.exists(), copy.exists(), path)
             if original.exists():
                 self.assertEqual(original.read_bytes(), copy.read_bytes(), path)
-        self.assertIn(b'AGCT synthetic restore baseline', git(restored, 'log', '-1', '--format=%B').stdout)
+        self.assertIn(b'TaskCarry synthetic restore baseline', git(restored, 'log', '-1', '--format=%B').stdout)
 
     def test_artifact_decision_is_bound_to_content(self):
         target = self.workspace / 'large.bin'

@@ -9,7 +9,7 @@ import tempfile
 import unittest
 from unittest import mock
 
-from agct.api import invoke
+from taskcarry.api import invoke
 
 
 SOURCE = Path(__file__).resolve().parents[1] / "examples/windows_quickstart/bootstrap.py"
@@ -20,7 +20,7 @@ SPEC.loader.exec_module(bootstrap)
 
 class WindowsQuickstartTests(unittest.TestCase):
     def setUp(self):
-        self.temp = tempfile.TemporaryDirectory(prefix="agct-quickstart-")
+        self.temp = tempfile.TemporaryDirectory(prefix="taskcarry-quickstart-")
         self.root = Path(self.temp.name) / "new-project"
 
     def tearDown(self):
@@ -55,7 +55,7 @@ class WindowsQuickstartTests(unittest.TestCase):
         local_config = bootstrap.git(self.root / "repository", "config", "--local", "--list")
         self.assertNotIn("user.name=", local_config)
         self.assertNotIn("user.email=", local_config)
-        self.assertEqual("AGCT Bootstrap|bootstrap@example.invalid", bootstrap.git(self.root / "repository", "log", "-1", "--format=%an|%ae"))
+        self.assertEqual("TaskCarry Bootstrap|bootstrap@example.invalid", bootstrap.git(self.root / "repository", "log", "-1", "--format=%an|%ae"))
         for name in ("toolkit", "runtime"):
             self.assertEqual("untouched", (self.root / name / "keep.txt").read_text(encoding="utf-8"))
         with self.assertRaisesRegex(ValueError, "existing target"):
@@ -82,7 +82,7 @@ class WindowsQuickstartTests(unittest.TestCase):
                 self.assertIn("checkpoint_id", checkpoint)
 
     def test_nonempty_control_including_governance_state_is_preserved(self):
-        for name in ("notes.txt", ".agct"):
+        for name in ("notes.txt", ".taskcarry"):
             with self.subTest(content=name):
                 root = self.root / name.replace(".", "-")
                 control = root / "control"

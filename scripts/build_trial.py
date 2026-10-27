@@ -15,18 +15,19 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from agct import __version__
+from taskcarry import __version__
 
 ROOT_FILES = {"README.md", "README.zh-CN.md", "README.zh-TW.md", "START_HERE.md", "LICENSE", "LICENSE_SCOPE.md", "SECURITY.md", "CONTRIBUTING.md", "pyproject.toml", "setup.py", ".gitignore", ".gitattributes", "AGENTS.md"}
-DIRECTORIES = {"agct", "skills", "docs", "templates", "examples", "tests", "scripts", ".github"}
+DIRECTORIES = {"taskcarry", "skills", "docs", "templates", "examples", "tests", "scripts", ".github"}
 EXTENSIONS = {".py", ".md", ".json", ".toml", ".html", ".css", ".js", ".yaml", ".yml", ".txt", ".svg", ".csv"}
 # This illustrative redraw was visually reviewed; original project screenshots
 # are not allowed. A changed or additional binary must be reviewed explicitly.
 REVIEWED_BINARY_ASSETS = {
     "docs/assets/workspace-sidebar-example.png": "dfc75af11cf1a2950f16479b70e95346b97fb0a06f73fc0fbdfca6dbacfaee22",
+    "docs/assets/social-preview.png": "146363c09e7d4cf1cf8763c3c9ce021621f0ee204a436eda01ac1536bf5163b3",
 }
-EXCLUDED = {"__pycache__", ".agct", ".venv", ".git", "node_modules", "dist", "build", "local"}
-SKILLS = {"agct-project-setup", "agct-task-delivery", "agct-governance-reconcile", "agct-experience-recovery"}
+EXCLUDED = {"__pycache__", ".taskcarry", ".venv", ".git", "node_modules", "dist", "build", "local"}
+SKILLS = {"taskcarry-project-setup", "taskcarry-task-delivery", "taskcarry-governance-reconcile", "taskcarry-experience-recovery"}
 REQUIRED = {"docs/VALIDATION.md", "docs/VALIDATION_RESULTS.json", "README.md", "README.zh-CN.md", "README.zh-TW.md", "LICENSE", "LICENSE_SCOPE.md", "pyproject.toml", "setup.py"}
 # Deliberately invalid path in a public traversal-rejection test fixture.
 SYNTHETIC_ABSOLUTE_LITERALS = {"C:/outside.txt"}
@@ -55,7 +56,7 @@ def reviewed_example_path(name, value):
     if name not in SYNTHETIC_EXAMPLE_FILES:
         return False
     normalized = value.replace("\\", "/")
-    if not re.fullmatch(r"C:" + r"/CoGov(?:/[A-Za-z0-9_.-]+)*/?", normalized):
+    if not re.fullmatch(r"C:" + r"/TaskCarry(?:/[A-Za-z0-9_.-]+)*/?", normalized):
         return False
     return all(part not in {".", ".."} for part in normalized.split("/"))
 
@@ -83,7 +84,7 @@ def files():
                              and not name.endswith(".egg-info")
                              and not linked(base / name)
                              and (base != ROOT or name in DIRECTORIES)
-                             and (base != ROOT / "agct" or name != "skill_data"))
+                             and (base != ROOT / "taskcarry" or name != "skill_data"))
         for name in sorted(filenames):
             path = base / name
             if linked(path) or not path.is_file():
@@ -143,7 +144,7 @@ def snapshot(deny_tokens=()):
     if actual_skills != SKILLS:
         raise RuntimeError("The release must contain the four reviewed public skills")
     for skill in sorted(SKILLS):
-        contents[f"agct/skill_data/{skill}/SKILL.md"] = contents[f"skills/{skill}/SKILL.md"]
+        contents[f"taskcarry/skill_data/{skill}/SKILL.md"] = contents[f"skills/{skill}/SKILL.md"]
     screening = screen_content(contents, deny_tokens)
     return contents, screening
 
@@ -161,8 +162,8 @@ def build_dependencies():
 
 
 def inspect_wheel(wheel, source, deny_tokens=()):
-    expected = {name: data for name, data in source.items() if name.startswith("agct/")}
-    if not {f"agct/skill_data/{skill}/SKILL.md" for skill in SKILLS}.issubset(expected):
+    expected = {name: data for name, data in source.items() if name.startswith("taskcarry/")}
+    if not {f"taskcarry/skill_data/{skill}/SKILL.md" for skill in SKILLS}.issubset(expected):
         raise RuntimeError("Frozen wheel sources lack one or more required skills")
     with zipfile.ZipFile(wheel) as archive:
         names = archive.namelist()
@@ -175,14 +176,14 @@ def inspect_wheel(wheel, source, deny_tokens=()):
                 continue
             if name.startswith("/") or ".." in Path(name).parts or "\\" in name or stat.S_ISLNK(info.external_attr >> 16):
                 raise RuntimeError("Wheel contains an unsafe member")
-            if not (name.startswith("agct/") or re.match(r"agent_co_governance_toolkit-[^/]+\.dist-info/", name)):
+            if not (name.startswith("taskcarry/") or re.match(r"taskcarry-[^/]+\.dist-info/", name)):
                 raise RuntimeError("Wheel contains a file outside the allowed package and metadata")
-            if not name.startswith("agct/"):
+            if not name.startswith("taskcarry/"):
                 relative_metadata = name.split(".dist-info/", 1)[1]
                 if relative_metadata not in {"METADATA", "WHEEL", "RECORD", "entry_points.txt", "top_level.txt", "licenses/LICENSE", "licenses/LICENSE_SCOPE.md", "LICENSE", "LICENSE_SCOPE.md"}:
                     raise RuntimeError("Wheel contains unreviewed distribution metadata")
             packaged[name] = archive.read(info)
-        actual = {name: data for name, data in packaged.items() if name.startswith("agct/")}
+        actual = {name: data for name, data in packaged.items() if name.startswith("taskcarry/")}
         if set(actual) != set(expected):
             raise RuntimeError("Wheel package membership differs from the frozen allowlist")
         if any(actual[name] != data for name, data in expected.items()):
@@ -223,8 +224,8 @@ def build(destination, replace=False, deny_tokens=(), profile="source"):
     if destination == ROOT or destination.is_relative_to(ROOT):
         raise RuntimeError("Release output must be outside the source repository")
     destination.parent.mkdir(parents=True, exist_ok=True)
-    prefix = "agent-co-governance-toolkit-" + __version__
-    with tempfile.TemporaryDirectory(prefix="agct-build-", dir=destination.parent) as temporary:
+    prefix = "taskcarry-" + __version__
+    with tempfile.TemporaryDirectory(prefix="taskcarry-build-", dir=destination.parent) as temporary:
         temporary = Path(temporary)
         stage, output = temporary / "source", temporary / "output"
         stage.mkdir()
@@ -242,7 +243,7 @@ def build(destination, replace=False, deny_tokens=(), profile="source"):
         if profile == "product":
             archive_contents["packages/" + wheels[0].name] = wheels[0].read_bytes()
             archive_contents["SHA256SUMS.txt"] = (sha(wheels[0].read_bytes()) + "  packages/" + wheels[0].name + "\n").encode("utf-8")
-        manifest = {"product": "Agent Co-Governance Toolkit", "version": __version__,
+        manifest = {"product": "TaskCarry", "version": __version__,
                     "files": [{"path": name, "sha256": sha(content), "bytes": len(content)} for name, content in sorted(archive_contents.items())]}
         archive = output / (prefix + ("-product" if profile == "product" else "") + ".zip")
         with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED) as zipped:

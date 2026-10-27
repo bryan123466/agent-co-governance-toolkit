@@ -30,7 +30,7 @@ jobs:
       - name: Install local distribution
         run: python -m pip install .
       - name: Verify command entrypoint
-        run: python -m agct --help
+        run: python -m taskcarry --help
       - name: Run unit and disposable Git integration tests
         run: python -m unittest discover -s tests -v
       - name: Build distribution wheel

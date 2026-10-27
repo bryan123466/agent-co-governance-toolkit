@@ -1,4 +1,4 @@
-# Agent Co-Governance Toolkit development
+# TaskCarry development
 
 Build an independent, reusable toolkit. Use synthetic projects for all examples and tests. Keep private project data, real host paths, credentials, and production receipts out of this repository. Do not change user-level Codex configuration or run production scheduled tasks during validation.
 

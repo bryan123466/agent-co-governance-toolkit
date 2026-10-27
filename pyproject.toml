@@ -3,20 +3,27 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "agent-co-governance-toolkit"
-version = "0.2.0rc3"
-description = "Local-first task continuity and evidence-based governance tools for coding agents"
+name = "taskcarry"
+version = "0.2.0rc4"
+description = "Local-first project memory and workspace collaboration for AI tools"
 readme = "README.md"
 requires-python = ">=3.11"
 license = {text = "MIT"}
-authors = [{name = "Agent Co-Governance Toolkit contributors"}]
+authors = [{name = "TaskCarry contributors"}]
 dependencies = []
+keywords = ["ai-agents", "project-memory", "workspace-coordination", "mcp", "git-worktree", "local-first"]
+
+[project.urls]
+Homepage = "https://github.com/bryan123466/taskcarry"
+Documentation = "https://github.com/bryan123466/taskcarry/blob/main/START_HERE.md"
+Issues = "https://github.com/bryan123466/taskcarry/issues"
+Releases = "https://github.com/bryan123466/taskcarry/releases"
 
 [project.scripts]
-agct = "agct.cli:main"
+taskcarry = "taskcarry.cli:main"
 
 [tool.setuptools.packages.find]
-include = ["agct*"]
+include = ["taskcarry*"]
 
 [tool.setuptools.package-data]
-agct = ["skill_data/**/*"]
+taskcarry = ["skill_data/**/*"]

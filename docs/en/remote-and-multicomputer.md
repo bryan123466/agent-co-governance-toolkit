@@ -4,9 +4,9 @@ Windows users can follow the [fixed-path walkthrough](windows-example.md) with r
 
 [Operation manual](operation-manual.md) · [简体中文](../zh-CN/remote-and-multicomputer.md) · [繁體中文](../zh-TW/remote-and-multicomputer.md) · [Command reference](../COMMANDS.md)
 
-Applies to 0.2.0rc1. These are optional reference procedures, not daily tasks required after installation. The cross-computer procedure has not been validated end to end on two physical computers. It combines Git operations with the existing local AGCT interface; it does not add automatic cross-host synchronization or recovery.
+Applies to 0.2.0rc4. These are optional reference procedures, not daily tasks required after installation. The cross-computer procedure has not been validated end to end on two physical computers. It combines Git operations with the existing local TaskCarry interface; it does not add automatic cross-host synchronization or recovery.
 
-Replace every `<...>` placeholder. Use the Python environment in which AGCT is installed. Save request files as UTF-8 JSON. Git pushes transmit data to the selected remote, so establish the destination, its readers and the authorized scope before uploading.
+Replace every `<...>` placeholder. Use the Python environment in which TaskCarry is installed. Save request files as UTF-8 JSON. Git pushes transmit data to the selected remote, so establish the destination, its readers and the authorized scope before uploading.
 
 <a id="private-git"></a>
 
@@ -20,12 +20,12 @@ Replace every `<...>` placeholder. Use the Python environment in which AGCT is i
 |---|---|---|
 | Selected code, documents and stable outputs | A private Git repository, committed and pushed | Uploaded file versions and commit history |
 | Curated project memory: goals, decisions, current position, next steps and sources | Ordinary Markdown/JSON files in private Git | A readable project handoff across computers |
-| AGCT tasks, stages, operations and experience records | `.agct/state.sqlite3` in the local control directory | Local tool state and historical records |
-| Checkpoint file objects | `.agct/objects/` in that same control directory | Explicitly captured files and their checkpoint layers |
-| Unsaved editor buffers and files outside checkpoints | Their original application/workspace; save or back them up separately | Git and AGCT do not capture these automatically |
+| TaskCarry tasks, stages, operations and experience records | `.taskcarry/state.sqlite3` in the local control directory | Local tool state and historical records |
+| Checkpoint file objects | `.taskcarry/objects/` in that same control directory | Explicitly captured files and their checkpoint layers |
+| Unsaved editor buffers and files outside checkpoints | Their original application/workspace; save or back them up separately | Git and TaskCarry do not capture these automatically |
 | Videos, installers, large data and similar artifacts | Authorized file storage; record location, size and hash in Git | A way to locate and verify bytes, not proof of upload or access |
 
-**Private Git is not an automatic mirror of a computer or the governance database.** Selected files reach it only after commit and push. Ignored files, unfinished uncommitted work and local chat history are not included automatically. GitHub blocks ordinary Git files larger than 100 MiB; use separately chosen storage or explicitly configure Git LFS for suitable large files. AGCT configures neither automatically. [GitHub file limits](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github)
+**Private Git is not an automatic mirror of a computer or the governance database.** Selected files reach it only after commit and push. Ignored files, unfinished uncommitted work and local chat history are not included automatically. GitHub blocks ordinary Git files larger than 100 MiB; use separately chosen storage or explicitly configure Git LFS for suitable large files. TaskCarry configures neither automatically. [GitHub file limits](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github)
 
 ### 4.2 Establish the private remote and one main writer
 
@@ -56,7 +56,7 @@ git -C "<A_BASELINE>" rev-parse HEAD
 git -C "<A_BASELINE>" ls-remote origin refs/heads/main
 ```
 
-The last two hashes should match. Investigate rejection instead of forcing a push. If remote history differs or another writer advanced it, reconcile the evidence and responsibility first. **This is a native Git push, not AGCT `reconcile` or a built-in remote receipt.** Use the provider's branch protection/access controls where appropriate to enforce the main writer; a prompt alone cannot provide a cross-host lock.
+The last two hashes should match. Investigate rejection instead of forcing a push. If remote history differs or another writer advanced it, reconcile the evidence and responsibility first. **This is a native Git push, not TaskCarry `reconcile` or a built-in remote receipt.** Use the provider's branch protection/access controls where appropriate to enforce the main writer; a prompt alone cannot provide a cross-host lock.
 
 ### 4.3 Keep useful memory in ordinary project files
 
@@ -75,7 +75,7 @@ This is a curated project handoff, not model weights, all private chats or a res
 PowerShell 7 export example, with the destination parent already present:
 
 ```powershell
-python -m agct --project "<A_CONTROL>" status | Set-Content -LiteralPath "<SNAPSHOT>/status.json" -Encoding utf8
+python -m taskcarry --project "<A_CONTROL>" status | Set-Content -LiteralPath "<SNAPSHOT>/status.json" -Encoding utf8
 ```
 
 Check that the JSON has `ok: true` and record the capture time. Do not treat an error envelope as a valid state report. Curated memory files use normal delivery and reception; do not dirty the dedicated receiving workspace just to add a summary. An exact commit example:
@@ -88,20 +88,20 @@ git -C "<MEMORY_WORKSPACE>" diff --cached --name-only
 git -C "<MEMORY_WORKSPACE>" commit -m "Update current project handoff"
 ```
 
-Inspect the index both before staging and before committing. If unrelated changes are staged, stop this commit step and preserve them rather than making a mixed commit. Then declare the stage as described in the main manual, receive it on the integration host and push it. A memory file in Git does not import itself into another computer's AGCT database or model memory.
+Inspect the index both before staging and before committing. If unrelated changes are staged, stop this commit step and preserve them rather than making a mixed commit. Then declare the stage as described in the main manual, receive it on the integration host and push it. A memory file in Git does not import itself into another computer's TaskCarry database or model memory.
 
 Prompt for Codex:
 
-> Maintain a concise project-memory/current.md for this project. Use authorized task records, commits and explicit sources to describe current facts, effective decisions, paused positions and next steps. Preserve necessary lineage without turning unchanged tasks into new backlog. Inspect existing files and the index, and deliver only actual changes. Do not export private chats, credentials or the whole .agct directory. Use local AGCT reception; push only content already authorized for the specified private remote.
+> Maintain a concise project-memory/current.md for this project. Use authorized task records, commits and explicit sources to describe current facts, effective decisions, paused positions and next steps. Preserve necessary lineage without turning unchanged tasks into new backlog. Inspect existing files and the index, and deliver only actual changes. Do not export private chats, credentials or the whole .taskcarry directory. Use local TaskCarry reception; push only content already authorized for the specified private remote.
 
 ### 4.4 Create a verifiable, consistent backup
 
 [Ready-to-paste Windows example for this step](windows-example.md#private-git)
 
-**Pause writes for this project before capturing one consistent point.** AGCT does not currently provide a single coordinated backup command for Git, SQLite and file objects. Follow this order:
+**Pause writes for this project before capturing one consistent point.** TaskCarry does not currently provide a single coordinated backup command for Git, SQLite and file objects. Follow this order:
 
 1. Save task files. Capture precise checkpoints for meaningful unfinished work, including `next_step`. A checkpoint is not a delivery and does not require declaring unfinished work as a completed output. Current checkpoints allow at most 500 selected paths, 32 MiB per file object and 128 MiB across captured layers; back up omitted or larger material separately.
-2. Let current AGCT operations finish. Pause this project's scheduled mutations and governance calls; no CLI, MCP or other program may modify its `.agct` during the copy. Pause edits to Git workspaces being captured as well. Retain the actual state of unfinished operations; do not manufacture completion or delete lock files for backup.
+2. Let current TaskCarry operations finish. Pause this project's scheduled mutations and governance calls; no CLI, MCP or other program may modify its `.taskcarry` during the copy. Pause edits to Git workspaces being captured as well. Retain the actual state of unfinished operations; do not manufacture completion or delete lock files for backup.
 3. Create a fresh backup directory **outside the source repositories, workspaces and control directory**. Record toolkit version, workspace paths/branches/HEADs, checkpoint IDs, `status`, capture time and the scope paused.
 4. Save reachable commits and references for every independent Git repository with a bundle. Worktrees sharing one Git common directory can have their references covered by the same bundle.
 
@@ -113,26 +113,26 @@ git -C "<REPOSITORY>" bundle list-heads "<SNAPSHOT>/project.bundle"
 
 A bundle can transport commits offline. It is not a complete backup of working files, index, untracked files, configuration or all local recovery information. Capture those separately or in checkpoints. [Official Git bundle documentation](https://git-scm.com/docs/git-bundle)
 
-5. While all relevant writes remain stopped, copy the complete `.agct` directory: `state.sqlite3`, accompanying WAL/SHM files if present, `objects` and other state files. Do not copy only the database's main file or move the originals. Save specifically needed files outside checkpoint coverage, plus reviewed project configuration; exclude login tokens.
+5. While all relevant writes remain stopped, copy the complete `.taskcarry` directory: `state.sqlite3`, accompanying WAL/SHM files if present, `objects` and other state files. Do not copy only the database's main file or move the originals. Save specifically needed files outside checkpoint coverage, plus reviewed project configuration; exclude login tokens.
 
 PowerShell 7 cold-copy example, where `<SNAPSHOT>` is a newly created empty directory:
 
 ```powershell
-Copy-Item -LiteralPath "<A_CONTROL>/.agct" -Destination "<SNAPSHOT>/.agct" -Recurse -ErrorAction Stop
-Get-ChildItem -LiteralPath "<SNAPSHOT>/.agct" -Force
+Copy-Item -LiteralPath "<A_CONTROL>/.taskcarry" -Destination "<SNAPSHOT>/.taskcarry" -Recurse -ErrorAction Stop
+Get-ChildItem -LiteralPath "<SNAPSHOT>/.taskcarry" -Force
 ```
 
-On other systems, use a local file-copy tool under the same stopped-writer condition, preserving hidden files and directory structure. Do not synchronize a **running** `.agct` or `.git` directory through a background file-sync service. SQLite's online backup API can snapshot a database; that alone does not coordinate the AGCT file objects and Git state with it. [SQLite backup documentation](https://www.sqlite.org/backup.html)
+On other systems, use a local file-copy tool under the same stopped-writer condition, preserving hidden files and directory structure. Do not synchronize a **running** `.taskcarry` or `.git` directory through a background file-sync service. SQLite's online backup API can snapshot a database; that alone does not coordinate the TaskCarry file objects and Git state with it. [SQLite backup documentation](https://www.sqlite.org/backup.html)
 
 6. Compare file inventories, sizes and SHA-256 hashes; check the database copy and representative checkpoint readability. At minimum verify the bundle, object directory and absence of copy errors before resuming the project. Archive the completed snapshot to your chosen storage and verify hashes on a downloaded copy before calling it a verified offsite backup. A directory name or sync icon is insufficient evidence.
 
-> Back up this project to [new backup directory] during a coordinated pause. First save selected WIP checkpoints and wait for current governance actions to finish. Pause relevant writers. Capture a Git bundle per independent repository, complete .agct, specifically needed files outside checkpoint coverage, and version/path inventories. Validate copies only; do not delete originals or recovery stashes. Record exclusions. When the backup is verified, restore the project settings paused for this operation without changing other projects.
+> Back up this project to [new backup directory] during a coordinated pause. First save selected WIP checkpoints and wait for current governance actions to finish. Pause relevant writers. Capture a Git bundle per independent repository, complete .taskcarry, specifically needed files outside checkpoint coverage, and version/path inventories. Validate copies only; do not delete originals or recovery stashes. Record exclusions. When the backup is verified, restore the project settings paused for this operation without changing other projects.
 
 ### 4.5 Separate recovery of material from re-enabling governance
 
 [Ready-to-paste Windows example for this step](windows-example.md#private-git)
 
-**Do not copy an old `.agct` to a new computer and execute its old reception/adoption plans.** Workspace identity includes absolute path, Git common directory and branch. The integration baseline also binds that identity. Version 0.2.0rc1 has no full cross-host state-migration API. Matching directory names do not prove the same execution state.
+**Do not copy an old `.taskcarry` to a new computer and execute its old reception/adoption plans.** Workspace identity includes absolute path, Git common directory and branch. The integration baseline also binds that identity. Version 0.2.0rc4 has no full cross-host state-migration API. Matching directory names do not prove the same execution state.
 
 Recovery procedure:
 
@@ -151,15 +151,15 @@ git clone --branch "<SAVED_BRANCH>" "<SNAPSHOT>/project.bundle" "<NEW_REPOSITORY
 
 A bundle clone has the bundle as `origin`. Before uploading later, explicitly configure the intended private remote; do not assume it is already connected online.
 
-3. To retrieve checkpoint files, **copy** the backed-up `.agct` into `<RECOVERY_CONTROL>/.agct` as a separate recovery working copy. Use a compatible AGCT version to inspect `status` and identify the checkpoint. Create `restore.json`:
+3. To retrieve checkpoint files, **copy** the backed-up `.taskcarry` into `<RECOVERY_CONTROL>/.taskcarry` as a separate recovery working copy. Use a compatible TaskCarry version to inspect `status` and identify the checkpoint. Create `restore.json`:
 
 ```json
 {"checkpoint_id":"<SAVED_CHECKPOINT_ID>","destination":"<NEW_INDEPENDENT_RESTORED_FILES_DIRECTORY>"}
 ```
 
 ```text
-python -m agct --project "<RECOVERY_CONTROL>" status
-python -m agct --project "<RECOVERY_CONTROL>" restore --input restore.json
+python -m taskcarry --project "<RECOVERY_CONTROL>" status
+python -m taskcarry --project "<RECOVERY_CONTROL>" restore --input restore.json
 ```
 
 The destination must be absent or empty, separate from the source workspace and recovery control directory. `restore` recovers only selected checkpoint files. A Git checkpoint creates a **synthetic restoration baseline** to represent HEAD/index/worktree layers and preserves the original HEAD as provenance; it does not restore the complete original repository history. It records a restoration event in the recovery working copy, leaving the backup original unchanged. Compare recovered files with the real cloned project before resuming on a named task branch. Never label the synthetic commit as the original commit.
@@ -168,10 +168,10 @@ The destination must be absent or empty, separate from the source workspace and 
 5. Regenerate local Skills/MCP configuration and call `doctor`/`status`. Old MCP fragments contain the original Python executable and project paths. Do not reuse them unchanged. Workspace re-registration also cannot bypass pending stages, operations or the bound integration-baseline identity.
 
 ```text
-python -m agct --project "<NEW_CONTROL>" init
-python -m agct --project "<NEW_CONTROL>" workspace --input new-baseline.json
-python -m agct --project "<NEW_CONTROL>" doctor
-python -m agct --project "<NEW_CONTROL>" status
+python -m taskcarry --project "<NEW_CONTROL>" init
+python -m taskcarry --project "<NEW_CONTROL>" workspace --input new-baseline.json
+python -m taskcarry --project "<NEW_CONTROL>" doctor
+python -m taskcarry --project "<NEW_CONTROL>" status
 ```
 
 Example `new-baseline.json`: `{"name":"baseline","path":"<NEW_BASELINE_ABSOLUTE_PATH>"}`. Follow the [operation manual](operation-manual.md) for other registrations and connection. Record the mapping from old IDs to new registrations. This is an explicit human/agent-assisted reconstruction, not automatic continuation of all transactions in the old database.
@@ -192,11 +192,11 @@ Computer B: independent clone → task branch → stable commit + handoff manife
                                      │ fetch original commits
                                      ▼
 Computer A: consistently named local intake clone/workspace
-            → A's AGCT submit → reception plan → sole receiving baseline
+            → A's TaskCarry submit → reception plan → sole receiving baseline
             → authorized push to main → B fetches for its next task position
 ```
 
-One AGCT control directory uses **local SQLite on one host**. B may use a separate local AGCT control directory for checkpoints; its database does not automatically merge with A's. Never share `.agct`, `.git` or an active worktree through bidirectional file sync.
+One TaskCarry control directory uses **local SQLite on one host**. B may use a separate local TaskCarry control directory for checkpoints; its database does not automatically merge with A's. Never share `.taskcarry`, `.git` or an active worktree through bidirectional file sync.
 
 A business area may contain multiple task branches. Define deliverables, writable paths, starting baseline and interface dependencies. Different task names still conflict if they change the same files. Every parallel writer needs its own file workspace and branch; opening two chats does not isolate a shared worktree. [Codex worktree documentation](https://learn.chatgpt.com/docs/environments/git-worktrees)
 
@@ -254,7 +254,7 @@ Create `handoffs/form-export-v1.json` **after** the output commit, avoiding a fi
 }
 ```
 
-This is a **human/agent-readable handoff, not an AGCT import API**. Do not pass it directly to `submit`.
+This is a **human/agent-readable handoff, not an TaskCarry import API**. Do not pass it directly to `submit`.
 
 ```text
 git -C "<B_REPOSITORY>" add -- handoffs/form-export-v1.json
@@ -308,9 +308,9 @@ An ancestry check succeeds with exit code 0. Resolve content, manifest, authoriz
 ```
 
 ```text
-python -m agct --project "<A_CONTROL>" workspace --input intake-workspace.json
-python -m agct --project "<A_CONTROL>" task --input intake-task.json
-python -m agct --project "<A_CONTROL>" submit --input intake-submit.json
+python -m taskcarry --project "<A_CONTROL>" workspace --input intake-workspace.json
+python -m taskcarry --project "<A_CONTROL>" task --input intake-task.json
+python -m taskcarry --project "<A_CONTROL>" submit --input intake-submit.json
 ```
 
 If a task ID already exists, confirm it is the same task instead of overwriting another task's meaning. `independent` here applies only to the example's new stage. A cumulative replacement must satisfy **the same task, the same registered workspace, original commit ancestry and path coverage**, with explicit `supersedes`. Matching names on two computers do not establish lineage. Retain evidence and resolve the relationship when those conditions are absent; do not invent coverage.
@@ -322,7 +322,7 @@ Create `receive-plan.json`:
 ```
 
 ```text
-python -m agct --project "<A_CONTROL>" reconcile --input receive-plan.json
+python -m taskcarry --project "<A_CONTROL>" reconcile --input receive-plan.json
 ```
 
 Review all returned `stage_ids`, baseline HEAD, unfinished operations and conflicts. A reception plan can include other already queued stages; it does not automatically select only this task. Execute only if the whole plan is within the authorized scope. Copy its returned `plan_id` into `receive-execute.json`:
@@ -332,13 +332,13 @@ Review all returned `stage_ids`, baseline HEAD, unfinished operations and confli
 ```
 
 ```text
-python -m agct --project "<A_CONTROL>" reconcile --input receive-execute.json
-python -m agct --project "<A_CONTROL>" status
+python -m taskcarry --project "<A_CONTROL>" reconcile --input receive-execute.json
+python -m taskcarry --project "<A_CONTROL>" status
 ```
 
 Confirm the stage is actually `COMMITTED`, its operations are complete and baseline content is correct. A successful call does not mean every queued item completed. Resolve specific conflicts without overwriting other WIP. Use planned `adopt` from the main manual when an A workspace needs the update. Publish the authorized baseline to `main` as in 4.2; preserve traceability between A's integration commit and B's source commit.
 
-> Receive computer B's form-export-v1. Read its remote handoff and original commits. Verify original base/commit, exact paths, actual checks, current baseline and task relationship. Use the consistently registered local intake workspace and AGCT submit, then planned reconcile. Do not claim a cross-host database import, rewrite source hashes or repeat completed effects. Check whether other stages in the plan are authorized too. Preserve B's unfinished-task notes and separate business acceptance. Push main only within existing authorization.
+> Receive computer B's form-export-v1. Read its remote handoff and original commits. Verify original base/commit, exact paths, actual checks, current baseline and task relationship. Use the consistently registered local intake workspace and TaskCarry submit, then planned reconcile. Do not claim a cross-host database import, rewrite source hashes or repeat completed effects. Check whether other stages in the plan are authorized too. Preserve B's unfinished-task notes and separate business acceptance. Push main only within existing authorization.
 
 ### 5.5 Continuing on B, transferring the main role and known limits
 
@@ -351,7 +351,7 @@ git -C "<B_REPOSITORY>" fetch origin
 git -C "<B_REPOSITORY>" worktree add -b codex/form-export-next "<B_NEXT_WORKSPACE>" origin/main
 ```
 
-Continue with the appropriate task relationship and record the new base. Do not redo completed stages. A does not automatically call AGCT `adopt` over the network on another computer.
+Continue with the appropriate task relationship and record the new base. Do not redo completed stages. A does not automatically call TaskCarry `adopt` over the network on another computer.
 
 | Situation | Action |
 |---|---|

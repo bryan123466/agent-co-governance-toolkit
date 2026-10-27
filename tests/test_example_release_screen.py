@@ -1,13 +1,35 @@
 """Permit the named public tutorial without opening arbitrary host paths."""
 import unittest
+import posixpath
+import re
 from pathlib import Path
+from urllib.parse import unquote, urlsplit
 
-from scripts.build_trial import reviewed_example_path, screen_content
+from scripts.build_trial import reviewed_example_path, screen_content, snapshot, product_contents
 
 
 class ExampleReleaseScreenTests(unittest.TestCase):
+    def test_product_document_links_resolve_inside_the_download(self):
+        contents = product_contents(snapshot()[0])
+        failures = []
+        for name, data in contents.items():
+            if not name.endswith(('.md', '.html')):
+                continue
+            text = data.decode('utf-8-sig')
+            links = re.findall(r'\[[^\]]*\]\(([^)]+)\)', text)
+            links += re.findall(r'(?:href|src)=[\"\x27]([^\"\x27]+)', text)
+            for link in links:
+                link = link.split(' "', 1)[0].strip('<>')
+                parsed = urlsplit(link)
+                if parsed.scheme or parsed.netloc or not parsed.path:
+                    continue
+                target = posixpath.normpath(posixpath.join(posixpath.dirname(name), unquote(parsed.path)))
+                if target not in contents and not any(p.startswith(target.rstrip('/') + '/') for p in contents):
+                    failures.append((name, link))
+        self.assertEqual(failures, [], 'Downloaded user documentation must not link to excluded maintenance files')
+
     def test_only_named_tutorial_resources_allow_the_synthetic_root(self):
-        root = "C:" + "/CoGov"
+        root = "C:" + "/TaskCarry"
         for name in ("docs/en/windows-example.md", "docs/zh-CN/windows-example.md", "docs/zh-TW/windows-example.md",
                      "examples/windows_quickstart/bootstrap.py"):
             for path in (root, root + "/runtime/Scripts/python.exe", root + "/control/"):
@@ -15,26 +37,26 @@ class ExampleReleaseScreenTests(unittest.TestCase):
                     self.assertTrue(reviewed_example_path(name, path))
                     screen_content({name: path.encode()})
         with self.assertRaises(RuntimeError):
-            screen_content({"agct/core.py": root.encode()})
+            screen_content({"taskcarry/core.py": root.encode()})
 
     def test_other_roots_and_escapes_remain_rejected(self):
-        root = "C:" + "/CoGov"
+        root = "C:" + "/TaskCarry"
         for path in (root + "Other/file.md", root + "/../private.md",
                      root + "/./private.md", root + "/control/../../private.md",
-                     "D:" + "/CoGov", "C:" + "/Users/example/private.md"):
+                     "D:" + "/TaskCarry", "C:" + "/Users/example/private.md"):
             with self.subTest(path=path), self.assertRaises(RuntimeError):
                 screen_content({"docs/en/windows-example.md": path.encode()})
 
     def test_complete_quoted_paths_and_standalone_lines_are_allowed(self):
-        root = "C:" + "/CoGov"
+        root = "C:" + "/TaskCarry"
         path = root + "/runtime/Scripts/python.exe"
-        for text in ("Use `" + path + "` now.", "& '" + path + "' -m agct",
+        for text in ("Use `" + path + "` now.", "& '" + path + "' -m taskcarry",
                      'Run "' + path + '" next.', "  " + path + "  \r\n"):
             with self.subTest(text=text):
                 screen_content({"docs/en/windows-example.md": text.encode()})
 
     def test_quoted_paths_are_checked_in_full_including_spaces_and_parentheses(self):
-        root = "C:" + "/CoGov"
+        root = "C:" + "/TaskCarry"
         for path in (root + "/with space/../../Users/example/private.md",
                      root + "/(scratch)/../../Users/example/private.md"):
             for quote in ('"', "'", "`"):
@@ -42,7 +64,7 @@ class ExampleReleaseScreenTests(unittest.TestCase):
                     screen_content({"docs/en/windows-example.md": (quote + path + quote).encode()})
 
     def test_unquoted_paths_cannot_allow_a_truncated_prefix(self):
-        root = "C:" + "/CoGov"
+        root = "C:" + "/TaskCarry"
         for text in (root + "/with space/../../Users/example/private.md",
                      root + "/(scratch)/../../Users/example/private.md",
                      "Use " + root + "/control here.",
@@ -51,7 +73,7 @@ class ExampleReleaseScreenTests(unittest.TestCase):
                 screen_content({"docs/en/windows-example.md": text.encode()})
 
     def test_secret_and_private_token_screens_still_apply_to_tutorial(self):
-        root = "C:" + "/CoGov"
+        root = "C:" + "/TaskCarry"
         with self.assertRaises(RuntimeError):
             screen_content({"docs/en/windows-example.md": (root + " PRIVATE_TOKEN").encode()},
                            ["PRIVATE_TOKEN"])

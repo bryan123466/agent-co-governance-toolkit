@@ -3,13 +3,13 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from agct.api import invoke
-from agct.core import Core
+from taskcarry.api import invoke
+from taskcarry.core import Core
 
 
 class RecoveryAdviceTests(unittest.TestCase):
     def setUp(self):
-        self.temp = tempfile.TemporaryDirectory(prefix='agct-advice-')
+        self.temp = tempfile.TemporaryDirectory(prefix='taskcarry-advice-')
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name) / 'control'
         Core.initialize(self.root, 'Synthetic recovery advice')

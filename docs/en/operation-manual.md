@@ -2,13 +2,13 @@
 
 [Complete Windows workflow](windows-example.md) · [简体中文](../zh-CN/operation-manual.md) · [繁體中文](../zh-TW/operation-manual.md) · [Product home](../../README.md) · [Command reference](../COMMANDS.md)
 
-Applies to 0.2.0rc1. **Use the [Windows walkthrough](windows-example.md) as the single detailed source for steps, directories and copyable prompts.** This page explains the workflow and choices rather than supplying a second installation procedure.
+Applies to 0.2.0rc4. **Use the [Windows walkthrough](windows-example.md) as the single detailed source for steps, directories and copyable prompts.** This page explains the workflow and choices rather than supplying a second installation procedure.
 
 ## One recommended onboarding path
 
-Create `CoGov`, `CoGov/control` and `CoGov/toolkit` yourself, and extract the package into `toolkit`. Open a new governance chat directly in `control`; it performs installation and onboarding. `control` is an ordinary governance directory containing this project's only `.agct`, not a specialist Git worktree.
+Create `TaskCarry`, `TaskCarry/control` and `TaskCarry/toolkit` yourself, and extract the package into `toolkit`. Open a new governance chat directly in `control`; it performs installation and onboarding. `control` is an ordinary governance directory containing this project's only `.taskcarry`, not a specialist Git worktree.
 
-One CoGov directory represents one real project. Provide **[Project name]** and **[One-sentence introduction]**. Governance examines actual directories, Git ownership and prior outputs to decide initialization or continuation; you do not select a new/existing-project route. An empty CoGov directory is not evidence that no earlier work exists. If context is unclear, governance briefly checks for prior outputs or obtains the existing chat's summary through section 3.1 of the main walkthrough before deciding the baseline.
+One TaskCarry directory represents one real project. Provide **[Project name]** and **[One-sentence introduction]**. Governance examines actual directories, Git ownership and prior outputs to decide initialization or continuation; you do not select a new/existing-project route. An empty TaskCarry directory is not evidence that no earlier work exists. If context is unclear, governance briefly checks for prior outputs or obtains the existing chat's summary through section 3.1 of the main walkthrough before deciding the baseline.
 
 For new specialists, provide **[n: number of new specialist chats]**. Governance adds n workspaces, continuing the existing numbering. You then create a chat for each and choose its directory. Each chat receives **[The actual project work this chat should handle]**, without preset business responsibilities or worker count.
 
@@ -33,7 +33,7 @@ Choose another root consistently before first initialization. Moving an already 
 | Governance chat | Interpret task/evidence relationships, call tools to receive work, verify results, coordinate adoption and explain actionable issues. |
 | Specialist chat | Advance real work in its assigned workspace, retain checkpoints and deliver stable stages precisely. Keep one main writer per task/workspace. |
 | Receiving baseline | A dedicated clean Git workspace for received work, without specialist WIP. |
-| AGCT engine | Persist local state, check plans against actual Git conditions and perform supported reception, adoption and recovery. |
+| TaskCarry engine | Persist local state, check plans against actual Git conditions and perform supported reception, adoption and recovery. |
 | Host automation | Wake the governance model on schedule; it is not another control database. |
 
 Specialist chats follow parallel work needs, such as software, hardware, algorithms, experiments, research, operations, simulation, writing or management. There is no fixed department count; sequential subtasks do not require new chats. Keep one main writer per task. Others may review read-only or take explicitly separated, nonoverlapping subtasks.
@@ -61,7 +61,7 @@ The initial inventory covers the registered set in `status.workspaces`, `status.
 
 MCP is the recommended direct tool connection for the governance chat. The CLI remains a fallback to the same control directory. A generated MCP fragment is not proof of connection; configure it in the host and confirm an actual tool call.
 
-Create scheduled governance through the host's official automation tools, using its actual timezone and target. Do not handwrite scheduler configuration or substitute a background shell. Runs read the actual registered tasks and workspaces, without a fixed worker count or a claim to scan every specialist chat.
+The first bounded governance pass shows its result directly in the current chat. Reuse that result when creating a schedule; do not run an extra Automation to demonstrate reporting. Create scheduled governance through the host's official tools, using its actual timezone and target. Daily results use the same AI and project records. Runs read registered tasks and workspaces without a fixed worker count or a claim to scan every chat.
 
 Specialists keep working normally. Reception handles explicit stages; adoption runs only when its target is ready. A `paused` task alone does not prove outside programs stopped writing. Toolkit locks serialize toolkit actions, not entire model turns or arbitrary external programs.
 
@@ -69,11 +69,11 @@ Specialists keep working normally. Reception handles explicit stages; adoption r
 
 | Need | Guidance and boundary |
 |---|---|
-| Private Git for selected outputs and curated memory | [Detailed procedure](remote-and-multicomputer.md#private-git): only committed and pushed files reach the remote; `.agct` and uncommitted material require separate consistent backup. |
+| Private Git for selected outputs and curated memory | [Detailed procedure](remote-and-multicomputer.md#private-git): only committed and pushed files reach the remote; `.taskcarry` and uncommitted material require separate consistent backup. |
 | Task branches across computers | [Detailed procedure](remote-and-multicomputer.md#multi-computer): one integration host and independent task branches; no built-in cross-host shared state or transaction migration. |
 | Exact CLI/MCP parameters | [Command reference](../COMMANDS.md). |
 | Actual system boundaries | [Architecture](architecture.md) and [operating scope](../RELEASE_BOUNDARIES.md). |
 
-A reception plan currently includes eligible pending stages without a built-in per-run count or total-duration cap; review its complete scope before execution. Experience records use implemented recovery actions, not arbitrary new capabilities created by prose. Operating-system repair and native-account migration are outside the product.
+A receiving plan selects up to 20 work items by default, with a maximum limit of 100, prioritizing unfinished receiving operations. Review its frozen scope before execution and report remaining work separately. This count does not limit the whole AI session's duration. Experience records use implemented recovery actions; operating-system repair and native-account migration remain outside the product.
 
 There is no requirement to enable every option or run maintainer tests. Establish clear preservation, delivery, reception and continuation for your own project, then extend the workflow when needed.

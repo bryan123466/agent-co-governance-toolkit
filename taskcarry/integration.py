@@ -27,7 +27,7 @@ class Integration:
         self.core = Core(project)
         self.store = self.core.store
         self.root = Path(project).resolve()
-        self.scratch = self.root / ".agct" / "scratch"
+        self.scratch = self.root / ".taskcarry" / "scratch"
 
     def _save(self, collection, key, record):
         self.store.put(collection, key, record)
@@ -45,7 +45,7 @@ class Integration:
     def workspace(self, name, path):
         name = identifier(name)
         p = repo(path)
-        if p.is_relative_to(self.root / ".agct"):
+        if p.is_relative_to(self.root / ".taskcarry"):
             raise GovernanceError("RESERVED_PATH", "Internal metadata cannot be a workspace")
         ident = identity(p)
         with self.store.guard():
@@ -135,13 +135,13 @@ class Integration:
     def _fault(self, requested, at):
         if requested != at:
             return
-        marker = self.root / ".agct" / "SYNTHETIC_TEST_ONLY"
-        if os.environ.get("AGCT_TEST_FAULTS") != "1" or not marker.is_file():
+        marker = self.root / ".taskcarry" / "SYNTHETIC_TEST_ONLY"
+        if os.environ.get("TASKCARRY_TEST_FAULTS") != "1" or not marker.is_file():
             raise GovernanceError("FAULT_INJECTION_DISABLED", "Fault injection is restricted to explicitly marked synthetic tests")
         raise GovernanceError("INJECTED_INTERRUPTION", "Synthetic interruption at " + at, {"point": at})
 
     def _check_fault(self, fault):
-        if fault is not None and (os.environ.get("AGCT_TEST_FAULTS") != "1" or not (self.root / ".agct" / "SYNTHETIC_TEST_ONLY").is_file()):
+        if fault is not None and (os.environ.get("TASKCARRY_TEST_FAULTS") != "1" or not (self.root / ".taskcarry" / "SYNTHETIC_TEST_ONLY").is_file()):
             raise GovernanceError("FAULT_INJECTION_DISABLED", "Fault injection is restricted to explicitly marked synthetic tests")
 
     def _finish(self, operation, baseline):
@@ -215,7 +215,7 @@ class Integration:
                     self._save("stages", stage["stage_id"], stage)
                     raise GovernanceError("CONTENT_CONFLICT", "Frozen delivery conflicts with the current baseline; user work was not changed", {"stage_id": stage["stage_id"]})
             tree = out(scratch, "write-tree")
-            message = f"Receive stage {stage['stage_id']}\n\nAGCT-Operation: {oid}\nAGCT-Source: {stage['commit']}\n"
+            message = f"Receive stage {stage['stage_id']}\n\nTaskCarry-Operation: {oid}\nTaskCarry-Source: {stage['commit']}\n"
             candidate = git(scratch, "commit-tree", tree, "-p", head, data=message.encode()).stdout.decode().strip()
         operation.update({"candidate": candidate, "result_tree": tree, "status": "CANDIDATE_READY", "effective_base": effective_base})
         self._save("operations", oid, operation)
@@ -430,13 +430,13 @@ class Integration:
         if operation.get("has_wip") and not stash:
             for row in out(target, "stash", "list", "--format=%H%x09%gs").splitlines():
                 sha, _, subject = row.partition("\t")
-                if subject.endswith("agct:" + operation["operation_id"]):
+                if subject.endswith("taskcarry:" + operation["operation_id"]):
                     stash = sha
                     operation["stash"] = sha
                     self._save("operations", operation["operation_id"], operation)
                     break
         if operation.get("has_wip") and not stash and fingerprint(target) == operation.get("before"):
-            git(target, "stash", "push", "--include-untracked", "-m", "agct:" + operation["operation_id"])
+            git(target, "stash", "push", "--include-untracked", "-m", "taskcarry:" + operation["operation_id"])
             stash = out(target, "rev-parse", "refs/stash")
             operation["stash"] = stash
             self._save("operations", operation["operation_id"], operation)
@@ -581,7 +581,7 @@ class Integration:
             has_wip = op["has_wip"]
             candidate = op["candidate"]
             if has_wip:
-                git(target, "stash", "push", "--include-untracked", "-m", "agct:" + oid)
+                git(target, "stash", "push", "--include-untracked", "-m", "taskcarry:" + oid)
                 op["stash"] = out(target, "rev-parse", "refs/stash")
                 op["status"] = "WIP_SAVED"
                 op["effect_state"] = "WIP_SAVED"

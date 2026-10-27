@@ -15,4 +15,4 @@ Remove private identifiers and secrets before sharing. Prefer the bundled fictio
 - Data loss observed, or no loss verified / 是否有内容丢失，如何核对:
 - Scope not tested / 尚未验证范围:
 
-Do not attach the whole `.agct` directory, raw chat exports, actual source repositories, or a full machine log. Include only the selected evidence needed to reproduce the problem. 不附完整状态目录、聊天、实际源码仓或全机日志。
+Do not attach the whole `.taskcarry` directory, raw chat exports, actual source repositories, or a full machine log. Include only the selected evidence needed to reproduce the problem. 不附完整状态目录、聊天、实际源码仓或全机日志。

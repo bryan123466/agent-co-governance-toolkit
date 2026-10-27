@@ -33,7 +33,7 @@ def main(argv=None):
     for stream in (sys.stdin, sys.stdout, sys.stderr):
         if hasattr(stream, "reconfigure"):
             stream.reconfigure(encoding="utf-8")
-    parser = Parser(description="Agent Co-Governance Toolkit: project-local governance")
+    parser = Parser(description="TaskCarry: project-local governance")
     parser.add_argument("--project", required=True, help="Explicit governance project directory")
     parser.add_argument("action", choices=ACTIONS)
     source = parser.add_mutually_exclusive_group()

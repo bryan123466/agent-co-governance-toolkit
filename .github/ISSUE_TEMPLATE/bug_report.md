@@ -6,7 +6,7 @@ labels: bug
 assignees: ''
 ---
 
-Use fictional data; do not attach private repositories, credentials, full chat exports, or `.agct` directories. 使用虚构资料，不附私有仓库、密钥、完整聊天或状态目录。
+Use fictional data; do not attach private repositories, credentials, full chat exports, or `.taskcarry` directories. 使用虚构资料，不附私有仓库、密钥、完整聊天或状态目录。
 
 **Version and platform / 版本与平台**
 

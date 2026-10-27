@@ -2,7 +2,7 @@
 
 [简体中文](../zh-CN/architecture.md) · [繁體中文](../zh-TW/architecture.md) · [Home](../../README.md)
 
-When several Codex chats work on a project, each needs to know what to do next without losing its earlier work. Agent Co-Governance Toolkit gives them a shared set of task records and a governance chat that brings ready results together. Files and progress remain on your computer; the project does not depend on one chat remembering everything.
+When several local AI workspaces advance a project, each needs to know what to do next without losing its earlier work. TaskCarry gives them shared task records and a governance chat that brings ready results together. Files and progress remain on your computer; the project does not depend on one chat remembering everything. Codex is the first documented host setup; other local AI tools can use the same CLI/MCP interfaces after their connection and capabilities are verified.
 
 ## Who does what
 
@@ -17,7 +17,7 @@ You set the direction, divide responsibilities, and decide whether a result meet
 | Project Skills | Explain when and how the chats should save progress, deliver work, and handle a known problem. |
 | Optional host scheduling | Wake the governance chat at configured times to perform the same workflow. |
 
-The toolkit keeps four things distinct: the installed package supplies tools and Skills; the control project's `.agct` directory retains durable task state; shared progress is read from those records; and business deliverables remain in their Git workspaces. Updating the package or Skills, or reading `status`, does not merge business Git history or advance a workspace's `HEAD`. Bringing received business results into a working workspace is an explicit `adopt` operation. See [governance maintenance](governance-maintenance.md) for package updates and recovery.
+The toolkit keeps four things distinct: the installed package supplies tools and Skills; the control project's `.taskcarry` directory retains durable task state; shared progress is read from those records; and business deliverables remain in their Git workspaces. Updating the package or Skills, or reading `status`, does not merge business Git history or advance a workspace's `HEAD`. Bringing received business results into a working workspace is an explicit `adopt` operation. See [governance maintenance](governance-maintenance.md) for package updates and recovery.
 
 ## From unfinished work to the next stage
 
@@ -42,8 +42,8 @@ For an unfamiliar problem, governance explains the concrete obstacle and next st
 
 ## Where the records live
 
-The project's `.agct` directory stores its task database, events, experience records, and selected-file snapshots. Keep these as project data, with suitable backups. Do not publish the database or edit it to make an incomplete operation look successful.
+The project's `.taskcarry` directory stores its task database, events, experience records, and selected-file snapshots. Keep these as project data, with suitable backups. Do not publish the database or edit it to make an incomplete operation look successful.
 
 The tools run locally on one computer. Separate worktrees support parallel tasks; multi-computer work needs the explicit branch-based handoff described in the manual. The toolkit does not provide distributed locks, automatic remote push or deployment, or guaranteed recovery of effects in external services.
 
-AI comes from your Codex environment. The toolkit does not train a model or require its own model API. Skills do not grant extra permissions; Codex connections and scheduling are enabled through the host's supported settings. See [practical capabilities and limits](../RELEASE_BOUNDARIES.md).
+AI comes from your chosen local AI tool. TaskCarry does not train a model or require a separate model API. Its current setup generates Codex project integration files. Other hosts need their own configuration and instruction-loading checks; MCP availability alone does not verify a host, grant file access or supply scheduling. Reports are produced in the governance chat from the same project records, without a separate reporting service or state page. See [practical capabilities and limits](../RELEASE_BOUNDARIES.md).

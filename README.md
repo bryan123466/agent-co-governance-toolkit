@@ -1,126 +1,106 @@
-# Agent Co-Governance Toolkit
+# TaskCarry
 
-**Give AI collaboration lasting project memory, with multiple workspaces advancing one long-running project.**
+**Project memory and collaboration for AI tools.**
 
 [English](README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md)
 
-[Download and install](https://github.com/bryan123466/agent-co-governance-toolkit/releases) · [User manual](docs/en/windows-example.md) · [Architecture](docs/en/architecture.md)
+[Download TaskCarry](https://github.com/bryan123466/taskcarry/releases/tag/v0.2.0rc4) · [Start with the user manual](docs/en/windows-example.md) · [See the architecture](docs/en/architecture.md)
 
-[Maintain and upgrade an existing project](docs/en/governance-maintenance.md)
+Keep a long-running project moving across AI conversations, workspaces, and pauses. TaskCarry saves the task context, selected work, deliverable history, and next steps that help you pick up where you left off.
 
-Agent Co-Governance Toolkit (AGCT) is an open-source project collaboration toolkit for **Codex users**. It organizes task progress, stage deliverables, important decisions, and continuation information from different workspaces into project records you can save, trace, and use again.
+Use it when one project has outgrown a single conversation: software and documentation advancing together, a research project with several workstreams, or a product with development, operations, and writing happening in parallel. Your AI tool helps do the work; TaskCarry gives that work a durable local record and a way to bring results together.
 
-Different Codex chats can advance software, hardware, algorithms, research, operations, or writing. A governance chat combines AI and tools to bring together progress, receive deliverables, and update participating workspaces with shared results when appropriate. Existing chats can join, and work already in progress can continue.
+**The current step-by-step examples use Codex.** The toolkit exposes the same local engine through a command line and MCP, providing a foundation for other AI-tool integrations. Each host still needs its own connection and workflow verification.
 
-**It is for people already using Codex who want to organize multiple conversations into a long-running project.** You set the direction and make important decisions, Codex helps understand and advance the work, and AGCT keeps its state and results traceable.
+## Why add TaskCarry to Git and project instructions?
 
-## Why AGCT?
+Git already keeps file history. Project instructions such as AGENTS.md already explain how an AI assistant should work. A handoff message already helps the next conversation get started. TaskCarry connects these useful pieces to the changing state of a project.
 
-A conversation can complete a task, but a long-running project often spans many conversations, files, and versions. As the work grows, the difficult parts become:
+| What you already use | What it helps with | What TaskCarry adds |
+|---|---|---|
+| Git | Versions, branches, and file changes | Which task a result belongs to, which stage was received, and what still needs to continue. |
+| AGENTS.md and Skills | Working practices and role instructions | Persistent records of the work actually saved, offered, integrated, or paused. |
+| Conversation summaries | Context for a person or another chat | Task records and file references you can update and revisit beyond one conversation. |
+| Manual handoffs | Coordination between a few workstreams | Reviewed plans, recorded operation results, and supported recovery when work is interrupted. |
 
-- Returning after a week and having to explain where you stopped, why you made certain choices, and what comes next.
-- Keeping several chats moving while trying to tell which deliverables have joined the project and which remain in individual workspaces.
-- Managing several versions of one task when old records and current action items are mixed together.
-- Working out what actually finished after an interruption, and whether anything needs to start again.
+For a short task in one chat, your existing tools may be enough. TaskCarry becomes useful when you repeatedly need to answer: **Where did we stop? Which result is current? What has already joined the project?**
 
-AGCT retains these relationships during everyday work. **Project continuity does not have to depend entirely on chat context; independent work can also contribute to a clear view of the whole project.**
+## What stays with your project?
 
-## What can you do with it?
-
-| Capability | How it helps your work |
+| Capability | What you can do |
 |---|---|
-| **Lasting project memory** | Keep progress, key decisions, deliverable locations, and next steps for registered tasks so work can continue across sessions. |
-| **Multiple-workspace collaboration** | Prepare independent workspaces for tasks that need to run in parallel, letting specialist chats advance their work before bringing the results together. |
-| **Build results stage by stage** | A task does not need to be entirely finished before it contributes. A stable stage can be handed to governance for inclusion in the shared version. |
-| **Retain unfinished work** | Save selected files and continuation notes when work pauses. Return to the previous position while paused tasks remain quietly available. |
-| **Keep iterations clear** | Record relationships between earlier and later results, retain history, and clearly distinguish results already integrated, stages offered for receipt, and work being retained for later. |
-| **Reuse verified recovery methods** | For known problems the tools already support, check current conditions before applying a suitable recovery method to reduce repeated operations. |
-| **Focus each governance turn** | Read a limited, paginated selection of current work from a consistent project snapshot. Keep paused work and completed history without treating them as new obligations. |
+| **Project memory** | Retain task goals, recorded decisions, current position, and next steps outside chat context. |
+| **Saved pause points** | Keep selected saved files and continuation notes without pretending the task is finished. |
+| **Multiple workspaces** | Let parallel tasks use separate working directories, then collect their ready results into a shared project version. |
+| **Stage-by-stage delivery** | Contribute a useful stage while the rest of a task continues. Track explicit relationships between later and earlier stages. |
+| **Clear current work** | Read a focused, paginated agenda while keeping paused work and completed history available. |
+| **Interrupted-work recovery** | Check recorded and actual effects, reuse supported recovery methods, and continue missing steps without blindly repeating completed work. |
+| **Material references** | Record where larger files live and whether a specified backup matches, without putting every file into Git. |
 
-The same local tools provide these capabilities. You can use MCP tools connected to Codex or work from the command line; both read and write the same project state.
+Memory comes from the tasks, notes, files, and deliveries you or your AI assistant explicitly connect. TaskCarry does not automatically collect all private conversations or capture unsaved editor content.
 
 ## How people, AI, and tools work together
 
-![Collaboration structure: the user sets direction, governance organizes the project, specialist workspaces advance in parallel, and all share persistent project records](docs/assets/collaboration.en.svg)
+![People set direction, a governance chat coordinates, specialist workspaces advance in parallel, and TaskCarry retains project records](docs/assets/collaboration.en.svg)
 
-The **governance chat** is the project's coordination point. It uses Codex to understand the work information provided, assess relationships between tasks and deliverables, and call tools to save state, organize delivery, and update workspaces.
+Your **governance chat** coordinates the project. It uses the AI capabilities of your host to understand the supplied work information, review the current state, and call TaskCarry tools. Specialist chats focus on their own tasks in clearly assigned workspaces.
 
-**Specialist chats** focus on their actual work. One chat can continue through related subtasks; add independent workspaces when parallel work is needed. Your project determines the roles and their number.
+TaskCarry stores records and performs the supported local operations. You retain decisions about project direction, priorities, business acceptance, and external delivery. The toolkit does not require a separate model API or train a model.
 
-**AGCT tools** retain tasks, files, versions, and operation results, checking targets and conditions before updates run. AI interprets the work, tools provide repeatable recording and execution, and people retain control of direction, important tradeoffs, and final business decisions.
+For example, software may have a usable module while experiments are paused and documentation is still a draft. Governance can receive the software stage and retain the other two tasks at their current positions. Nobody needs to mark the entire project complete just to preserve useful progress.
 
-This gives collaboration a shared record while allowing each workspace to keep its own pace.
+## The everyday workflow
 
-## From starting work to continuing progress
+![Work on tasks, save progress, offer a stable stage, receive it into the shared project, update selected workspaces, and continue](docs/assets/governance-flow.en.svg)
 
-![Workflow: advance tasks, save progress, prepare stable stage deliverables, integrate them into the project, update workspaces, and continue](docs/assets/governance-flow.en.svg)
+1. **Work in your task chat.** Continue the real task in its assigned workspace.
+2. **Save a useful stopping point.** Record the current position and selected files when you pause.
+3. **Offer a ready result.** Identify the stable version and the files it changes.
+4. **Bring it into the project.** The governance chat reviews a plan and receives the stage through the tools.
+5. **Continue from shared progress.** Update the workspaces that need those business changes, preserving supported local work and addressing concrete conflicts.
 
-For example, a product project might use three workspaces for software, experiments, and documentation. Software has a usable module, experiments are still being prepared, and documentation has a first draft. Governance can receive the stable software result while recording the current positions of the experiments and documentation. They do not have to wait for the whole project to finish together.
+A received stage can be part of an unfinished task. A paused task can stay paused. Replacing an older stage requires a documented relationship and matching change history, so independent results are not discarded merely because a newer file exists.
 
-When a newer software version arrives, governance organizes the results using the declared task and version relationships, retaining the necessary history. Workspaces that need shared progress first have their supported local work checked and preserved. If a conflict appears, governance identifies it so the relevant workspace can resolve it.
+## Start with one project
 
-Here, “receiving” means bringing a stage's deliverables into the project. You and the appropriate owners still decide whether they meet product goals or are ready for external delivery.
+Download **taskcarry-0.2.0rc4-product.zip** from the [release page](https://github.com/bryan123466/taskcarry/releases/tag/v0.2.0rc4), then follow the [Windows user manual](docs/en/windows-example.md).
 
-## What does lasting memory retain?
+1. **Create the project directory and governance chat.** The manual gives a concrete folder example and a copyable installation prompt. Fill in **[Project name]** and **[One-sentence introduction]**.
+2. **Connect existing work or add task workspaces.** Keep a suitable existing chat, or create independent workspaces for parallel tasks. Fill in **[The actual work this chat is responsible for]**.
+3. **Ask governance to run its first review.** It checks the connected project and reports the result in that same chat. You can then continue working and add scheduling when useful.
 
-AGCT stores project memory outside the chat, in your local project. It records **the information needed to continue the work**:
+There is no separate report application to open. Initial setup feedback and everyday project summaries are produced by your governance AI in its chat, using TaskCarry records and tools. A configured host automation can perform those reviews on a schedule.
 
-| Project record | Questions it can answer later |
-|---|---|
-| Task state and key decisions | How far has this progressed? Why was it arranged this way? |
-| Saved work and next steps | Where did we stop? What should happen next? |
-| Stage deliverables and version relationships | Which result is already part of the project? Which stage did it evolve from? |
-| File references and deliverable locations | Where are the materials? Do they need to be saved separately? |
-| Operation results and applicable experience | What has already run? Which method may help with a similar problem? |
+You do not need to learn the engine, inspect its database, or run developer tests before using the product.
 
-You do not need to put every large file into Git. The tools can record material locations to help you find files and arrange backups; actual copying and backup still follow your storage setup. When you want remote storage for project deliverables and selected records, the manual explains how to configure a private Git repository.
+<img src="docs/assets/workspace-sidebar-example.png" alt="Example arrangement of governance and specialist chats" width="360">
 
-You or the governance chat explicitly record this information; unrecorded decisions in conversations do not automatically become project memory. It comes from the tasks and work materials you connect. It does not automatically collect every conversation or save editor content that has not been written to disk.
+This is an organization example. Choose your own roles and number of chats. If several existing chats share a working directory, retain one main writer there and move responsibilities that need parallel work into separate workspaces, as the manual explains.
 
-## Connect an existing project or start a new one
+## Build on the local workflow
 
-**Existing work can continue.** In the original chat, summarize the current task, deliverables, important context, and unfinished work. Give that summary to governance for onboarding, then bring the continuation instructions back to the original chat. You can keep a suitable existing chat without redoing the project.
+- **Scheduled coordination:** use your host's scheduling feature to ask governance to review connected work and produce a useful summary. Installing TaskCarry does not create a schedule.
+- **Private Git:** configure your own remote repository for selected committed results. File references help locate materials, but copying, backup, and remote synchronization remain explicit operations.
+- **Additional AI tools:** CLI and MCP provide integration points around one engine. The Codex guide is the current concrete onboarding path; it does not establish that every MCP client, model, or AI platform has been verified.
+- **Multiple computers:** the [guide](docs/en/remote-and-multicomputer.md) describes separate task branches and one integration computer. Real two-computer operation has not completed end-to-end validation; start after the local workflow is established.
 
-**Add workspaces when parallel work is needed.** Each workspace has a clear task scope. Multiple workspaces advance separately through independent directories and Git worktrees. If several existing chats share a directory, keep one primary writer there and follow the manual to move responsibilities that need parallel work into separate workspaces.
+TaskCarry uses Python 3.11+; Git is needed for Git workflows. It stores project state locally and includes four project Skills for setup, task delivery, governance, and recovery. Each control scope has one local store and one receiving baseline. Installation updates tools and Skills; adopting received business changes into a workspace is a separate, reviewed action. See [maintenance](docs/en/governance-maintenance.md) and [capabilities and limits](docs/RELEASE_BOUNDARIES.md).
 
-<img src="docs/assets/workspace-sidebar-example.png" alt="Generic arrangement of a governance chat and multiple specialist chats in Codex" width="360">
+## Documentation
 
-The image is a generic organization example. You choose the specialist names and their number; backup or observer chats are not required.
-
-## Start in three steps
-
-1. **Prepare a project.** [Download the product package](https://github.com/bryan123466/agent-co-governance-toolkit/releases) and follow the [user manual](docs/en/windows-example.md#choose) to create its directory. Each project directory corresponds to one actual project.
-2. **Create the governance chat.** Select the directory specified by the manual, paste the [installation prompt](docs/en/windows-example.md#install), and fill in **[Project name]** and **[One-sentence introduction]**.
-3. **Connect your work.** [Continue existing chats](docs/en/windows-example.md#existing) or [add specialist workspaces](docs/en/windows-example.md#agents), specify **[The actual work each workspace is responsible for]**, and start making progress.
-
-The complete user manual provides directory examples, copyable prompts, MCP setup, and automation configuration. Follow its steps; you do not need to read engine source code or run development tests first.
-
-## Expand gradually from local collaboration
-
-- **Organize the project on a schedule.** Configure a scheduled task in Codex or another host so governance reviews connected work, summarizes changes, and handles eligible updates. The host provides scheduling.
-- **Store results in private Git.** Push selected deliverables and project records to your own remote repository for traceability and recovery. Remote synchronization is configured separately and follows your authorization.
-- **Assign different tasks to different computers.** The manual suggests a workflow with independent task branches and one integration computer. It has not completed a real two-computer end-to-end validation; consider it after the local workflow is stable.
-
-## Technology and usage
-
-AGCT uses **Python 3.11+ and Git**, with your existing **Codex** providing AI capabilities. It includes a local execution engine, CLI, MCP interface, and four project Skills: setup, task delivery, governance reconciliation, and experience recovery. Its runtime uses the Python standard library and does not require a separate model service.
-
-Each control scope has one local governance store and one baseline for receiving shared results. A product spanning independent repositories can configure a separate control for each and bring their progress together in one governance chat. Concurrent writes and updates within the same workspace still need coordination. Recovery covers implemented and verified methods and cannot guarantee automatic resolution of every unknown failure. See [Architecture](docs/en/architecture.md) and [Operating scope](docs/RELEASE_BOUNDARIES.md) for implementation details.
-
-## Documentation and participation
-
-| Document | English | 简体中文 | 繁體中文 |
+| Guide | English | 简体中文 | 繁體中文 |
 |---|---|---|---|
-| Product introduction | [README](README.md) | [项目介绍](README.zh-CN.md) | [專案介紹](README.zh-TW.md) |
-| User manual | [Manual](docs/en/windows-example.md) | [完整手册](docs/zh-CN/windows-example.md) | [完整手冊](docs/zh-TW/windows-example.md) |
-| Quick orientation | [Overview](docs/en/getting-started.md) | [快速了解](docs/zh-CN/getting-started.md) | [快速瞭解](docs/zh-TW/getting-started.md) |
-| Architecture | [Architecture](docs/en/architecture.md) | [架构](docs/zh-CN/architecture.md) | [架構](docs/zh-TW/architecture.md) |
+| User manual | [Start here](docs/en/windows-example.md) | [从这里开始](docs/zh-CN/windows-example.md) | [從這裡開始](docs/zh-TW/windows-example.md) |
+| Architecture | [How it works](docs/en/architecture.md) | [架构说明](docs/zh-CN/architecture.md) | [架構說明](docs/zh-TW/architecture.md) |
+| Maintenance | [Maintain a project](docs/en/governance-maintenance.md) | [维护项目](docs/zh-CN/governance-maintenance.md) | [維護專案](docs/zh-TW/governance-maintenance.md) |
 | Private Git and multiple computers | [Guide](docs/en/remote-and-multicomputer.md) | [说明](docs/zh-CN/remote-and-multicomputer.md) | [說明](docs/zh-TW/remote-and-multicomputer.md) |
 
-[CLI / MCP reference](docs/COMMANDS.md) · [Public Skills](skills) · [Contributing](https://github.com/bryan123466/agent-co-governance-toolkit/blob/main/CONTRIBUTING.md) · [Issues and suggestions](https://github.com/bryan123466/agent-co-governance-toolkit/issues)
+[CLI / MCP reference](docs/COMMANDS.md) · [Public Skills](skills) · [Validation records](https://github.com/bryan123466/taskcarry/blob/v0.2.0rc4/docs/VALIDATION.md)
 
-Share your use cases, ask questions, or contribute improvements. Before submitting feedback, remove project materials, personal paths, credentials, and sensitive runtime records; see the [Security guide](SECURITY.md). Version changes are recorded in [Releases](https://github.com/bryan123466/agent-co-governance-toolkit/releases).
+## Join in
 
-## Open-source license
+Questions, real use cases, clearer examples, translations, and code improvements are welcome. Start with [Issues](https://github.com/bryan123466/taskcarry/issues) or the [contribution guide](https://github.com/bryan123466/taskcarry/blob/v0.2.0rc4/CONTRIBUTING.md). Remove private project information before sharing; the [security guide](SECURITY.md) explains what to keep out of a report.
 
-The public source, documentation, templates, and examples use the [MIT](LICENSE) license, allowing use, modification, and commercial reuse under its terms. You retain control of the projects and materials you manage with the toolkit; this repository contains no private business project. Dependencies and services retain their own licenses and terms. See [License scope](LICENSE_SCOPE.md).
+## License
+
+The public code, documentation, templates, and examples use the [MIT license](LICENSE), including commercial reuse under its terms. Your own project and materials remain yours to manage; using TaskCarry does not make them public. Dependencies and services retain their own terms. See [license scope](LICENSE_SCOPE.md).

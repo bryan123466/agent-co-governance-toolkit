@@ -5,9 +5,9 @@ from pathlib import Path
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from agct.core import Core
-from agct.integration import Integration
-from agct.gitops import git, commit
+from taskcarry.core import Core
+from taskcarry.integration import Integration
+from taskcarry.gitops import git, commit
 
 SPEC = """# Synthetic quality management forms
 
@@ -48,12 +48,12 @@ def create(destination):
     git(baseline, "config", "user.name", "Synthetic Workshop")
     git(baseline, "config", "user.email", "workshop@example.invalid")
     (baseline / "SPEC.md").write_text(SPEC, encoding="utf-8")
-    (baseline / ".gitignore").write_text("__pycache__/\n*.pyc\n.agct/\n", encoding="utf-8")
+    (baseline / ".gitignore").write_text("__pycache__/\n*.pyc\n.taskcarry/\n", encoding="utf-8")
     git(baseline, "add", "--", "SPEC.md", ".gitignore")
     git(baseline, "commit", "-m", "Create synthetic quality form exercise")
     project = root / "governance"
     Core.initialize(project, name="Synthetic quality workshop")
-    (project / ".agct" / "SYNTHETIC_TEST_ONLY").write_text("Generated material only\n", encoding="utf-8")
+    (project / ".taskcarry" / "SYNTHETIC_TEST_ONLY").write_text("Generated material only\n", encoding="utf-8")
     engine = Integration(project)
     engine.workspace("baseline", baseline)
     manifest = {"synthetic": True, "project": str(project), "baseline": str(baseline), "base_commit": commit(baseline, "HEAD"), "workers": {}}

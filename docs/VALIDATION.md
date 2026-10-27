@@ -1,111 +1,39 @@
-# Release validation / 发布验证
+# TaskCarry 0.2.0rc4 — validation
 
-## Current 0.2.0rc3 validation / 本次更新验证
+[English](#english) · [简体中文](#简体中文) · [繁體中文](#繁體中文)
 
-The source suite ran **159 cases: 156 passed, 0 failed, 0 errored, 3 skipped** on Windows with Python 3.12.14. The standard source wheel/sdist build check was enabled. Two skips require unavailable native symbolic-link privileges; the installed-wheel case is invoked separately and passed.
+## English
 
-New regression coverage exercises actual receiving limits, frozen recovery identity, old empty plans with later work, legacy plan compatibility, persisted preparation failures, unchanged-input retry, checkpoint reuse, pre-candidate interruption, successful successors, and conditional non-executing experience advice. Tests inspect actual Git results and saved state. Existing multi-workspace, cumulative-stage, conflict, WIP-layer and effect-recovery tests remain in the suite.
+Validation uses disposable synthetic projects with real Git repositories. It does not run a user's project or native scheduled tasks. The local source suite ran **160 cases: 157 passed, 3 skipped, 0 failures and 0 errors**, on Windows with Python 3.12.14.
 
-The separate installed-wheel contract passed with four packaged Skills and real stdio MCP calls. A fresh rc2-to-rc3 upgrade walkthrough passed 55 assertions, preserving the original control state and restoring its old checkpoint. Another real old/new-wheel scenario resumed an effect-applied receiving operation, used existing recovery experience and completed its original receipt without a duplicate Git commit or professional-workspace change. These are additional scopes, not unique tests to add to the source count.
+Two source skips require native symbolic-link privileges unavailable on this host. The third is the installed-wheel contract, which passed separately against the built wheel. Standard wheel and source-distribution construction was enabled in the source run. Source coverage includes current-work selection, exact delivery, cumulative versions, bounded batches, paused checkpoints, file/index preservation, actual Git conflicts, interrupted effects and conditional experience-based continuation.
 
-本次源码测试 **159 项：156 通过、0 失败、0 错误、3 跳过**。跳过项为两项原生符号链接权限用例，以及另行通过的安装 wheel 用例。实际 rc2→rc3 升级通过 55 项断言，另验证旧版本已产生 Git 效果但回执中断时，新版沿原计划应用既有经验，只补回执，不重复提交、不改专业工作区。原九份操作手册字节保持不变。
+The final product ZIP was unpacked outside the checkout, its manifest and member hashes checked, and its wheel installed into an independent directory. The actual `taskcarry` command, four packaged Skills and generated stdio MCP command were exercised. The product walkthrough passed **47 checks** covering an empty initial project, three specialist workspaces, cumulative deliveries, paused work, a separately delivered stage, receipt recovery after an applied Git effect, repeat execution without a duplicate commit, checkpoint restoration and a selected workspace update preserving its local draft. These checks are a separate walkthrough, not additional independent unit tests to add to the suite count.
 
-Skill frontmatter validation and independent static review completed. This was not a new autonomous model-decision experiment, native Codex connection activation, real scheduled automation run or physical multi-computer trial. Scheduling guidance describes host responsibilities; it does not certify that a user's schedule is active. Local tests are not cross-platform CI evidence: check the Actions run for the exact public commit.
+An initial private walkthrough used the wrong Windows `pip --target` executable subdirectory. The executable was present in `bin`; the harness was corrected and the full walkthrough passed. Product code was not changed to accommodate that harness error.
 
-产品 ZIP 不附本页或测试结果；这些维护证据只保留在源码仓库。未运行用户项目、原生自动化或实体双电脑。旧版证据保留在下方及 JSON 的 prior_release_evidence 中，不冒充本次新增验证。
+Four Skill definitions passed the system frontmatter validator. Public content was screened using an explicit file allowlist, host-path and common-secret checks and private-term exclusions. The downloadable product excludes maintenance tests and this validation record; its user-document links are checked against actual package membership.
 
-## Historical 0.2.0rc2 validation / 旧版历史验证
+The three-language static overview and six SVG diagrams were visually reviewed. Independent local rendering at 1440 px and 390 px found no horizontal overflow, missing images or script errors. This is artifact rendering, not native AI-client acceptance.
 
-This maintenance update was verified with disposable synthetic projects and real local Git worktrees on Windows with Python 3.12. The source suite ran **143 cases: 140 passed, 0 failed, 0 errored, 3 skipped**. Two skips concern unavailable native symbolic-link privileges; the third is the separately invoked installed-wheel check. The source run explicitly enabled the standard wheel/sdist build check.
+**Not exercised:** native Codex or another AI client's activation, real scheduled triggers, physical multi-computer operation, or independent-user usability. Actual cross-platform CI is reported by the [Actions run for the release commit](https://github.com/bryan123466/taskcarry/actions); local results alone do not certify all platforms. Detailed portable results are in [VALIDATION_RESULTS.json](VALIDATION_RESULTS.json). Earlier evidence remains in Git history rather than being relabeled as this release's results.
 
-The independent installed-wheel check passed, including four packaged Skills and actual stdio MCP `status`, `agenda` and `doctor` requests. A separate rc1-to-rc2 installed-wheel walkthrough preserved existing tasks, paused work, artifact records, database and checkpoint object bytes, and restored an older checkpoint without reinitializing the project. These are additional execution scopes, not extra unique tests to add to the source count.
+## 简体中文
 
-本次在隔离的合成项目与真实本地 Git 工作树中验证。完整源码测试 **143 项：140 通过、0 失败、0 错误、3 跳过**；跳过项为两项宿主原生符号链接权限用例，以及单独执行的 wheel 安装用例。标准 wheel/sdist 构建验证已启用。独立安装包验证及 rc1 到 rc2 的原状态接续均通过；这些覆盖与源码测试有重叠，不累计成虚高用例总数。
+本次仅在独立合成项目中使用真实 Git 进行验证，没有运行用户业务项目、原生自动化或修改全局宿主配置。源码测试 **160 项：157 通过、3 跳过、0 失败、0 错误**。两项跳过依赖本机未具备的符号链接权限；另一项安装包验证已单独实际通过。源码测试启用了标准 wheel 与 sdist 构建。
 
-New coverage includes consistent read snapshots, paginated current-work fingerprints, dependency binding changes, resumable setup, detected user edits, source-read diagnostic errors, cumulative version reception, effect reconciliation, and business HEAD/index/WIP preservation during tool integration updates. The nine operating-manual files remain byte-identical.
+最终产品 ZIP 在源码目录外解压，逐项核对清单及哈希，再安装其 wheel。新版命令、四个 Skills 和生成的 stdio MCP 启动配置均实际执行。三个专业工作区的完整演练通过 **47 个检查点**，涵盖空白项目接入、累计版本交付、暂停检查点、独立交付、Git 效果发生后中断的经验恢复、重复执行不新增提交、检查点恢复及工作区更新保留本地草稿。演练检查点不与单元测试数相加。
 
-The product ZIP excludes this evidence and test results. This source repository retains maintenance evidence in [VALIDATION_RESULTS.json](VALIDATION_RESULTS.json). Native Codex connection activation, real scheduled automation, physical multi-computer execution and a new model-decision experiment were **not** performed. Cross-platform CI must be checked against the specific public commit's Actions run; local success alone is not cross-platform evidence.
+首次私有演练误用了 Windows `pip --target` 的命令目录；命令实际位于 `bin`，修正测试器后完整重跑通过，没有因此改动产品代码。另完成四份 Skill 格式验证、公开内容筛查、产品包内文档链接检查，以及三语页面和图示的桌面/手机渲染检查。
 
-新版重点覆盖一致只读快照、分页议程、依赖绑定变化、安装断点接续、已检测用户修改保全、源码读取错误诊断，以及工具更新不改变业务 HEAD/index/WIP。未运行用户真实项目、原生 Codex 自动化或实体双电脑验证。下文保留旧版本历史记录，不能作为新版新做的模型演练或新平台验证。
+未进行真实 AI 客户端激活、定时任务自然触发、实体多电脑或陌生用户验收。跨平台结果以对应发布提交的 Actions 为准，不能用本地通过替代。产品包不附本页和维护测试结果；旧版记录保留在 Git 历史。
 
-## Historical 0.2.0rc1 evidence / 旧版历史验证
+## 繁體中文
 
-**Agent Co-Governance Toolkit 0.2.0rc1 — local trial candidate.**
+本次只在獨立合成專案中使用真實 Git 驗證，未執行使用者業務專案、原生排程或修改全域宿主設定。原始碼測試 **160 項：157 通過、3 跳過、0 失敗、0 錯誤**。兩項跳過需要本機未具備的符號連結權限；另一項套件安裝驗證已另行實際通過。原始碼測試啟用了標準 wheel 與 sdist 建置。
 
-This document reports observed results, not a guarantee of autonomous production recovery. Machine-readable case results are in [VALIDATION_RESULTS.json](VALIDATION_RESULTS.json). First-time testers can use the [trial prompt](TESTER_START.md) or [中文试用提示词](TESTER_START.zh-CN.md).
+最終產品 ZIP 在原始碼目錄之外解壓縮，逐項核對清單與雜湊後安裝其中的 wheel。新版命令、四個 Skills 及產生的 stdio MCP 啟動設定均實際執行。三個專業工作區完整演練通過 **47 個檢查點**，涵蓋空白專案接入、累計版本交付、暫停檢查點、獨立交付、Git 效果發生後中斷的經驗恢復、重複執行不增加提交、檢查點還原及工作區更新保留本機草稿。演練檢查點不與單元測試數相加。
 
-The complete source test run exercised **78 cases: 75 passed, 0 failed, 0 errored, 3 skipped**. Two skips concern native symbolic-link privileges; the third is the separately invoked installed-wheel test. Package-installation outcomes are recorded separately below and in the JSON evidence rather than rewriting this original source-run result.
+首次私有演練誤用了 Windows `pip --target` 的命令目錄；命令實際位於 `bin`，修正測試器後完整重跑通過，未因此更改產品程式碼。另完成四份 Skill 格式驗證、公開內容篩查、產品內文件連結檢查，以及三語頁面與圖示的桌面/手機渲染檢查。
 
-完整源码测试实际运行 **78 项：75 项通过、0 失败、0 错误、3 项跳过**。两项因本机无法创建原生符号链接而跳过；另一项是需要构建完成后单独执行的安装包测试。安装验证单独留证，不改写原源码测试结果。
-
-**Supplemental checks passed:** installed wheel (four Skills and real project-bound MCP startup) and standard source wheel/sdist construction (four canonical Skills, no generated source copies). Counting unique cases across these runs gives **79 cases: 77 passed, 2 native-link privilege skips, no failures or errors**. The fictional reference adds 12 Python tests, 19 Node checks, and 13 cross-validator cases; those are reported separately from the toolkit's 79 cases.
-
-**补充安装验证已通过：**实际 wheel 在独立目录安装，四个 Skills 齐全，生成的项目 MCP 命令可以实际启动；无预生成资源副本的标准源码也能构建完整 wheel 与 sdist。合并去重后共 **79 个工具用例：77 通过，2 个原生链接权限用例跳过，0 失败、0 错误**。虚构表单另有 12 个 Python 测试、19 个 Node 检查、13 个跨验证器用例，不混入工具用例计数。
-
-## Scope and method / 范围与方法
-
-The validation host is Windows with Python 3.12. Tests create disposable, fictional projects and real local Git repositories. Runtime libraries are Python standard library only; optional schema validation uses a separate test-only installation. The test workspace provides logical isolation, not an operating-system-enforced sandbox. No production automation, private project, original business directory or global host configuration was modified.
-
-本轮使用虚构的品质管理表单任务，实际运行 Git、CLI、stdio MCP 与多 Agent 协作。使用独立目录、限定工作区与可丢弃仓库隔离测试，不把它描述为虚拟机或强制安全沙盒。没有访问真实业务来源目录，没有让专业线程参加实验。
-
-## What was exercised / 已验证的工作链
-
-| Layer / 层次 | Actual coverage / 实际覆盖 |
-|---|---|
-| Task memory / 任务状态 | Active and paused tasks; selected HEAD/index/worktree checkpoints; binary files and deletions; independent restoration; unchanged tasks do not create delivery backlog. |
-| Stable delivery / 阶段交付 | Exact immutable commit ranges; independent and cumulative stages; transitive ancestry; newer working files do not alter frozen deliveries. |
-| Reception / 接收 | Real baseline integration, repeated-call reuse, content conflicts, independent-stage continuation, one-baseline binding and branch identity checks. |
-| Interrupted effects / 中断效果 | Inject interruption after Git effect; inspect persisted operation; verify effect and complete receipt without duplicate commit. |
-| Experience / 经验 | Match error, action, version and scope; reject outdated or inapplicable rules; use `receipt-recovery-v1` in a real model-guided MCP rehearsal. |
-| Workspace adoption / 工作区采用 | Preserve local commits, staged changes, unstaged changes, untracked content and paused checkpoints; resume the original journal; retain exact owned stash. |
-| Byte preservation / 字节保全 | Windows autocrlf conversion, distinct index/worktree bytes, net-zero diff with nonzero staged work, and new user content after interruption. |
-| Boundaries / 边界 | Wrong argument types, path traversal, metadata and secret-like paths, actual junctions, oversized new/deleted blobs, ignored-file collisions, redirected scratch storage. |
-| Interfaces / 接口 | Shared typed API/CLI/MCP contract; real stdio processes; setup preview/install/uninstall and modified-file preservation. |
-| Release / 发布物 | Positive file allowlist, private-term/path screening, source manifest, wheel content parity, four packaged Skills and independent installed-wheel startup. |
-
-## Multi-Agent rehearsal / 多 Agent 演练
-
-Three worker roles produced schema/examples, a Python validation service, and a browser form. A separate governance role interpreted current tool evidence and used public MCP tools through a shell bridge to receive and adopt their work.
-
-The schema worker declared two cumulative versions. The receiver selected the current version and retained the old record as history. A deliberately interrupted service reception was recovered using the applicable experience rule, without replaying the already completed Git effect. Three workspaces adopted the baseline while the UI worker's paused, untracked note remained preserved.
-
-The rehearsal exposed a real LF/CRLF preservation defect. The shared implementation was corrected and regression-tested; the governance role then resumed the original operation and verified the original byte hash. It did not delete the original failure evidence or replace the frozen plan.
-
-Cross-module testing also found that the UI validator accepted an extra field rejected by the schema and service. The UI worker added a regression test, fixed its own files and declared a new exact incremental stage based on its adopted HEAD. This avoids re-delivering already adopted files from other workers.
-
-The final rehearsal used **25 public MCP calls**, accepted **4 effective stages**, superseded **1 older candidate**, and completed **6 adoption operations** across three worker workspaces. The baseline contains exactly four integration commits. Final actionable stages, operations and artifacts are all empty; paused WIP remains saved state. The corrected increment passed subsequent reception and adoption. The [completed fictional reference](../examples/quality_forms/reference/README.md) is included for inspection and repeatable checks.
-
-最终 **25 次公共 MCP 调用**完成 **4 个有效阶段接收、1 个旧候选替代、3 个工作区共 6 次采用**；基线恰好增加 4 次集成提交。待处理阶段、操作与材料均为空，暂停工作与原始未提交字节仍然保留。额外字段修复后的 Schema、服务与 UI 在 12 份标注样例及 1 份探测上全部一致。
-
-这是实际模型依据工具证据作出决策、经公共 MCP 协议执行的演练；并非只有预写的成功状态。它仍不等同于原生 Codex 桌面 MCP 连接验收，更不等同于定时 Automation 已运行。
-
-## Defects found and corrected / 本轮发现并修正
-
-1. CLI truthy strings could bypass boolean intent: shared typed validation now rejects them before effects.
-2. Cumulative histories and failed latest stages could reintroduce older candidates: current-state projection and receiving selection now preserve lineage without fallback replay.
-3. A stage conflict could be reported as complete when a new plan had no queued stages: unresolved conflicts remain explicit.
-4. WIP preservation missed staged changes cancelled in the working tree: capture considers index and worktree changes independently.
-5. Git newline conversion changed raw WIP bytes: saved expected bytes, exact layer checks and bounded newline correction now protect the tested cases.
-6. Adoption could overwrite ignored local files: collisions are refused before effects.
-7. Invalid execute requests could prematurely bind a baseline: binding occurs only after a valid executable plan.
-8. Redirected scratch paths could escape their intended location: symlink/junction ancestry is checked.
-9. Frozen oversized blobs, including deleted original content, now receive bounded checks before delivery records.
-10. Packaging is checked against frozen allowlisted bytes; both source installation and trial-wheel installation must include all four Skills.
-11. Extracted-archive smoke testing caught omitted CSV fixtures despite a valid manifest. The release allowlist and mandatory fixture checks now include the documented example's actual inputs.
-
-These fixes are in shared code and regression tests. They are not temporary commands applied only to a named synthetic worker. The recovery experience has explicit applicability and an executable bounded action; it does not train model weights or execute arbitrary code stored in memory.
-
-## Evidence limits / 验证限制
-
-- **Native Codex host connection is not accepted as passed.** The local native CLI probe stopped while loading host configuration: `invalid transport in mcp_servers.node_repl`. The AGCT MCP server had not started. No native settings were changed to bypass this. Direct stdio MCP and installed-package tests are separate evidence.
-- Two native symbolic-link creation tests may be skipped on this Windows account because it cannot create those links. Actual Windows junction tests and portable rejection tests run separately. See individual outcomes in the JSON report.
-- The three-platform CI matrix is configured but was not run on hosted Linux/macOS in this local validation. Do not infer cross-platform certification from configuration alone.
-- HTML documentation and the fictional UI received structural/static checks. Local-file browser rendering was not accepted by the available browser tool, so no browser screenshot or full interactive UI acceptance is claimed.
-- No remote push, distributed locking, multi-computer failover, production scheduled automation or OS repair was tested or promised in this RC.
-- Toolkit locks serialize toolkit operations. Other programs must not concurrently mutate the same receiving/adoption workspace; the tool does not physically lock out unrelated editors or Git clients.
-
-## Release decision / 发布判断
-
-Suitable for an **isolated first trial** using generated material. The next external check is a volunteer's clean local installation and actual Codex tool discovery/call, followed by small fictional workflows. It is not yet a production release or a claim that every native host works.
-
-可向愿意测试的人提供候选包，先验证独立安装、宿主 MCP 接入、任务保存、版本接收与恢复。宿主接入的未验证项有明确边界，不需要修改正在使用的生产治理或专业工作台来完成首轮测试。
+未進行真實 AI 用戶端啟用、排程自然觸發、實體多電腦或陌生使用者驗收。跨平台結果以對應發布提交的 Actions 為準，本機通過不能取代。產品套件不附本頁及維護測試結果；舊版記錄保留在 Git 歷史。

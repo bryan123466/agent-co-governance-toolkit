@@ -1,4 +1,4 @@
-# Contributing / 参与贡献 / 參與貢獻
+# Contributing to TaskCarry / 参与贡献 / 參與貢獻
 
 [English](#en) · [简体中文](#zh-CN) · [繁體中文](#zh-TW)
 
@@ -8,10 +8,12 @@
 
 **You can use the product without developing it or running its maintenance tests.** Start with the [Windows guide](docs/en/windows-example.md) to connect your own project. If you would like to help improve the toolkit, everyday experience is welcome alongside code contributions.
 
+TaskCarry helps AI tools carry project memory and work across sessions and workspaces. Contributions should make that everyday experience clearer and more reliable. Codex provides the current complete onboarding example; contributions for other hosts should describe the connection tested and its actual behavior, without presenting one client's success as universal compatibility.
+
 ### Ways to help
 
 - **Share a use case.** Describe what you were trying to do and which part of the workflow helped or felt unclear. Use a fictional or sanitized example.
-- **Ask a question or report a problem.** Search [Issues](https://github.com/bryan123466/agent-co-governance-toolkit/issues), then [open an issue](https://github.com/bryan123466/agent-co-governance-toolkit/issues/new/choose) if needed. Include the relevant step, what you expected, and what happened. A question does not require a test project or a code fix.
+- **Ask a question or report a problem.** Search [Issues](https://github.com/bryan123466/taskcarry/issues), then [open an issue](https://github.com/bryan123466/taskcarry/issues/new/choose) if needed. Include the relevant step, what you expected, and what happened. A question does not require a test project or a code fix.
 - **Improve the guides or translations.** Small corrections, clearer examples, and fixes to English, Simplified Chinese, or Traditional Chinese are useful contributions. Point to the page or propose a focused pull request.
 - **Contribute code.** Describe the problem first, especially before adding a command, a state store, or a recovery mechanism. This helps keep changes consistent with the rest of the toolkit.
 
@@ -23,7 +25,7 @@ Use Python 3.11+ and Git in a dedicated development environment. From the source
 
 ```text
 python -m pip install .
-python -m agct --help
+python -m taskcarry --help
 python -m unittest discover -s tests -v
 ```
 
@@ -33,7 +35,7 @@ Keep the three language editions consistent, and update examples when command ar
 
 Keep private source, customer data, credentials, real host paths, proprietary Skills without redistribution rights, and real-project run records out of contributions. Fault injection must be explicitly enabled only in marked synthetic projects. CI must not modify external projects or push a user's branch.
 
-The [CI configuration](.github/workflows/ci.yml) defines synthetic checks on Windows, Linux, and macOS with Python 3.11 and 3.12, including an installed-wheel check. Report the actual [Actions result for the relevant commit](https://github.com/bryan123466/agent-co-governance-toolkit/actions); a configured matrix is not evidence that every check passed.
+The [CI configuration](.github/workflows/ci.yml) defines synthetic checks on Windows, Linux, and macOS with Python 3.11 and 3.12, including an installed-wheel check. Report the actual [Actions result for the relevant commit](https://github.com/bryan123466/taskcarry/actions); a configured matrix is not evidence that every check passed.
 
 <a id="zh-CN"></a>
 
@@ -41,10 +43,12 @@ The [CI configuration](.github/workflows/ci.yml) defines synthetic checks on Win
 
 **使用产品不需要参与开发，也不需要运行维护测试。** 按照 [Windows 操作手册](docs/zh-CN/windows-example.md)接入自己的项目即可。如果你愿意帮助改进工具，实际使用中的经验和代码贡献同样欢迎。
 
+TaskCarry 帮助 AI 工具跨会话、跨工作区保留项目记忆并接续工作。贡献应让这些日常体验更清楚、更可靠。当前完整接入示例使用 Codex；贡献其他宿主的接入方法时，请说明实际验证的连接与行为，不把某个客户端成功描述成全部平台兼容。
+
 ### 可以怎样参与
 
 - **分享使用场景。** 说明你想完成什么，哪些步骤有帮助、哪些地方不好理解；使用虚构或已脱敏的例子。
-- **提问或反馈问题。** 先查看 [Issues](https://github.com/bryan123466/agent-co-governance-toolkit/issues)，需要时[新建问题](https://github.com/bryan123466/agent-co-governance-toolkit/issues/new/choose)，说明操作步骤、预期和实际结果。普通提问不要求你先搭测试项目或修代码。
+- **提问或反馈问题。** 先查看 [Issues](https://github.com/bryan123466/taskcarry/issues)，需要时[新建问题](https://github.com/bryan123466/taskcarry/issues/new/choose)，说明操作步骤、预期和实际结果。普通提问不要求你先搭测试项目或修代码。
 - **改善文档与翻译。** 修正错字、补充更清楚的例子，或改善英文、简体中文、繁体中文表达，都可以参与。可以指出对应页面，也可以提交小范围的 Pull Request。
 - **贡献代码。** 先说明要解决的具体问题，尤其是在增加命令、状态存储或恢复机制之前，方便与现有工具保持一致。
 
@@ -56,7 +60,7 @@ The [CI configuration](.github/workflows/ci.yml) defines synthetic checks on Win
 
 ```text
 python -m pip install .
-python -m agct --help
+python -m taskcarry --help
 python -m unittest discover -s tests -v
 ```
 
@@ -66,7 +70,7 @@ CLI、MCP 和 Skills 继续共用同一个内核。针对新行为或真实故�
 
 贡献内容不得包含私有源码、真实客户资料、凭证、真实主机路径、无再分发权的 Skill 或真实项目运行记录。故障注入只在明确标记的虚构项目中显式启用；CI 不得修改外部项目或推送用户分支。
 
-[CI 配置](.github/workflows/ci.yml)定义 Windows、Linux、macOS 与 Python 3.11、3.12 的虚构项目检查，并包含安装后 wheel 检查。报告验证结果时使用[对应提交的 Actions 实际结果](https://github.com/bryan123466/agent-co-governance-toolkit/actions)，配置了检查不代表所有检查已经通过。
+[CI 配置](.github/workflows/ci.yml)定义 Windows、Linux、macOS 与 Python 3.11、3.12 的虚构项目检查，并包含安装后 wheel 检查。报告验证结果时使用[对应提交的 Actions 实际结果](https://github.com/bryan123466/taskcarry/actions)，配置了检查不代表所有检查已经通过。
 
 <a id="zh-TW"></a>
 
@@ -74,10 +78,12 @@ CLI、MCP 和 Skills 继续共用同一个内核。针对新行为或真实故�
 
 **使用產品不需要參與開發，也不需要執行維護測試。** 依照 [Windows 操作手冊](docs/zh-TW/windows-example.md)接入自己的專案即可。如果你願意協助改善工具，實際使用經驗與程式碼貢獻都很歡迎。
 
+TaskCarry 協助 AI 工具跨對話、跨工作區保留專案記憶並接續工作。貢獻應讓這些日常體驗更清楚、更可靠。目前完整接入範例使用 Codex；貢獻其他宿主的接入方法時，請說明實際驗證的連線與行為，不把某個用戶端成功描述成全部平台相容。
+
 ### 可以如何參與
 
 - **分享使用情境。** 說明你想完成什麼、哪些步驟有幫助、哪些地方不好理解；使用虛構或已去識別化的例子。
-- **提問或回報問題。** 先查看 [Issues](https://github.com/bryan123466/agent-co-governance-toolkit/issues)，需要時[建立問題](https://github.com/bryan123466/agent-co-governance-toolkit/issues/new/choose)，說明操作步驟、預期與實際結果。一般提問不要求你先建立測試專案或修正程式碼。
+- **提問或回報問題。** 先查看 [Issues](https://github.com/bryan123466/taskcarry/issues)，需要時[建立問題](https://github.com/bryan123466/taskcarry/issues/new/choose)，說明操作步驟、預期與實際結果。一般提問不要求你先建立測試專案或修正程式碼。
 - **改善文件與翻譯。** 修正錯字、補充更清楚的例子，或改善英文、簡體中文、繁體中文表達，都可以參與。可以指出對應頁面，也可以提交小範圍的 Pull Request。
 - **貢獻程式碼。** 先說明要解決的具體問題，尤其是在增加指令、狀態儲存或恢復機制之前，方便與現有工具保持一致。
 
@@ -89,7 +95,7 @@ CLI、MCP 和 Skills 继续共用同一个内核。针对新行为或真实故�
 
 ```text
 python -m pip install .
-python -m agct --help
+python -m taskcarry --help
 python -m unittest discover -s tests -v
 ```
 
@@ -99,4 +105,4 @@ CLI、MCP 與 Skills 繼續共用同一個核心。針對新行為或真實故�
 
 貢獻內容不得包含私有原始碼、真實客戶資料、憑證、真實主機路徑、無再散布權的 Skill 或真實專案執行記錄。故障注入只在明確標記的虛構專案中明確啟用；CI 不得修改外部專案或推送使用者分支。
 
-[CI 設定](.github/workflows/ci.yml)定義 Windows、Linux、macOS 與 Python 3.11、3.12 的虛構專案檢查，並包含安裝後的 wheel 檢查。報告驗證結果時使用[對應提交的 Actions 實際結果](https://github.com/bryan123466/agent-co-governance-toolkit/actions)，設定了檢查不代表所有檢查已經通過。
+[CI 設定](.github/workflows/ci.yml)定義 Windows、Linux、macOS 與 Python 3.11、3.12 的虛構專案檢查，並包含安裝後的 wheel 檢查。報告驗證結果時使用[對應提交的 Actions 實際結果](https://github.com/bryan123466/taskcarry/actions)，設定了檢查不代表所有檢查已經通過。

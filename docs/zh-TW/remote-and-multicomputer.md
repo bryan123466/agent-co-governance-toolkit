@@ -4,9 +4,9 @@ Windows 使用者可以直接跟隨[固定目錄完整示例](windows-example.md
 
 [返回操作手冊](operation-manual.md) · [English](../en/remote-and-multicomputer.md) · [简体中文](../zh-CN/remote-and-multicomputer.md) · [指令參考](../COMMANDS.md)
 
-適用版本：0.2.0rc1。這兩章是按需要啟用的參考流程，不是安裝後每天必須執行的任務。下述跨電腦流程尚未經過兩臺實體電腦的端到端驗證；它組合了 Git 操作與現有本機 AGCT 介面，沒有新增跨機同步或自動恢復能力。
+適用版本：0.2.0rc4。這兩章是按需要啟用的參考流程，不是安裝後每天必須執行的任務。下述跨電腦流程尚未經過兩臺實體電腦的端到端驗證；它組合了 Git 操作與現有本機 TaskCarry 介面，沒有新增跨機同步或自動恢復能力。
 
-所有 `<...>` 都是需要替換的預留位置符號。`python` 應指向已經安裝 AGCT 的 Python 環境。JSON 檔案儲存為 UTF-8；不要把示例中的預留位置符號直接執行。Git 推送會向所選遠端傳送資料，應先確認儲存庫、存取者和本次授權範圍。
+所有 `<...>` 都是需要替換的預留位置符號。`python` 應指向已經安裝 TaskCarry 的 Python 環境。JSON 檔案儲存為 UTF-8；不要把示例中的預留位置符號直接執行。Git 推送會向所選遠端傳送資料，應先確認儲存庫、存取者和本次授權範圍。
 
 <a id="private-git"></a>
 
@@ -20,12 +20,12 @@ Windows 使用者可以直接跟隨[固定目錄完整示例](windows-example.md
 |---|---|---|
 | 選定的程式碼、文件、穩定成果 | 私有 Git 儲存庫，完成 commit 和 push | 已推送的檔案版本與提交歷史 |
 | 精選專案記憶：目標、決策、當前節點、下一步、來源 | 私有 Git 中的普通 Markdown/JSON 檔案 | 可跨電腦閱讀的專案接續說明 |
-| AGCT 任務、階段、操作與經驗記錄 | 本機治理目錄的 `.agct/state.sqlite3` | 本機工具的狀態與原始記錄 |
-| 檢查點檔案對象 | 同一治理目錄的 `.agct/objects/` | 明確選中並儲存過的檔案及檢查點層次 |
-| 未儲存的編輯器內容、未納入檢查點的檔案 | 原程式或工作區；需要單獨儲存/備份 | Git 和 AGCT 不會自動捕獲它們 |
+| TaskCarry 任務、階段、操作與經驗記錄 | 本機治理目錄的 `.taskcarry/state.sqlite3` | 本機工具的狀態與原始記錄 |
+| 檢查點檔案對象 | 同一治理目錄的 `.taskcarry/objects/` | 明確選中並儲存過的檔案及檢查點層次 |
+| 未儲存的編輯器內容、未納入檢查點的檔案 | 原程式或工作區；需要單獨儲存/備份 | Git 和 TaskCarry 不會自動捕獲它們 |
 | 影片、安裝套件、大型資料等 | 經授權的獨立檔案儲存；Git 儲存位置、大小和雜湊說明 | 找到並核對檔案，不代表檔案已上傳或可存取 |
 
-**私有 Git 不是整個電腦或治理資料庫的自動鏡像。** 只有已經提交並推送的選定檔案才會到達遠端；忽略檔案、未提交成果和本機對話歷史不會因此自動儲存。GitHub 普通 Git 檔案超過 100 MiB 會被拒絕；大檔案應另選儲存或明確設定 Git LFS，AGCT 不自動設定它們。[GitHub 檔案限制](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github)
+**私有 Git 不是整個電腦或治理資料庫的自動鏡像。** 只有已經提交並推送的選定檔案才會到達遠端；忽略檔案、未提交成果和本機對話歷史不會因此自動儲存。GitHub 普通 Git 檔案超過 100 MiB 會被拒絕；大檔案應另選儲存或明確設定 Git LFS，TaskCarry 不自動設定它們。[GitHub 檔案限制](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github)
 
 ### 4.2 建立私有遠端，明確誰能推進主線
 
@@ -56,7 +56,7 @@ git -C "<A_BASELINE>" rev-parse HEAD
 git -C "<A_BASELINE>" ls-remote origin refs/heads/main
 ```
 
-後兩條的提交雜湊應一致。被拒絕時先查原因，不強推。若遠端已有不同歷史或其他寫入，先核對差異與寫入責任。**這是原生 Git 推送，不是 AGCT 的 `reconcile` 或內建遠端回執。** 建議使用託管平台的分支保護/權限限制來落實唯一主線寫入者；僅在提示詞裡約定無法形成跨機鎖。
+後兩條的提交雜湊應一致。被拒絕時先查原因，不強推。若遠端已有不同歷史或其他寫入，先核對差異與寫入責任。**這是原生 Git 推送，不是 TaskCarry 的 `reconcile` 或內建遠端回執。** 建議使用託管平台的分支保護/權限限制來落實唯一主線寫入者；僅在提示詞裡約定無法形成跨機鎖。
 
 ### 4.3 把有用記憶儲存為普通專案檔案
 
@@ -75,7 +75,7 @@ git -C "<A_BASELINE>" ls-remote origin refs/heads/main
 PowerShell 7 匯出示例（目標父目錄已存在）：
 
 ```powershell
-python -m agct --project "<A_CONTROL>" status | Set-Content -LiteralPath "<SNAPSHOT>/status.json" -Encoding utf8
+python -m taskcarry --project "<A_CONTROL>" status | Set-Content -LiteralPath "<SNAPSHOT>/status.json" -Encoding utf8
 ```
 
 檢查 JSON 中 `ok` 為 `true`，並記下采集時間。不要把失敗輸出當成正常狀態。整理後的記憶檔案也應走普通專業交付與接收；不要為寫摘要直接弄臟專用接收工作區。精確提交示例：
@@ -88,20 +88,20 @@ git -C "<MEMORY_WORKSPACE>" diff --cached --name-only
 git -C "<MEMORY_WORKSPACE>" commit -m "Update current project handoff"
 ```
 
-提交前兩次檢查暫存區；若存在不屬於本次交付的暫存內容，停止這一步並保留它，不混合提交。隨後按主手冊宣告階段，由整合主機接收並推送。記憶檔案進入 Git 不會自動匯入另一臺電腦的 AGCT 狀態庫或模型記憶。
+提交前兩次檢查暫存區；若存在不屬於本次交付的暫存內容，停止這一步並保留它，不混合提交。隨後按主手冊宣告階段，由整合主機接收並推送。記憶檔案進入 Git 不會自動匯入另一臺電腦的 TaskCarry 狀態庫或模型記憶。
 
 可直接交給 Codex：
 
-> 請為本專案維護一份精簡、可接續的 project-memory/current.md。基於已授權的任務記錄、提交和明確來源，寫清當前事實、有效決定、暫停節點與下一步；舊決定只保留必要沿革，不把沒有變化的任務列成新增積壓。先檢查現有檔案及暫存區，只交付這次真實變化。不要匯出私人對話、憑據或整個 .agct。按本機 AGCT 流程提交接收；只有我已授權上傳的資料才推送到指定私有遠端。
+> 請為本專案維護一份精簡、可接續的 project-memory/current.md。基於已授權的任務記錄、提交和明確來源，寫清當前事實、有效決定、暫停節點與下一步；舊決定只保留必要沿革，不把沒有變化的任務列成新增積壓。先檢查現有檔案及暫存區，只交付這次真實變化。不要匯出私人對話、憑據或整個 .taskcarry。按本機 TaskCarry 流程提交接收；只有我已授權上傳的資料才推送到指定私有遠端。
 
 ### 4.4 做一份可核對的一致備份
 
 [本步驟可直接複製的 Windows 示例](windows-example.md#private-git)
 
-**先停止這一個專案的寫入，再備份同一時點。** 當前 AGCT 沒有跨儲存庫、SQLite 與檔案對象的一鍵一致備份指令。操作順序：
+**先停止這一個專案的寫入，再備份同一時點。** 當前 TaskCarry 沒有跨儲存庫、SQLite 與檔案對象的一鍵一致備份指令。操作順序：
 
 1. 讓相關任務儲存檔案。對有意義的未完成內容建立精確檢查點，記錄 `next_step`；檢查點不是交付，也不要求把未完成工作提交為成果。當前檢查點最多選擇 500 個路徑，單個檔案對象上限 32 MiB、各層合計上限 128 MiB；超出或未選中的資料另行備份。
-2. 等當前 AGCT 操作結束，暫停此專案的定時寫入與治理呼叫，保證備份期間沒有 CLI/MCP/其他程式改動其 `.agct`。需要捕獲的 Git 工作區也暫停修改。保留未完成操作的真實狀態，不為備份偽造終態或刪除鎖檔案。
+2. 等當前 TaskCarry 操作結束，暫停此專案的定時寫入與治理呼叫，保證備份期間沒有 CLI/MCP/其他程式改動其 `.taskcarry`。需要捕獲的 Git 工作區也暫停修改。保留未完成操作的真實狀態，不為備份偽造終態或刪除鎖檔案。
 3. 建立一個**不在源儲存庫、工作區或治理目錄內部**的備份目錄。儲存工具版本、各工作區路徑/分支/HEAD、檢查點 ID、`status`、備份時間和暫停範圍。
 4. 用 Git bundle 儲存每個獨立 Git 儲存庫的可達提交與引用；共享同一 Git 公共目錄的 worktree 可由同一 bundle 覆蓋相應引用。
 
@@ -113,26 +113,26 @@ git -C "<REPOSITORY>" bundle list-heads "<SNAPSHOT>/project.bundle"
 
 Bundle 可用於離線傳遞提交。它不是工作目錄、暫存區、未跟蹤檔案、設定和所有本機恢復資訊的完整備份；這些需要檢查點或另外儲存。[Git bundle 官方說明](https://git-scm.com/docs/git-bundle)
 
-5. 在所有相關寫入仍停止時，完整複製治理目錄中的 `.agct`，包括 `state.sqlite3`、存在的 WAL/SHM 配套檔案、`objects` 和其他狀態檔案。不要只挑資料庫主檔案，不要移動原件。另存尚未被檢查點覆蓋、確實需要保留的檔案，以及經檢查的專案設定；不包含登入權杖。
+5. 在所有相關寫入仍停止時，完整複製治理目錄中的 `.taskcarry`，包括 `state.sqlite3`、存在的 WAL/SHM 配套檔案、`objects` 和其他狀態檔案。不要只挑資料庫主檔案，不要移動原件。另存尚未被檢查點覆蓋、確實需要保留的檔案，以及經檢查的專案設定；不包含登入權杖。
 
 PowerShell 7 的冷備份示例（`<SNAPSHOT>` 是已經建立的空目錄）：
 
 ```powershell
-Copy-Item -LiteralPath "<A_CONTROL>/.agct" -Destination "<SNAPSHOT>/.agct" -Recurse -ErrorAction Stop
-Get-ChildItem -LiteralPath "<SNAPSHOT>/.agct" -Force
+Copy-Item -LiteralPath "<A_CONTROL>/.taskcarry" -Destination "<SNAPSHOT>/.taskcarry" -Recurse -ErrorAction Stop
+Get-ChildItem -LiteralPath "<SNAPSHOT>/.taskcarry" -Force
 ```
 
-其他系統可在同樣停寫條件下用本機檔案複製工具，保留隱藏檔案和完整目錄結構。不要讓同步磁碟在背景複製**執行中的** `.agct` 或 `.git`。SQLite 線上備份 API 能處理資料庫快照，但單獨快照資料庫仍不等於同時一致地儲存 AGCT 的檔案對象和 Git 狀態。[SQLite 備份說明](https://www.sqlite.org/backup.html)
+其他系統可在同樣停寫條件下用本機檔案複製工具，保留隱藏檔案和完整目錄結構。不要讓同步磁碟在背景複製**執行中的** `.taskcarry` 或 `.git`。SQLite 線上備份 API 能處理資料庫快照，但單獨快照資料庫仍不等於同時一致地儲存 TaskCarry 的檔案對象和 Git 狀態。[SQLite 備份說明](https://www.sqlite.org/backup.html)
 
 6. 核對檔案清單、大小與 SHA-256；檢查資料庫副本及代表性檢查點能否讀取。至少確認 bundle 校驗通過、對象目錄已儲存、沒有複製錯誤，再恢復原專案正常執行。把完成的備份封存上傳到所選儲存，並在另一份下載副本上核對雜湊，才稱“異地備份已驗證”。目錄名或同步圖示不構成這項證據。
 
-> 請給本專案做一次停寫期間的一致備份到 [新備份目錄]。先儲存選定 WIP 檢查點，等待當前治理動作結束，再協調暫停相關寫入。儲存每個獨立儲存庫的 Git bundle、完整 .agct、未被檢查點覆蓋的具名必要檔案、版本與路徑清單。只對副本做驗證，不刪除原檔案或恢復用 stash。記錄哪些內容不在備份中。完成並核驗後恢復剛才暫停的本專案執行設定，不改變其他專案。
+> 請給本專案做一次停寫期間的一致備份到 [新備份目錄]。先儲存選定 WIP 檢查點，等待當前治理動作結束，再協調暫停相關寫入。儲存每個獨立儲存庫的 Git bundle、完整 .taskcarry、未被檢查點覆蓋的具名必要檔案、版本與路徑清單。只對副本做驗證，不刪除原檔案或恢復用 stash。記錄哪些內容不在備份中。完成並核驗後恢復剛才暫停的本專案執行設定，不改變其他專案。
 
 ### 4.5 恢復時分成“找回資料”與“重新啟用治理”
 
 [本步驟可直接複製的 Windows 示例](windows-example.md#private-git)
 
-**不要把舊 `.agct` 複製到新電腦後直接執行舊接收/採用計畫。** 工作區身分包含絕對路徑、Git 公共目錄和分支；整合基線還綁定原身分。0.2.0rc1 沒有完整的跨機狀態遷移 API。相同目錄名字不代表同一現場。
+**不要把舊 `.taskcarry` 複製到新電腦後直接執行舊接收/採用計畫。** 工作區身分包含絕對路徑、Git 公共目錄和分支；整合基線還綁定原身分。0.2.0rc4 沒有完整的跨機狀態遷移 API。相同目錄名字不代表同一現場。
 
 恢復步驟：
 
@@ -151,15 +151,15 @@ git clone --branch "<SAVED_BRANCH>" "<SNAPSHOT>/project.bundle" "<NEW_REPOSITORY
 
 從 bundle 複製儲存庫時 `origin` 指向 bundle；之後若要上傳，先明確設定正確私有遠端，不能把它當成已連接線上儲存庫。
 
-3. 需要找回檢查點時，把備份 `.agct` **複製**到獨立的 `<RECOVERY_CONTROL>/.agct`，只把它當恢復工具的工作副本。使用與備份兼容的 AGCT 版本讀取 `status`，核對檢查點。建立 `restore.json`：
+3. 需要找回檢查點時，把備份 `.taskcarry` **複製**到獨立的 `<RECOVERY_CONTROL>/.taskcarry`，只把它當恢復工具的工作副本。使用與備份兼容的 TaskCarry 版本讀取 `status`，核對檢查點。建立 `restore.json`：
 
 ```json
 {"checkpoint_id":"<SAVED_CHECKPOINT_ID>","destination":"<NEW_INDEPENDENT_RESTORED_FILES_DIRECTORY>"}
 ```
 
 ```text
-python -m agct --project "<RECOVERY_CONTROL>" status
-python -m agct --project "<RECOVERY_CONTROL>" restore --input restore.json
+python -m taskcarry --project "<RECOVERY_CONTROL>" status
+python -m taskcarry --project "<RECOVERY_CONTROL>" restore --input restore.json
 ```
 
 目標必須為空或不存在，且獨立於原工作區與恢復治理目錄。`restore` 只恢復檢查點選中的檔案；Git 檢查點會建立**合成恢復基線**以呈現原 HEAD/暫存/工作區層次，保留原 HEAD 的來源記錄，但不是還原完整原儲存庫歷史。它會在恢復工作副本登記恢復事件，不修改備份原件。先比對這些檔案與從儲存庫複製出的真實專案，再在具名任務分支中恢復工作，不能把合成提交冒充原始提交。
@@ -168,10 +168,10 @@ python -m agct --project "<RECOVERY_CONTROL>" restore --input restore.json
 5. 重新生成本機 Skills/MCP 設定並做 `doctor`/`status` 檢查。舊 MCP 片段含原 Python 和專案絕對路徑，不直接重用。當前路徑重綁定入口也不能繞過待處理階段、未完操作或基線身分限制。
 
 ```text
-python -m agct --project "<NEW_CONTROL>" init
-python -m agct --project "<NEW_CONTROL>" workspace --input new-baseline.json
-python -m agct --project "<NEW_CONTROL>" doctor
-python -m agct --project "<NEW_CONTROL>" status
+python -m taskcarry --project "<NEW_CONTROL>" init
+python -m taskcarry --project "<NEW_CONTROL>" workspace --input new-baseline.json
+python -m taskcarry --project "<NEW_CONTROL>" doctor
+python -m taskcarry --project "<NEW_CONTROL>" status
 ```
 
 `new-baseline.json` 示例：`{"name":"baseline","path":"<NEW_BASELINE_ABSOLUTE_PATH>"}`。其餘登記與接入見[操作手冊](operation-manual.md)。保留恢復記錄裡的舊 ID 與新登記 ID 的對應關係；這是一項明確的人工/Agent 輔助重建，不能稱為自動延續了舊資料庫的完整事務歷史。
@@ -192,11 +192,11 @@ python -m agct --project "<NEW_CONTROL>" status
                          │ fetch 精確源提交
                          ▼
 電腦 A：穩定命名的本機 intake 倉/工作區
-        → A 的 AGCT submit → 接收計畫 → 唯一接收基線
+        → A 的 TaskCarry submit → 接收計畫 → 唯一接收基線
         → 授權 push main → B fetch 後接續下一任務節點
 ```
 
-AGCT 的一個治理目錄由**一臺電腦上的本機 SQLite**管理。電腦 B 可以有獨立的本機 AGCT 做檢查點，但其資料庫不會自動合併到 A。不要把 `.agct`、`.git` 或活動 worktree 放進雙向同步目錄共用。
+TaskCarry 的一個治理目錄由**一臺電腦上的本機 SQLite**管理。電腦 B 可以有獨立的本機 TaskCarry 做檢查點，但其資料庫不會自動合併到 A。不要把 `.taskcarry`、`.git` 或活動 worktree 放進雙向同步目錄共用。
 
 同一業務主題可拆成任務支線；要明確成果、允許修改的路徑、基線和介面依賴。只有任務名不同而實際修改同一檔案，仍可能衝突。每個並行寫入者使用自己的檔案工作區和分支；同一 worktree 的檔案不會因為開了兩個對話窗而隔離。[Codex worktree 說明](https://learn.chatgpt.com/docs/environments/git-worktrees)
 
@@ -254,7 +254,7 @@ git -C "<B_REPOSITORY>" diff --no-renames --name-only "<SOURCE_BASE>" HEAD
 }
 ```
 
-這是**人和治理 Agent 閱讀的交接說明，不是 AGCT import API**；不要直接把它傳給 `submit`。
+這是**人和治理 Agent 閱讀的交接說明，不是 TaskCarry import API**；不要直接把它傳給 `submit`。
 
 ```text
 git -C "<B_REPOSITORY>" add -- handoffs/form-export-v1.json
@@ -308,9 +308,9 @@ git -C "<A_INTAKE>" switch -c codex/intake-form-export "<SOURCE_COMMIT>"
 ```
 
 ```text
-python -m agct --project "<A_CONTROL>" workspace --input intake-workspace.json
-python -m agct --project "<A_CONTROL>" task --input intake-task.json
-python -m agct --project "<A_CONTROL>" submit --input intake-submit.json
+python -m taskcarry --project "<A_CONTROL>" workspace --input intake-workspace.json
+python -m taskcarry --project "<A_CONTROL>" task --input intake-task.json
+python -m taskcarry --project "<A_CONTROL>" submit --input intake-submit.json
 ```
 
 已有同名任務時先核對實際身分，不用說明檔案覆蓋另一任務。上面 `independent` 僅適用於這個示例的新階段；若要累積取代舊階段，必須滿足**同一任務、同一登記工作區、原提交祖先關係及路徑覆蓋**，並明確給出 `supersedes`。跨電腦同名階段不會自動產生關聯。歷史不滿足條件時保留原證據，請治理判斷關係，不能偽造覆蓋。
@@ -322,7 +322,7 @@ python -m agct --project "<A_CONTROL>" submit --input intake-submit.json
 ```
 
 ```text
-python -m agct --project "<A_CONTROL>" reconcile --input receive-plan.json
+python -m taskcarry --project "<A_CONTROL>" reconcile --input receive-plan.json
 ```
 
 核對返回計畫的全部 `stage_ids`、基線 HEAD、未完操作和衝突。接收計畫可能包含其他已有排隊階段，並不自動只選這個任務；全部都在本次授權內才執行。將返回的 `plan_id` 原樣填入 `receive-execute.json`：
@@ -332,13 +332,13 @@ python -m agct --project "<A_CONTROL>" reconcile --input receive-plan.json
 ```
 
 ```text
-python -m agct --project "<A_CONTROL>" reconcile --input receive-execute.json
-python -m agct --project "<A_CONTROL>" status
+python -m taskcarry --project "<A_CONTROL>" reconcile --input receive-execute.json
+python -m taskcarry --project "<A_CONTROL>" status
 ```
 
 檢查階段實際為 `COMMITTED`、相關操作完成及當前基線內容；整體呼叫成功不代表所有排隊項都已完成。具體衝突只處理相關任務，不覆蓋其他人的 WIP。需要更新 A 的某工作區時按主手冊先 `adopt` 計畫再執行。授權上傳的基線按 4.2 精確 push 到 `main`；接收形成的新整合提交和原 B 源提交都要能追溯。
 
-> 接收電腦 B 的 form-export-v1。先讀取遠端交接說明與原提交，核對原 base/commit、精確路徑、已做檢查、當前基線及任務關係。使用本機穩定登記的 intake 工作區，通過 AGCT submit 與先計畫後執行的 reconcile 接收，不冒充跨機資料庫匯入，不重寫來源雜湊，不重複執行已完成效果。檢查計畫中的其他階段是否也在授權範圍。保留 B 的未完任務說明，業務驗收單獨判斷；僅按已有授權推送主線。
+> 接收電腦 B 的 form-export-v1。先讀取遠端交接說明與原提交，核對原 base/commit、精確路徑、已做檢查、當前基線及任務關係。使用本機穩定登記的 intake 工作區，通過 TaskCarry submit 與先計畫後執行的 reconcile 接收，不冒充跨機資料庫匯入，不重寫來源雜湊，不重複執行已完成效果。檢查計畫中的其他階段是否也在授權範圍。保留 B 的未完任務說明，業務驗收單獨判斷；僅按已有授權推送主線。
 
 ### 5.5 B 接續、主機換手和已知邊界
 
@@ -351,7 +351,7 @@ git -C "<B_REPOSITORY>" fetch origin
 git -C "<B_REPOSITORY>" worktree add -b codex/form-export-next "<B_NEXT_WORKSPACE>" origin/main
 ```
 
-根據任務關係接續，記錄新 base；不用重做已完成階段。其他機器上的 AGCT `adopt` 不會通過網路被 A 自動呼叫。
+根據任務關係接續，記錄新 base；不用重做已完成階段。其他機器上的 TaskCarry `adopt` 不會通過網路被 A 自動呼叫。
 
 | 情況 | 應采取的動作 |
 |---|---|

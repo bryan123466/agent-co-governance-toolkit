@@ -6,15 +6,15 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from agct.core import Core
-from agct.gitops import commit, fingerprint, git, out
-from agct.integration import Integration
-from agct.store import GovernanceError
+from taskcarry.core import Core
+from taskcarry.gitops import commit, fingerprint, git, out
+from taskcarry.integration import Integration
+from taskcarry.store import GovernanceError
 
 
 class AdversarialGovernanceTests(unittest.TestCase):
     def setUp(self):
-        self.temp = tempfile.TemporaryDirectory(prefix='agct-adversarial-')
+        self.temp = tempfile.TemporaryDirectory(prefix='taskcarry-adversarial-')
         self.root = Path(self.temp.name)
         self.control = self.root / 'control'
         Core.initialize(self.control, 'Synthetic adversarial project')
@@ -76,7 +76,7 @@ class AdversarialGovernanceTests(unittest.TestCase):
         git(self.worker, 'add', '--', 'payload.bin')
         git(self.worker, 'commit', '-m', 'Synthetic boundedness payload')
         tip = commit(self.worker, 'HEAD')
-        with patch('agct.gitops.MAX_BLOB_BYTES', 128):
+        with patch('taskcarry.gitops.MAX_BLOB_BYTES', 128):
             self.assert_error('DELIVERY_TOO_LARGE', self.engine.submit, 'quality', 'worker', tip,
                               self.base, ['payload.bin'], stage_id='oversized-new')
         self.assertIsNone(self.engine.store.get('stages', 'oversized-new'))
@@ -91,7 +91,7 @@ class AdversarialGovernanceTests(unittest.TestCase):
         git(self.worker, 'rm', '--', 'payload.bin')
         git(self.worker, 'commit', '-m', 'Synthetic payload deletion')
         tip = commit(self.worker, 'HEAD')
-        with patch('agct.gitops.MAX_BLOB_BYTES', 128):
+        with patch('taskcarry.gitops.MAX_BLOB_BYTES', 128):
             self.assert_error('DELIVERY_TOO_LARGE', self.engine.submit, 'quality', 'worker', tip,
                               origin, ['payload.bin'], stage_id='oversized-deleted')
         self.assertIsNone(self.engine.store.get('stages', 'oversized-deleted'))
@@ -158,8 +158,8 @@ class AdversarialGovernanceTests(unittest.TestCase):
         git(self.baseline, 'add', '--', 'shared.txt')
         git(self.baseline, 'commit', '-m', 'Synthetic public update')
         plan = self.engine.adopt('worker', 'baseline')['plan']['plan_id']
-        (self.control / '.agct' / 'SYNTHETIC_TEST_ONLY').write_text('synthetic', encoding='utf-8')
-        with patch.dict(os.environ, {'AGCT_TEST_FAULTS': '1'}):
+        (self.control / '.taskcarry' / 'SYNTHETIC_TEST_ONLY').write_text('synthetic', encoding='utf-8')
+        with patch.dict(os.environ, {'TASKCARRY_TEST_FAULTS': '1'}):
             self.assert_error('INJECTED_INTERRUPTION', self.engine.adopt,
                               'worker', 'baseline', True, plan, fault='after_restore')
         first_after_stash = first.read_bytes()
@@ -280,7 +280,7 @@ class AdversarialGovernanceTests(unittest.TestCase):
         outside = self.root / 'unrelated-target'
         outside.mkdir()
         (outside / 'keep.txt').write_text('synthetic preserve', encoding='utf-8')
-        link = self.control / '.agct' / 'scratch'
+        link = self.control / '.taskcarry' / 'scratch'
         created = subprocess.run(['cmd', '/d', '/c', 'mklink', '/J', str(link), str(outside)], capture_output=True)
         self.assertEqual(0, created.returncode, created.stderr.decode(errors='replace'))
         try:

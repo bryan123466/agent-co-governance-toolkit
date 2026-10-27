@@ -10,7 +10,7 @@ import sys
 def call(project, tool, arguments):
     env = os.environ.copy()
     env["PYTHONPATH"] = str(Path(__file__).resolve().parents[1])
-    proc = subprocess.Popen([sys.executable, "-m", "agct", "--project", str(project), "mcp"],
+    proc = subprocess.Popen([sys.executable, "-m", "taskcarry", "--project", str(project), "mcp"],
                             stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                             text=True, encoding="utf-8", env=env)
     messages = [

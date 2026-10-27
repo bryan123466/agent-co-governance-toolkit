@@ -7,8 +7,8 @@ import tomllib
 import unittest
 from unittest.mock import patch
 
-import agct
-from agct import setup
+import taskcarry
+from taskcarry import setup
 
 
 class SetupRecoveryTests(unittest.TestCase):
@@ -40,14 +40,14 @@ class SetupRecoveryTests(unittest.TestCase):
     def test_resume_after_file_effect_does_not_rewrite_completed_file(self):
         target = self.fail_after_first_file()
         original = (target.read_bytes(), target.stat().st_mtime_ns)
-        self.assertFalse((self.root / ".agct/setup-manifest.json").exists())
-        pending = json.loads((self.root / ".agct/setup-intent.json").read_text())
+        self.assertFalse((self.root / ".taskcarry/setup-manifest.json").exists())
+        pending = json.loads((self.root / ".taskcarry/setup-intent.json").read_text())
         self.assertIsNone(pending["files"][target.relative_to(self.root).as_posix()]["before"])
         result = setup.configure(self.root, mode="install")
         self.assertTrue(result["resumed"])
         self.assertEqual(result["files_written"], len(result["files"]) - 1)
         self.assertEqual((target.read_bytes(), target.stat().st_mtime_ns), original)
-        self.assertFalse((self.root / ".agct/setup-intent.json").exists())
+        self.assertFalse((self.root / ".taskcarry/setup-intent.json").exists())
         self.assertTrue(setup.runtime_info(self.root)["managed_files_match"])
 
     def test_crash_before_manifest_only_records_completed_files_on_resume(self):
@@ -78,7 +78,7 @@ class SetupRecoveryTests(unittest.TestCase):
         with patch.object(setup, "atomic_write", side_effect=interrupt):
             with self.assertRaises(RuntimeError):
                 setup.configure(self.root, mode="install")
-        manifest = self.root / ".agct/setup-manifest.json"
+        manifest = self.root / ".taskcarry/setup-manifest.json"
         before = (manifest.read_bytes(), manifest.stat().st_mtime_ns)
         with patch.object(setup, "atomic_write", side_effect=AssertionError("No file rewrite expected")):
             result = setup.configure(self.root, mode="install")
@@ -103,13 +103,13 @@ class SetupRecoveryTests(unittest.TestCase):
         with self.assertRaises(setup.SetupError) as failure:
             setup.configure(self.root, mode="install")
         self.assertEqual(failure.exception.code, "SETUP_CONFLICT")
-        self.assertFalse((self.root / ".agct/setup-intent.json").exists())
+        self.assertFalse((self.root / ".taskcarry/setup-intent.json").exists())
         self.assertEqual(path.read_bytes(), content)
 
     def test_changed_package_version_cannot_resume_pending_install(self):
         self.fail_after_first_file()
         before = self.snapshot()
-        with patch.object(agct, "__version__", agct.__version__ + ".different"):
+        with patch.object(taskcarry, "__version__", taskcarry.__version__ + ".different"):
             with self.assertRaises(setup.SetupError) as failure:
                 setup.configure(self.root, mode="install")
         self.assertEqual(failure.exception.code, "SETUP_PENDING_SOURCE_CHANGED")
@@ -129,7 +129,7 @@ class SetupRecoveryTests(unittest.TestCase):
 
     def test_interrupted_update_keeps_the_existing_installation_identity(self):
         setup.configure(self.root, mode="install")
-        manifest_path = self.root / ".agct/setup-manifest.json"
+        manifest_path = self.root / ".taskcarry/setup-manifest.json"
         previous = json.loads(manifest_path.read_text())
         updated = setup.planned_files(self.root)
         name = next(iter(updated))
@@ -161,8 +161,8 @@ class SetupRecoveryTests(unittest.TestCase):
             with self.assertRaises(setup.SetupError) as failure:
                 setup.configure(self.root, mode="install")
         self.assertEqual(failure.exception.code, "SETUP_PENDING_SOURCE_CHANGED")
-        self.assertTrue((self.root / ".agct/setup-intent.json").exists())
-        self.assertFalse((self.root / ".agct/setup-manifest.json").exists())
+        self.assertTrue((self.root / ".taskcarry/setup-intent.json").exists())
+        self.assertFalse((self.root / ".taskcarry/setup-manifest.json").exists())
         self.assertEqual(setup.configure(self.root, mode="install")["files_written"], 0)
 
     def test_pending_preview_and_diagnostics_are_read_only(self):
@@ -174,7 +174,7 @@ class SetupRecoveryTests(unittest.TestCase):
         self.assertFalse(preview["conflicts"])
         self.assertEqual(preview["server_name"], "project_one")
         self.assertEqual(diagnostic["setup_status"], "pending")
-        self.assertEqual(diagnostic["loaded_runtime"]["version"], agct.__version__)
+        self.assertEqual(diagnostic["loaded_runtime"]["version"], taskcarry.__version__)
         self.assertTrue(diagnostic["pending_source_matches_disk"])
         self.assertNotIn("pending_source_matches_loaded", diagnostic)
         self.assertFalse(diagnostic["host_loading_verified"])
@@ -235,7 +235,7 @@ class SetupRecoveryTests(unittest.TestCase):
 
         with patch.object(Path, "read_bytes", new=changed_source):
             info = setup.runtime_info(self.root)
-        self.assertEqual(info["loaded_runtime"]["version"], agct.__version__)
+        self.assertEqual(info["loaded_runtime"]["version"], taskcarry.__version__)
         self.assertNotEqual(info["loaded_runtime"]["source_sha256"], initial["loaded_runtime"]["source_sha256"])
         self.assertFalse(info["managed_runtime_matches_disk"])
         self.assertFalse(info["loaded_code_verified"])
@@ -254,7 +254,7 @@ class SetupRecoveryTests(unittest.TestCase):
 
     def test_legacy_manifest_upgrade_preserves_files_and_then_is_idempotent(self):
         setup.configure(self.root, mode="install")
-        path = self.root / ".agct/setup-manifest.json"
+        path = self.root / ".taskcarry/setup-manifest.json"
         manifest = json.loads(path.read_text())
         path.write_text(json.dumps({"format": 1, "files": manifest["files"]}), encoding="utf-8")
         self.assertIsNone(setup.runtime_info(self.root)["managed_setup_version"])
@@ -262,18 +262,18 @@ class SetupRecoveryTests(unittest.TestCase):
         self.assertEqual(result["files_written"], 0)
         updated = json.loads(path.read_text())
         self.assertEqual(updated["files"], manifest["files"])
-        self.assertEqual(updated["runtime"]["version"], agct.__version__)
+        self.assertEqual(updated["runtime"]["version"], taskcarry.__version__)
         self.assertEqual(setup.configure(self.root, mode="install")["files_written"], 0)
 
     def test_server_names_persist_and_keep_two_projects_distinct(self):
         second = self.root / "second-project"
         second.mkdir()
-        setup.configure(self.root, mode="install", server_name="agct_core")
-        setup.configure(second, mode="install", server_name="agct-public")
-        for project, name in ((self.root, "agct_core"), (second, "agct-public")):
+        setup.configure(self.root, mode="install", server_name="taskcarry_core")
+        setup.configure(second, mode="install", server_name="taskcarry-public")
+        for project, name in ((self.root, "taskcarry_core"), (second, "taskcarry-public")):
             result = setup.configure(project, mode="install")
             self.assertEqual(result["server_name"], name)
-            config = tomllib.loads((project / ".agct/codex.mcp.toml").read_text())
+            config = tomllib.loads((project / ".taskcarry/codex.mcp.toml").read_text())
             self.assertEqual(list(config["mcp_servers"]), [name])
             self.assertIn(str(project), config["mcp_servers"][name]["args"])
             self.assertFalse((project / ".codex/config.toml").exists())
@@ -302,7 +302,7 @@ class SetupRecoveryTests(unittest.TestCase):
 
     def test_manifest_change_during_pending_install_is_not_overwritten(self):
         self.fail_after_first_file()
-        path = self.root / ".agct/setup-manifest.json"
+        path = self.root / ".taskcarry/setup-manifest.json"
         path.write_text(json.dumps({"format": 1, "files": {}}), encoding="utf-8")
         before = self.snapshot()
         with self.assertRaises(setup.SetupError) as failure:
@@ -312,7 +312,7 @@ class SetupRecoveryTests(unittest.TestCase):
 
     def test_diagnostic_detects_user_changes_without_writing(self):
         setup.configure(self.root, mode="install")
-        target = self.root / ".agct/codex.mcp.toml"
+        target = self.root / ".taskcarry/codex.mcp.toml"
         target.write_text("# user customization", encoding="utf-8")
         before = self.snapshot()
         info = setup.runtime_info(self.root)
@@ -324,7 +324,7 @@ class SetupRecoveryTests(unittest.TestCase):
 
     def test_invalid_intent_is_reported_without_repair(self):
         self.fail_after_first_file()
-        path = self.root / ".agct/setup-intent.json"
+        path = self.root / ".taskcarry/setup-intent.json"
         content = json.loads(path.read_text())
         content["installation_id"] = "0" * 32
         path.write_text(json.dumps(content), encoding="utf-8")
@@ -337,9 +337,9 @@ class SetupRecoveryTests(unittest.TestCase):
     def test_copied_intent_does_not_authorize_another_project(self):
         self.fail_after_first_file()
         other = self.root / "other"
-        (other / ".agct").mkdir(parents=True)
-        intent = (self.root / ".agct/setup-intent.json").read_bytes()
-        (other / ".agct/setup-intent.json").write_bytes(intent)
+        (other / ".taskcarry").mkdir(parents=True)
+        intent = (self.root / ".taskcarry/setup-intent.json").read_bytes()
+        (other / ".taskcarry/setup-intent.json").write_bytes(intent)
         with self.assertRaises(setup.SetupError) as failure:
             setup.configure(other, mode="install")
         self.assertEqual(failure.exception.code, "SETUP_INTENT_INVALID")
@@ -360,7 +360,7 @@ class SetupRecoveryTests(unittest.TestCase):
                 setup.configure(self.root, mode="install")
         self.assertEqual(failure.exception.code, "SETUP_CONFLICT")
         self.assertEqual(target.read_text(), "Concurrent user file")
-        self.assertFalse((self.root / ".agct/setup-manifest.json").exists())
+        self.assertFalse((self.root / ".taskcarry/setup-manifest.json").exists())
 
 
 if __name__ == "__main__":

@@ -62,14 +62,14 @@ def validate_server_name(value):
     return value
 
 
-def planned_files(root, server_name="agct"):
+def planned_files(root, server_name="taskcarry"):
     server_name = validate_server_name(server_name)
     files = {}
     for source in skill_sources():
         files[f".agents/skills/{source.parent.name}/SKILL.md"] = source.read_bytes()
     package_parent = Path(__file__).resolve().parent.parent
     quote = lambda value: json.dumps(str(value), ensure_ascii=False)
-    args = ["-m", "agct", "--project", str(root), "mcp"]
+    args = ["-m", "taskcarry", "--project", str(root), "mcp"]
     fragment = (
         "# Generated project-specific MCP fragment. This is NOT loaded automatically.\n"
         "# Review and add this section to the appropriate Codex configuration.\n"
@@ -81,12 +81,12 @@ def planned_files(root, server_name="agct"):
         f"PYTHONPATH = {quote(package_parent)}\n"
         "PYTHONUTF8 = \"1\"\n"
     )
-    files[".agct/codex.mcp.toml"] = fragment.encode("utf-8")
+    files[".taskcarry/codex.mcp.toml"] = fragment.encode("utf-8")
     return files
 
 
 def read_manifest(root):
-    path = safe_target(root, ".agct/setup-manifest.json")
+    path = safe_target(root, ".taskcarry/setup-manifest.json")
     if not path.exists():
         return {"format": 1, "files": {}}
     try:
@@ -102,7 +102,7 @@ def validate_manifest(result, root):
     for name, value in result["files"].items():
         if not isinstance(name, str) or not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{64}", value):
             raise SetupError("SETUP_MANIFEST_INVALID", "Invalid managed file record")
-        if not (name == ".agct/codex.mcp.toml" or (name.startswith(".agents/skills/agct-") and name.endswith("/SKILL.md") and len(Path(name).parts) == 4)):
+        if not (name == ".taskcarry/codex.mcp.toml" or (name.startswith(".agents/skills/taskcarry-") and name.endswith("/SKILL.md") and len(Path(name).parts) == 4)):
             raise SetupError("SETUP_MANIFEST_INVALID", "Manifest includes a path outside the managed setup scope")
         safe_target(root, name)
     if "server_name" in result:
@@ -118,9 +118,9 @@ def validate_manifest(result, root):
 
 @contextmanager
 def setup_lock(root):
-    directory = safe_target(root, ".agct")
+    directory = safe_target(root, ".taskcarry")
     directory.mkdir(parents=True, exist_ok=True)
-    path = safe_target(root, ".agct/setup.lock")
+    path = safe_target(root, ".taskcarry/setup.lock")
     stream = path.open("a+b")
     try:
         if os.name == "nt":
@@ -147,7 +147,7 @@ def setup_lock(root):
 
 def atomic_write(path, content):
     path.parent.mkdir(parents=True, exist_ok=True)
-    descriptor, temporary = tempfile.mkstemp(prefix=".agct-", suffix=".tmp", dir=path.parent)
+    descriptor, temporary = tempfile.mkstemp(prefix=".taskcarry-", suffix=".tmp", dir=path.parent)
     try:
         with os.fdopen(descriptor, "wb") as stream:
             stream.write(content)
@@ -191,7 +191,7 @@ def valid_runtime(value):
 
 
 def read_intent(root):
-    path = safe_target(root, ".agct/setup-intent.json")
+    path = safe_target(root, ".taskcarry/setup-intent.json")
     if not path.exists():
         return None
     try:
@@ -247,7 +247,7 @@ def pending_matches(root, intent, files, runtime, server_name):
             or not isinstance(after.get("files"), dict)
             or any(after["files"].get(name) != row["after"] for name, row in intent["files"].items())):
         raise SetupError("SETUP_INTENT_INVALID", "Pending setup has an inconsistent target manifest")
-    actual = file_hash(safe_target(root, ".agct/setup-manifest.json"))
+    actual = file_hash(safe_target(root, ".taskcarry/setup-manifest.json"))
     if actual not in {intent["manifest_before_sha256"], digest(encoded(after))}:
         raise SetupError("SETUP_MANIFEST_CHANGED", "Setup manifest changed since the pending installation")
 
@@ -279,15 +279,15 @@ def configure(project, mode="preview", server_name=None):
         validate_server_name(server_name)
     if mode == "preview":
         manifest, intent = read_manifest(root), read_intent(root)
-        selected = server_name or (intent or manifest).get("server_name", "agct")
+        selected = server_name or (intent or manifest).get("server_name", "taskcarry")
         files, runtime = planned_files(root, selected), loaded_runtime()
         if intent:
             pending_matches(root, intent, files, runtime, selected)
         return dict(preview(root, files, manifest, intent), server_name=selected, runtime=runtime)
     with setup_lock(root):
         manifest = read_manifest(root)
-        manifest_path = safe_target(root, ".agct/setup-manifest.json")
-        intent_path = safe_target(root, ".agct/setup-intent.json")
+        manifest_path = safe_target(root, ".taskcarry/setup-manifest.json")
+        intent_path = safe_target(root, ".taskcarry/setup-intent.json")
         intent = read_intent(root)
         if mode == "uninstall":
             if intent:
@@ -312,7 +312,7 @@ def configure(project, mode="preview", server_name=None):
             return {"mode": mode, "removed": removed, "preserved_modified": preserved,
                     "global_config_changed": False, "agents_md_changed": False,
                     "note": "Any configuration section manually activated in Codex remains user managed. Governance state and user files are retained."}
-        selected = server_name or (intent or manifest).get("server_name", "agct")
+        selected = server_name or (intent or manifest).get("server_name", "taskcarry")
         files, runtime = planned_files(root, selected), loaded_runtime()
         if intent:
             pending_matches(root, intent, files, runtime, selected)
@@ -379,7 +379,7 @@ def runtime_info(project):
         manifest, intent = read_manifest(root), read_intent(root)
         result["pending_installation"] = intent is not None
         result["managed_setup_version"] = manifest.get("runtime", {}).get("version")
-        result["server_name"] = (intent or manifest).get("server_name", "agct")
+        result["server_name"] = (intent or manifest).get("server_name", "taskcarry")
         if intent:
             result["pending_runtime_version"] = intent.get("runtime", {}).get("version")
         files = planned_files(root, result["server_name"])

@@ -11,15 +11,15 @@ import tomllib
 import unittest
 import zipfile
 
-from agct.api import invoke
-from agct.core import Core
-from agct.gitops import git, out
-from agct.store import GovernanceError
+from taskcarry.api import invoke
+from taskcarry.core import Core
+from taskcarry.gitops import git, out
+from taskcarry.store import GovernanceError
 
 
 class PublicApiContractTests(unittest.TestCase):
     def setUp(self):
-        self.temp = tempfile.TemporaryDirectory(prefix="agct-release-")
+        self.temp = tempfile.TemporaryDirectory(prefix="taskcarry-release-")
         self.root = Path(self.temp.name)
         self.project = self.root / "control"
         invoke(self.project, "init", {"name": "Synthetic contract review"})
@@ -51,7 +51,7 @@ class PublicApiContractTests(unittest.TestCase):
         with self.assertRaises(GovernanceError) as raised:
             invoke(target, "init", {"name": {"unexpected": "object"}})
         self.assertEqual(raised.exception.code, "INVALID_ARGUMENT")
-        self.assertFalse((target / ".agct").exists())
+        self.assertFalse((target / ".taskcarry").exists())
 
     def test_registered_workspace_checkpoint_uses_exact_registered_path(self):
         work = self.repository("worker")
@@ -105,12 +105,12 @@ class PublicApiContractTests(unittest.TestCase):
         self.assertEqual((baseline / "form.txt").read_text(encoding="utf-8"), "stable revision\n")
 
 
-@unittest.skipUnless(os.environ.get("AGCT_TEST_WHEEL"), "Set AGCT_TEST_WHEEL to verify the actual built wheel")
+@unittest.skipUnless(os.environ.get("TASKCARRY_TEST_WHEEL"), "Set TASKCARRY_TEST_WHEEL to verify the actual built wheel")
 class InstalledWheelContractTests(unittest.TestCase):
     def test_wheel_installs_four_skills_and_launches_project_bound_mcp(self):
-        wheel = Path(os.environ["AGCT_TEST_WHEEL"]).resolve()
+        wheel = Path(os.environ["TASKCARRY_TEST_WHEEL"]).resolve()
         self.assertTrue(wheel.is_file(), str(wheel))
-        with tempfile.TemporaryDirectory(prefix="agct-wheel-") as temporary:
+        with tempfile.TemporaryDirectory(prefix="taskcarry-wheel-") as temporary:
             root = Path(temporary)
             installed = root / "installed"
             project = root / "synthetic-project"
@@ -119,7 +119,7 @@ class InstalledWheelContractTests(unittest.TestCase):
             self.assertEqual(process.returncode, 0, process.stdout + process.stderr)
             environment = os.environ.copy()
             environment.update(PYTHONPATH=str(installed), PYTHONUTF8="1")
-            base = [sys.executable, "-m", "agct", "--project", str(project)]
+            base = [sys.executable, "-m", "taskcarry", "--project", str(project)]
             for arguments in (["init"], ["setup", "--json", '{"mode":"install"}']):
                 process = subprocess.run(base + arguments, capture_output=True, text=True, encoding="utf-8", cwd=root, env=environment, timeout=20)
                 self.assertEqual(process.returncode, 0, process.stdout + process.stderr)
@@ -127,15 +127,15 @@ class InstalledWheelContractTests(unittest.TestCase):
             skill_files = list((project / ".agents/skills").glob("*/SKILL.md"))
             self.assertEqual(len(skill_files), 4)
             for skill in skill_files:
-                self.assertTrue(skill.read_text(encoding="utf-8").startswith("---\nname: agct-"))
-            config = tomllib.loads((project / ".agct/codex.mcp.toml").read_text(encoding="utf-8"))["mcp_servers"]["agct"]
+                self.assertTrue(skill.read_text(encoding="utf-8").startswith("---\nname: taskcarry-"))
+            config = tomllib.loads((project / ".taskcarry/codex.mcp.toml").read_text(encoding="utf-8"))["mcp_servers"]["taskcarry"]
             self.assertEqual(Path(config["env"]["PYTHONPATH"]), installed)
             environment.update(config["env"])
             frames = [
                 {"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVersion": "2025-11-25", "capabilities": {}, "clientInfo": {"name": "wheel-contract", "version": "1"}}},
-                {"jsonrpc": "2.0", "id": 2, "method": "tools/call", "params": {"name": "agct_status"}},
-                {"jsonrpc": "2.0", "id": 3, "method": "tools/call", "params": {"name": "agct_agenda", "arguments": {"limit": 1}}},
-                {"jsonrpc": "2.0", "id": 4, "method": "tools/call", "params": {"name": "agct_doctor"}},
+                {"jsonrpc": "2.0", "id": 2, "method": "tools/call", "params": {"name": "taskcarry_status"}},
+                {"jsonrpc": "2.0", "id": 3, "method": "tools/call", "params": {"name": "taskcarry_agenda", "arguments": {"limit": 1}}},
+                {"jsonrpc": "2.0", "id": 4, "method": "tools/call", "params": {"name": "taskcarry_doctor"}},
             ]
             process = subprocess.run([config["command"], *config["args"]], input="\n".join(json.dumps(frame) for frame in frames) + "\n", text=True, encoding="utf-8", capture_output=True, cwd=root, env=environment, timeout=20)
             self.assertEqual(process.returncode, 0, process.stderr)
@@ -148,26 +148,26 @@ class InstalledWheelContractTests(unittest.TestCase):
             self.assertEqual(agenda["total"], 0)
             runtime = replies[3]["result"]["structuredContent"]["result"]["runtime"]
             self.assertEqual(runtime["setup_status"], "installed")
-            self.assertEqual(Path(runtime["loaded_runtime"]["module_root"]), installed / "agct")
+            self.assertEqual(Path(runtime["loaded_runtime"]["module_root"]), installed / "taskcarry")
             self.assertTrue(runtime["managed_runtime_matches_disk"])
             self.assertFalse(runtime["loaded_code_verified"])
 
 
-@unittest.skipUnless(os.environ.get("AGCT_TEST_SOURCE_BUILD") == "1", "Opt in to the independent source build with AGCT_TEST_SOURCE_BUILD=1")
+@unittest.skipUnless(os.environ.get("TASKCARRY_TEST_SOURCE_BUILD") == "1", "Opt in to the independent source build with TASKCARRY_TEST_SOURCE_BUILD=1")
 class StandardSourceBuildTests(unittest.TestCase):
     def test_plain_checkout_wheel_and_sdist_include_canonical_skills(self):
         """Exercise setuptools directly: the release ZIP builder is not involved."""
         repository = Path(__file__).resolve().parents[1]
-        names = {"agct-project-setup", "agct-task-delivery", "agct-governance-reconcile", "agct-experience-recovery"}
-        with tempfile.TemporaryDirectory(prefix="agct-source-build-") as temporary:
+        names = {"taskcarry-project-setup", "taskcarry-task-delivery", "taskcarry-governance-reconcile", "taskcarry-experience-recovery"}
+        with tempfile.TemporaryDirectory(prefix="taskcarry-source-build-") as temporary:
             root = Path(temporary)
             source, output = root / "checkout", root / "artifacts"
             source.mkdir()
             output.mkdir()
             for name in ("pyproject.toml", "setup.py", "README.md", "LICENSE", "LICENSE_SCOPE.md"):
                 (source / name).write_bytes((repository / name).read_bytes())
-            for package_file in (repository / "agct").glob("*.py"):
-                target = source / "agct" / package_file.name
+            for package_file in (repository / "taskcarry").glob("*.py"):
+                target = source / "taskcarry" / package_file.name
                 target.parent.mkdir(exist_ok=True)
                 target.write_bytes(package_file.read_bytes())
             for name in names:
@@ -175,17 +175,17 @@ class StandardSourceBuildTests(unittest.TestCase):
                 target = source / relative
                 target.parent.mkdir(parents=True)
                 target.write_bytes((repository / relative).read_bytes())
-            self.assertFalse((source / "agct/skill_data").exists())
+            self.assertFalse((source / "taskcarry/skill_data").exists())
             process = subprocess.run([sys.executable, "-m", "pip", "wheel", "--no-index", "--no-deps", "--no-build-isolation", "--wheel-dir", str(output), str(source)], capture_output=True, text=True, encoding="utf-8", timeout=180)
             self.assertEqual(process.returncode, 0, process.stdout + process.stderr)
             wheels = list(output.glob("*.whl"))
             self.assertEqual(len(wheels), 1)
             with zipfile.ZipFile(wheels[0]) as wheel:
-                packaged = {name for name in wheel.namelist() if name.startswith("agct/skill_data/") and name.endswith("/SKILL.md")}
-                self.assertEqual(packaged, {f"agct/skill_data/{name}/SKILL.md" for name in names})
+                packaged = {name for name in wheel.namelist() if name.startswith("taskcarry/skill_data/") and name.endswith("/SKILL.md")}
+                self.assertEqual(packaged, {f"taskcarry/skill_data/{name}/SKILL.md" for name in names})
                 for name in names:
-                    self.assertEqual(wheel.read(f"agct/skill_data/{name}/SKILL.md"), (source / "skills" / name / "SKILL.md").read_bytes())
-            self.assertFalse((source / "agct/skill_data").exists(), "Build must not generate duplicate source resources")
+                    self.assertEqual(wheel.read(f"taskcarry/skill_data/{name}/SKILL.md"), (source / "skills" / name / "SKILL.md").read_bytes())
+            self.assertFalse((source / "taskcarry/skill_data").exists(), "Build must not generate duplicate source resources")
             # Verify the sdist retains those same canonical assets for downstream builds.
             process = subprocess.run([sys.executable, "-c", "import sys; from setuptools.build_meta import build_sdist; build_sdist(sys.argv[1])", str(output)], capture_output=True, text=True, encoding="utf-8", cwd=source, timeout=90)
             self.assertEqual(process.returncode, 0, process.stdout + process.stderr)
@@ -197,7 +197,7 @@ class StandardSourceBuildTests(unittest.TestCase):
                     matches = [member for member in members if member.endswith(f"/skills/{name}/SKILL.md")]
                     self.assertEqual(len(matches), 1, name)
                     self.assertEqual(archive.extractfile(matches[0]).read(), (source / "skills" / name / "SKILL.md").read_bytes())
-            self.assertFalse((source / "agct/skill_data").exists())
+            self.assertFalse((source / "taskcarry/skill_data").exists())
 
 
 if __name__ == "__main__":

@@ -2,11 +2,11 @@
 import os
 from unittest.mock import patch
 
-from agct.api import invoke
-from agct.core import Core
-from agct.gitops import commit, fingerprint, git, out
-from agct.integration import Integration
-from agct.store import GovernanceError
+from taskcarry.api import invoke
+from taskcarry.core import Core
+from taskcarry.gitops import commit, fingerprint, git, out
+from taskcarry.integration import Integration
+from taskcarry.store import GovernanceError
 from test_integration import GitFixture
 
 
@@ -52,8 +52,8 @@ class BoundedReceiveTests(GitFixture):
     def test_pending_operations_change_plan_identity_and_do_not_double_count_stage(self):
         self.stages(2)
         original = self.engine.reconcile("baseline", limit=2)["plan"]
-        (self.control / ".agct" / "SYNTHETIC_TEST_ONLY").write_text("synthetic")
-        with patch.dict(os.environ, {"AGCT_TEST_FAULTS": "1"}):
+        (self.control / ".taskcarry" / "SYNTHETIC_TEST_ONLY").write_text("synthetic")
+        with patch.dict(os.environ, {"TASKCARRY_TEST_FAULTS": "1"}):
             with self.assertRaises(GovernanceError):
                 self.engine.reconcile("baseline", True, original["plan_id"], fault="after_candidate")
         newer = self.engine.reconcile("baseline", limit=2)["plan"]
@@ -69,8 +69,8 @@ class BoundedReceiveTests(GitFixture):
     def test_only_selected_recovery_operation_is_resumed(self):
         stages = self.stages(2)
         original = self.engine.reconcile("baseline")["plan"]
-        (self.control / ".agct" / "SYNTHETIC_TEST_ONLY").write_text("synthetic")
-        with patch.dict(os.environ, {"AGCT_TEST_FAULTS": "1"}):
+        (self.control / ".taskcarry" / "SYNTHETIC_TEST_ONLY").write_text("synthetic")
+        with patch.dict(os.environ, {"TASKCARRY_TEST_FAULTS": "1"}):
             for stage in stages:
                 with self.assertRaises(GovernanceError):
                     self.engine._receive(self.base, stage, original["plan_id"], "after_candidate")
@@ -146,10 +146,10 @@ class AdoptionPreparationTests(GitFixture):
         (self.worker / "notes.txt").write_text("unfinished notes")
         self.write_commit(self.base, {"public.txt": "accepted progress"})
         plan = self.engine.adopt("worker", "baseline")["plan"]
-        with patch("agct.integration.import_commit", side_effect=GovernanceError("TEMPORARY_IMPORT", "Synthetic temporary failure")):
+        with patch("taskcarry.integration.import_commit", side_effect=GovernanceError("TEMPORARY_IMPORT", "Synthetic temporary failure")):
             self.fail(plan, "TEMPORARY_IMPORT")
         failed = self.core.store.list("operations")[0]
-        with patch("agct.integration.import_commit", side_effect=GovernanceError("TEMPORARY_IMPORT", "Different scratch diagnostic")):
+        with patch("taskcarry.integration.import_commit", side_effect=GovernanceError("TEMPORARY_IMPORT", "Different scratch diagnostic")):
             self.fail(plan, "TEMPORARY_IMPORT")
         failure_events = [event for event in self.core.store.events() if event["kind"] == "adoption_preparation_failed"]
         self.assertEqual(len(failure_events), 1)

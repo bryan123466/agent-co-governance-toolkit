@@ -33,7 +33,7 @@ class Store:
         if any(_linked(p) for p in (raw_root, *raw_root.parents)):
             raise GovernanceError('UNSAFE_METADATA', 'The project location cannot traverse symbolic links or junctions.')
         self.root = raw_root.resolve()
-        self.directory = self.root / '.agct'
+        self.directory = self.root / '.taskcarry'
         self.path = self.directory / 'state.sqlite3'
         self._mutex = threading.RLock()
         self._depth = 0

@@ -11,7 +11,7 @@ All example identifiers and values are fictional. 示例不含真实公司、客
 From the extracted product directory:
 
 ```text
-python examples/quality_forms/bootstrap.py --destination ../agct-forms-example
+python examples/quality_forms/bootstrap.py --destination ../taskcarry-forms-example
 ```
 
 The destination must not exist. This creates a Git baseline, three worker worktrees and ready-to-edit JSON requests in the new destination. It does not activate Codex configuration or receive deliveries automatically.
@@ -19,7 +19,7 @@ The destination must not exist. This creates a Git baseline, three worker worktr
 目标目录必须不存在。生成器只在新目录中创建 Git 基线、三个工作者工作区和 JSON 请求文件；不自动启用 Codex 配置或接收成果。
 
 ```text
-agct-forms-example/
+taskcarry-forms-example/
   control/           project governance / 项目治理
   baseline/          receiving baseline / 接收基线
   workers/forms/     inspection records / 检查记录
@@ -31,11 +31,11 @@ agct-forms-example/
 ## Connect and work / 接入并工作
 
 ```text
-python -m agct --project ../agct-forms-example/control init --input ../agct-forms-example/requests/init.json
-python -m agct --project ../agct-forms-example/control workspace --input ../agct-forms-example/requests/workspace-baseline.json
-python -m agct --project ../agct-forms-example/control workspace --input ../agct-forms-example/requests/workspace-forms.json
-python -m agct --project ../agct-forms-example/control task --input ../agct-forms-example/requests/task-forms.json
-python -m agct --project ../agct-forms-example/control status
+python -m taskcarry --project ../taskcarry-forms-example/control init --input ../taskcarry-forms-example/requests/init.json
+python -m taskcarry --project ../taskcarry-forms-example/control workspace --input ../taskcarry-forms-example/requests/workspace-baseline.json
+python -m taskcarry --project ../taskcarry-forms-example/control workspace --input ../taskcarry-forms-example/requests/workspace-forms.json
+python -m taskcarry --project ../taskcarry-forms-example/control task --input ../taskcarry-forms-example/requests/task-forms.json
+python -m taskcarry --project ../taskcarry-forms-example/control status
 ```
 
 Register the review and quality workspaces using their matching request files when you want those roles. Each role can be a Codex chat, another Agent, or a person. Multiple Agents are optional; one user can perform the roles sequentially.

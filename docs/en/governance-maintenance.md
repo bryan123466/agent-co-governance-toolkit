@@ -2,9 +2,9 @@
 
 [简体中文](../zh-CN/governance-maintenance.md) · [繁體中文](../zh-TW/governance-maintenance.md)
 
-AGCT keeps project records in the control directory while the installed toolkit provides the operations that use them. Updating the toolkit should help the next session continue the same work. It should not create a new project, resubmit past results, or merge business branches simply to refresh a Skill.
+TaskCarry keeps project records in the control directory while the installed toolkit provides the operations that use them. Updating the toolkit should help the next session continue the same work. It should not create a new project, resubmit past results, or merge business branches simply to refresh a Skill.
 
-This supplement applies to 0.2.0rc3. The existing installation and operating walkthroughs remain applicable. Start a new project with the normal walkthrough; the arrangements below help maintain an existing installation. For saved schedules and an optional observer, see [scheduled governance](automation.md).
+This supplement applies to 0.2.0rc4. The existing installation and operating walkthroughs remain applicable. Start a new project with the normal walkthrough; the arrangements below help maintain an existing installation. For saved schedules and an optional observer, see [scheduled governance](automation.md).
 
 ## Three updates with different purposes
 
@@ -22,7 +22,7 @@ This supplement applies to 0.2.0rc3. The existing installation and operating wal
 {"limit": 20}
 ```
 
-Send this to `agct_agenda`, or use the CLI `agenda` action with a JSON request file. Follow `next_cursor` to inspect remaining pages. A cursor belongs to the same current-input fingerprint; if work changes, start a fresh selection. Pass the previous `fingerprint` as `previous_fingerprint` when comparing observations. `changed: false` does not close pending work or authorize another attempt.
+Send this to `taskcarry_agenda`, or use the CLI `agenda` action with a JSON request file. Follow `next_cursor` to inspect remaining pages. A cursor belongs to the same current-input fingerprint; if work changes, start a fresh selection. Pass the previous `fingerprint` as `previous_fingerprint` when comparing observations. `changed: false` does not close pending work or authorize another attempt.
 
 Selection does not perform a repair, run another AI, or start a schedule. Matching experience is a suggestion; the existing executor must still verify actual effects. The item limit bounds the response, not database scanning costs, query time, or the duration of an AI session.
 
@@ -46,7 +46,7 @@ A historical source snapshot describes what was used then; a current runtime obs
 
 Source fingerprints describe the files currently on disk. They do not prove that a long-running process has replaced previously imported code. Restart the affected MCP connection after changing the runtime package; `loaded_code_verified` remains false rather than asserting in-memory code attestation.
 
-For AGCT's own development, run governance from an installed wheel outside the editable source checkout. Develop and test the next version separately. Adopt it when the affected operations are safely stopped. Keep the control directory: tasks, checkpoints and previous receipts belong to the project, not a particular toolkit build. This release does not include a general automatic package upgrader or a cross-schema rollback engine.
+For TaskCarry's own development, run governance from an installed wheel outside the editable source checkout. Develop and test the next version separately. Adopt it when the affected operations are safely stopped. Keep the control directory: tasks, checkpoints and previous receipts belong to the project, not a particular toolkit build. This release does not include a general automatic package upgrader or a cross-schema rollback engine.
 
 ## One governance chat, separate repository scopes
 

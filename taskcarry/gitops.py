@@ -25,8 +25,8 @@ def git(path, *args, data=None, check=True, timeout=60):
     for key in list(env):
         if key.startswith("GIT_"):
             env.pop(key, None)
-    env.update({"GIT_TERMINAL_PROMPT": "0", "GIT_AUTHOR_NAME": "Agent Co-Governance Toolkit",
-                "GIT_AUTHOR_EMAIL": "toolkit@localhost", "GIT_COMMITTER_NAME": "Agent Co-Governance Toolkit",
+    env.update({"GIT_TERMINAL_PROMPT": "0", "GIT_AUTHOR_NAME": "TaskCarry",
+                "GIT_AUTHOR_EMAIL": "toolkit@localhost", "GIT_COMMITTER_NAME": "TaskCarry",
                 "GIT_COMMITTER_EMAIL": "toolkit@localhost"})
     argv = ["git", "-c", "core.hooksPath=" + os.devnull, "-c", "commit.gpgsign=false",
             "-c", "merge.autoStash=false", "-c", "core.quotePath=false", "-C", str(path), *map(str, args)]
@@ -79,7 +79,7 @@ def pathsafe(value):
     if not value or p.is_absolute() or any(x in {"", ".", ".."} for x in value.split("/")):
         raise GovernanceError("INVALID_PATH", "Path must stay inside the workspace")
     lower = [x.lower() for x in p.parts]
-    if any(x in {".git", ".agct", ".ssh"} for x in lower):
+    if any(x in {".git", ".taskcarry", ".ssh"} for x in lower):
         raise GovernanceError("RESERVED_PATH", "Governance and Git internals are not deliverables")
     name = lower[-1]
     if name == ".env" or name.startswith(".env.") and name not in {".env.example", ".env.sample"} or name in {"id_rsa", "id_ed25519", "credentials.json", "auth.json"} or name.endswith((".pfx", ".p12", ".key")):

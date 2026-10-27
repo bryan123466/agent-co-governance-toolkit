@@ -1,5 +1,54 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="580" viewBox="0 0 1200 580" role="img" aria-labelledby="title description" xml:lang="zh-CN">
-<title id="title">每一段工作，都有继续推进的位置</title><desc id="description">可以暂停、可以按阶段汇总，也可以在共同成果之上继续迭代。</desc>
-<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#6a969b"/></marker></defs>
-<rect width="1200" height="580" rx="20" fill="#f3f7f7"/>
-<g font-family="Segoe UI, Noto Sans CJK SC, Microsoft JhengHei, Microsoft YaHei, sans-serif"><text x="42" y="50" text-anchor="start" font-size="30" fill="#19384b" font-weight="700">每一段工作，都有继续推进的位置</text><text x="42" y="82" text-anchor="start" font-size="18" fill="#58717d" font-weight="400">可以暂停、可以按阶段汇总，也可以在共同成果之上继续迭代。</text><text x="140" y="132" text-anchor="middle" font-size="17" fill="#0b776e" font-weight="700">01</text><rect x="40" y="151" width="200" height="135" rx="14" fill="#ffffff" stroke="#cbdcde"/><text x="140.0" y="186" text-anchor="middle" font-size="20" fill="#19384b" font-weight="700">推进任务</text><text x="140.0" y="218" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">在各自工作区</text><text x="140.0" y="242" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">完成实际工作</text><path d="M240 218H272" fill="none" stroke="#6a969b" stroke-width="2.2" marker-end="url(#arrow)"/><text x="372" y="132" text-anchor="middle" font-size="17" fill="#0b776e" font-weight="700">02</text><rect x="272" y="151" width="200" height="135" rx="14" fill="#ffffff" stroke="#cbdcde"/><text x="372.0" y="186" text-anchor="middle" font-size="20" fill="#19384b" font-weight="700">保存进度</text><text x="372.0" y="218" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">选定已保存文件</text><text x="372.0" y="242" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">记下下一步</text><path d="M472 218H504" fill="none" stroke="#6a969b" stroke-width="2.2" marker-end="url(#arrow)"/><text x="604" y="132" text-anchor="middle" font-size="17" fill="#0b776e" font-weight="700">03</text><rect x="504" y="151" width="200" height="135" rx="14" fill="#ffffff" stroke="#cbdcde"/><text x="604.0" y="186" text-anchor="middle" font-size="20" fill="#19384b" font-weight="700">整理阶段成果</text><text x="604.0" y="218" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">明确任务与版本</text><text x="604.0" y="242" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">交给治理汇总</text><path d="M704 218H736" fill="none" stroke="#6a969b" stroke-width="2.2" marker-end="url(#arrow)"/><text x="836" y="132" text-anchor="middle" font-size="17" fill="#0b776e" font-weight="700">04</text><rect x="736" y="151" width="200" height="135" rx="14" fill="#19384b" stroke="#cbdcde"/><text x="836.0" y="186" text-anchor="middle" font-size="20" fill="#ffffff" font-weight="700">汇入项目</text><text x="836.0" y="218" text-anchor="middle" font-size="16" fill="#d9ecec" font-weight="400">检查文件与结果</text><text x="836.0" y="242" text-anchor="middle" font-size="16" fill="#d9ecec" font-weight="400">保留成果历史</text><path d="M936 218H968" fill="none" stroke="#6a969b" stroke-width="2.2" marker-end="url(#arrow)"/><text x="1068" y="132" text-anchor="middle" font-size="17" fill="#0b776e" font-weight="700">05</text><rect x="968" y="151" width="200" height="135" rx="14" fill="#ffffff" stroke="#cbdcde"/><text x="1068.0" y="186" text-anchor="middle" font-size="20" fill="#19384b" font-weight="700">继续推进</text><text x="1068.0" y="218" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">按需更新工作区</text><text x="1068.0" y="242" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">保全本地工作</text><path d="M1068 286V330H140V286" fill="none" stroke="#6a969b" stroke-width="2.2" marker-end="url(#arrow)"/><text x="600" y="357" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">有新进展，再进入共同工作流程</text><rect x="65" y="390" width="510" height="120" rx="14" fill="#ffffff" stroke="#cbdcde"/><text x="320.0" y="425" text-anchor="middle" font-size="20" fill="#19384b" font-weight="700">暂时停下，也能接续</text><text x="320.0" y="457" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">保存当前位置与下一步</text><text x="320.0" y="481" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">回来时继续原任务</text><rect x="625" y="390" width="510" height="120" rx="14" fill="#ffffff" stroke="#cbdcde"/><text x="880.0" y="425" text-anchor="middle" font-size="20" fill="#19384b" font-weight="700">遇到已知问题，复用经验</text><text x="880.0" y="457" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">核对已经完成的操作</text><text x="880.0" y="481" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">适用时补上尚缺步骤</text><text x="600" y="552" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">工具整理阶段成果；项目方向、重要取舍与最终业务验收由人决定。</text></g></svg>
+  <title id="title">TaskCarry · 保存进度，协作交付，接续工作</title>
+  <desc id="description">让项目跨越对话与工作区，持续推进的本地工作流程。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0 0L8 4L0 8Z" fill="#6a969b" />
+    </marker>
+  </defs>
+  <rect width="1200" height="580" rx="20" fill="#f3f7f7" />
+  <g font-family="Segoe UI, Noto Sans CJK SC, Microsoft JhengHei, Microsoft YaHei, sans-serif">
+    <text x="42" y="50" text-anchor="start" font-size="29" fill="#19384b" font-weight="700">TaskCarry · 保存进度，协作交付，接续工作</text>
+    <text x="42" y="82" text-anchor="start" font-size="18" fill="#58717d" font-weight="400">让项目跨越对话与工作区，持续推进的本地工作流程。</text>
+    <text x="140" y="132" text-anchor="middle" font-size="17" fill="#0b776e" font-weight="700">01</text>
+    <rect x="40" y="151" width="200" height="135" rx="14" fill="#ffffff" stroke="#cbdcde" />
+    <text x="140.0" y="186" text-anchor="middle" font-size="20" fill="#19384b" font-weight="700">推进任务</text>
+    <text x="140.0" y="218" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">在各自工作区</text>
+    <text x="140.0" y="242" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">完成实际工作</text>
+    <path d="M240 218H272" fill="none" stroke="#6a969b" stroke-width="2.2" marker-end="url(#arrow)" />
+    <text x="372" y="132" text-anchor="middle" font-size="17" fill="#0b776e" font-weight="700">02</text>
+    <rect x="272" y="151" width="200" height="135" rx="14" fill="#ffffff" stroke="#cbdcde" />
+    <text x="372.0" y="186" text-anchor="middle" font-size="20" fill="#19384b" font-weight="700">保存进度</text>
+    <text x="372.0" y="218" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">选定已保存文件</text>
+    <text x="372.0" y="242" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">记下下一步</text>
+    <path d="M472 218H504" fill="none" stroke="#6a969b" stroke-width="2.2" marker-end="url(#arrow)" />
+    <text x="604" y="132" text-anchor="middle" font-size="17" fill="#0b776e" font-weight="700">03</text>
+    <rect x="504" y="151" width="200" height="135" rx="14" fill="#ffffff" stroke="#cbdcde" />
+    <text x="604.0" y="186" text-anchor="middle" font-size="20" fill="#19384b" font-weight="700">整理阶段成果</text>
+    <text x="604.0" y="218" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">明确任务与版本</text>
+    <text x="604.0" y="242" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">交给治理汇总</text>
+    <path d="M704 218H736" fill="none" stroke="#6a969b" stroke-width="2.2" marker-end="url(#arrow)" />
+    <text x="836" y="132" text-anchor="middle" font-size="17" fill="#0b776e" font-weight="700">04</text>
+    <rect x="736" y="151" width="200" height="135" rx="14" fill="#19384b" stroke="#cbdcde" />
+    <text x="836.0" y="186" text-anchor="middle" font-size="20" fill="#ffffff" font-weight="700">汇入项目</text>
+    <text x="836.0" y="218" text-anchor="middle" font-size="16" fill="#d9ecec" font-weight="400">检查文件与结果</text>
+    <text x="836.0" y="242" text-anchor="middle" font-size="16" fill="#d9ecec" font-weight="400">保留成果历史</text>
+    <path d="M936 218H968" fill="none" stroke="#6a969b" stroke-width="2.2" marker-end="url(#arrow)" />
+    <text x="1068" y="132" text-anchor="middle" font-size="17" fill="#0b776e" font-weight="700">05</text>
+    <rect x="968" y="151" width="200" height="135" rx="14" fill="#ffffff" stroke="#cbdcde" />
+    <text x="1068.0" y="186" text-anchor="middle" font-size="20" fill="#19384b" font-weight="700">继续推进</text>
+    <text x="1068.0" y="218" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">按需更新工作区</text>
+    <text x="1068.0" y="242" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">保全本地工作</text>
+    <path d="M1068 286V330H140V286" fill="none" stroke="#6a969b" stroke-width="2.2" marker-end="url(#arrow)" />
+    <text x="600" y="357" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">有新进展，再进入共同工作流程</text>
+    <rect x="65" y="390" width="510" height="120" rx="14" fill="#ffffff" stroke="#cbdcde" />
+    <text x="320.0" y="425" text-anchor="middle" font-size="20" fill="#19384b" font-weight="700">暂时停下，也能接续</text>
+    <text x="320.0" y="457" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">保存当前位置与下一步</text>
+    <text x="320.0" y="481" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">回来时继续原任务</text>
+    <rect x="625" y="390" width="510" height="120" rx="14" fill="#ffffff" stroke="#cbdcde" />
+    <text x="880.0" y="425" text-anchor="middle" font-size="20" fill="#19384b" font-weight="700">遇到已知问题，复用经验</text>
+    <text x="880.0" y="457" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">核对已经完成的操作</text>
+    <text x="880.0" y="481" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">适用时补上尚缺步骤</text>
+    <text x="600" y="552" text-anchor="middle" font-size="16" fill="#58717d" font-weight="400">工具整理阶段成果；项目方向、重要取舍与最终业务验收由人决定。</text>
+  </g>
+</svg>

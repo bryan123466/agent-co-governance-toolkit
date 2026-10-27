@@ -10,7 +10,7 @@
 
 ```text
 python -m pip install .
-python -m agct --help
+python -m taskcarry --help
 ```
 
 安装可能需要本机缓存或下载的 Python 构建工具，安装后的工具运行时使用标准库。Git 集成需要单独安装 Git。不要仅为绕过项目权限错误而改用管理员终端。
@@ -18,12 +18,12 @@ python -m agct --help
 ## 2．生成并初始化虚构项目
 
 ```text
-python examples/quality_forms/bootstrap.py --destination ../agct-quality-demo
-python -m agct --project ../agct-quality-demo/control init --input ../agct-quality-demo/requests/init.json
-python -m agct --project ../agct-quality-demo/control workspace --input ../agct-quality-demo/requests/workspace-baseline.json
-python -m agct --project ../agct-quality-demo/control workspace --input ../agct-quality-demo/requests/workspace-forms.json
-python -m agct --project ../agct-quality-demo/control task --input ../agct-quality-demo/requests/task-forms.json
-python -m agct --project ../agct-quality-demo/control doctor
+python examples/quality_forms/bootstrap.py --destination ../taskcarry-quality-demo
+python -m taskcarry --project ../taskcarry-quality-demo/control init --input ../taskcarry-quality-demo/requests/init.json
+python -m taskcarry --project ../taskcarry-quality-demo/control workspace --input ../taskcarry-quality-demo/requests/workspace-baseline.json
+python -m taskcarry --project ../taskcarry-quality-demo/control workspace --input ../taskcarry-quality-demo/requests/workspace-forms.json
+python -m taskcarry --project ../taskcarry-quality-demo/control task --input ../taskcarry-quality-demo/requests/task-forms.json
+python -m taskcarry --project ../taskcarry-quality-demo/control doctor
 ```
 
 其他两个工作者分别有 `workspace-review.json`、`task-review.json`、`workspace-quality.json`、`task-quality.json`，只登记本次准备使用的工作者。基线和工作者各有独立 Git 工作树，控制目录保存治理状态。
@@ -33,8 +33,8 @@ python -m agct --project ../agct-quality-demo/control doctor
 在表单工作者的 `forms/inspection.csv` 中修改虚构数值，先保存文件，再运行：
 
 ```text
-python -m agct --project ../agct-quality-demo/control checkpoint --input ../agct-quality-demo/requests/checkpoint-forms.json
-python -m agct --project ../agct-quality-demo/control status
+python -m taskcarry --project ../taskcarry-quality-demo/control checkpoint --input ../taskcarry-quality-demo/requests/checkpoint-forms.json
+python -m taskcarry --project ../taskcarry-quality-demo/control status
 ```
 
 核对返回的检查点编号。请求将任务标记暂停并记录下一步，不创建交付阶段，也不覆盖编辑器尚未保存的内容。
@@ -46,16 +46,16 @@ python -m agct --project ../agct-quality-demo/control status
 当小范围虚构修改可以交付时：
 
 ```text
-git -C ../agct-quality-demo/workers/forms add -- forms/inspection.csv
-git -C ../agct-quality-demo/workers/forms commit -m "Improve fictional inspection form"
-git -C ../agct-quality-demo/workers/forms rev-parse HEAD
+git -C ../taskcarry-quality-demo/workers/forms add -- forms/inspection.csv
+git -C ../taskcarry-quality-demo/workers/forms commit -m "Improve fictional inspection form"
+git -C ../taskcarry-quality-demo/workers/forms rev-parse HEAD
 ```
 
 打开 `requests/submit-forms-template.json`，把 `REPLACE_WITH_YOUR_NEW_COMMIT` 换成精确提交号，另存为 `requests/submit-forms.json`。其中 `base` 来自合成基线，`paths` 必须与基准到提交的实际变化路径完全一致；只有实际提交了字段说明时才加入该路径。
 
 ```text
-python -m agct --project ../agct-quality-demo/control submit --input ../agct-quality-demo/requests/submit-forms.json
-python -m agct --project ../agct-quality-demo/control reconcile --input ../agct-quality-demo/requests/reconcile-plan.json
+python -m taskcarry --project ../taskcarry-quality-demo/control submit --input ../taskcarry-quality-demo/requests/submit-forms.json
+python -m taskcarry --project ../taskcarry-quality-demo/control reconcile --input ../taskcarry-quality-demo/requests/reconcile-plan.json
 ```
 
 阅读计划后新建 JSON 文件，填写 `baseline: "baseline"`、`execute: true` 和返回的 `plan_id`，用 `reconcile --input` 执行。同时核对返回结果和基线 Git 日志。不要直接改保存的计划来强迫过期计划通过。
@@ -75,23 +75,23 @@ python -m agct --project ../agct-quality-demo/control reconcile --input ../agct-
 创建内容为 `{"mode":"preview"}` 的 `setup-preview.json`，运行：
 
 ```text
-python -m agct --project ../agct-quality-demo/control setup --input setup-preview.json
+python -m taskcarry --project ../taskcarry-quality-demo/control setup --input setup-preview.json
 ```
 
 预览不应修改文件。确认受管理路径适合本项目后，创建 `{"mode":"install"}` 的 `setup-install.json` 并使用同样命令调用该文件。安装生成：
 
-- `.agents/skills/agct-project-setup/SKILL.md`
-- `.agents/skills/agct-task-delivery/SKILL.md`
-- `.agents/skills/agct-governance-reconcile/SKILL.md`
-- `.agents/skills/agct-experience-recovery/SKILL.md`
-- `.agct/codex.mcp.toml`
-- `.agct/setup-manifest.json`
+- `.agents/skills/taskcarry-project-setup/SKILL.md`
+- `.agents/skills/taskcarry-task-delivery/SKILL.md`
+- `.agents/skills/taskcarry-governance-reconcile/SKILL.md`
+- `.agents/skills/taskcarry-experience-recovery/SKILL.md`
+- `.taskcarry/codex.mcp.toml`
+- `.taskcarry/setup-manifest.json`
 
 这些路径都相对于指定项目。将**该项目目录**作为 Codex 任务工作目录打开，以便发现项目内 Skills。工作者路径由工作区登记提供，各工作者的实际编辑范围仍需明确。
 
 TOML 是**配置片段，不等于连接已经启用**。它包含固定到该项目的 stdio 服务命令。核对内容后，按本机 Codex 支持的 MCP 配置方式加入；安装助手不覆盖 `.codex/config.toml`、`AGENTS.md` 或用户全局设置。宿主设置方式以[官方 MCP 文档](https://developers.openai.com/codex/mcp)为准。
 
-按宿主需要刷新工具连接后，请 Codex 调用 `agct_doctor` 和 `agct_status`。CLI 或协议测试不能证明桌面连接已经成功，反馈时要分别说明。
+按宿主需要刷新工具连接后，请 Codex 调用 `taskcarry_doctor` 和 `taskcarry_status`。CLI 或协议测试不能证明桌面连接已经成功，反馈时要分别说明。
 
 工作者提示词示例：
 
@@ -117,7 +117,7 @@ TOML 是**配置片段，不等于连接已经启用**。它包含固定到该�
 
 创建内容为 `{"mode":"uninstall"}` 的 `setup-uninstall.json`，在相同项目调用 `setup --input`。助手移除符合条件且未修改的受管理文件，保留修改过的文件、核心任务状态与快照。手动启用的 MCP 配置仍由用户管理，需要核对身份后单独移除。
 
-之后可在独立环境运行 `python -m pip uninstall agent-co-governance-toolkit`，或停用该专用环境。保留仍需要的检查点与证据，不使用会删除无关项目父目录的清理命令。
+之后可在独立环境运行 `python -m pip uninstall taskcarry`，或停用该专用环境。保留仍需要的检查点与证据，不使用会删除无关项目父目录的清理命令。
 
 ## 反馈
 

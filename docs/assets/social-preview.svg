@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title description">
+<title id="title">TaskCarry — Project memory and collaboration for AI tools</title>
+<desc id="description">Three independent workspaces connect to persistent local project memory. Remember progress, coordinate workspaces, and resume work.</desc>
+<defs>
+  <linearGradient id="background" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#101d30"/><stop offset="1" stop-color="#07111f"/></linearGradient>
+  <linearGradient id="hub" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#173b49"/><stop offset="1" stop-color="#12313c"/></linearGradient>
+  <marker id="tip" viewBox="0 0 8 8" markerWidth="7" markerHeight="7" refX="7" refY="4" orient="auto"><path d="M1 1L7 4L1 7" fill="none" stroke="#75e6c8" stroke-width="1.3"/></marker>
+</defs>
+<rect width="1280" height="640" fill="url(#background)"/>
+<path d="M64 465H1216" stroke="#294253"/>
+<g font-family="Segoe UI, Arial, sans-serif">
+  <text x="64" y="64" fill="#80d9ca" font-size="14" font-weight="600" letter-spacing="2.5">LOCAL PROJECT CONTINUITY</text>
+  <text x="60" y="174" fill="#f4fafc" font-size="92" font-weight="700" letter-spacing="-4">TaskCarry</text>
+  <text x="64" y="247" fill="#e5f0f6" font-size="32">Project memory and collaboration</text>
+  <text x="64" y="291" fill="#e5f0f6" font-size="32">for AI tools</text>
+  <text x="64" y="367" fill="#9cb5c5" font-size="19">Across conversations. Across workspaces.</text>
+  <text x="64" y="397" fill="#9cb5c5" font-size="19">Keep the project moving.</text>
+  <!-- Independent workspaces connect to one persistent local project record. -->
+  <g fill="#132639" stroke="#365365">
+    <rect x="728" y="79" width="192" height="90" rx="12"/>
+    <rect x="728" y="217" width="192" height="90" rx="12"/>
+    <rect x="728" y="355" width="192" height="90" rx="12"/>
+  </g>
+  <g fill="#e7f4f7" font-size="18" font-weight="600">
+    <text x="752" y="116">Workspace 01</text><text x="752" y="254">Workspace 02</text><text x="752" y="392">Workspace 03</text>
+  </g>
+  <g fill="#98b1c0" font-size="14">
+    <text x="752" y="144">Independent work</text><text x="752" y="282">Independent work</text><text x="752" y="420">Independent work</text>
+  </g>
+  <g stroke="#75e6c8" stroke-width="2" stroke-linejoin="round" fill="none" marker-end="url(#tip)">
+    <path d="M920 124H944V229H976"/>
+    <path d="M920 262H976"/>
+    <path d="M920 400H944V295H976"/>
+  </g>
+  <rect x="978" y="174" width="238" height="177" rx="16" fill="url(#hub)" stroke="#6cd9bd" stroke-width="1.5"/>
+  <text x="1002" y="209" fill="#8ce9cf" font-size="14" font-weight="600" letter-spacing="1">TASKCARRY</text>
+  <text x="1002" y="244" fill="#ffffff" font-size="24" font-weight="650">Project memory</text>
+  <text x="1002" y="276" fill="#c1d9dd" font-size="15">Tasks · Decisions</text>
+  <text x="1002" y="302" fill="#c1d9dd" font-size="15">Saved work · Next steps</text>
+  <text x="1002" y="329" fill="#88b5bc" font-size="13">Local records · Reviewed updates</text>
+  <!-- Three short promises remain readable at social-card sizes. -->
+  <g fill="none" stroke="#7be3c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M65 508H83V531H65ZM70 514H78M70 520H78"/>
+    <path d="M447 508H460V519H447ZM466 520H479V531H466ZM460 514H472V520"/>
+    <path d="M870 509A12 12 0 1 1 859 525M859 510V519H868"/>
+  </g>
+  <g fill="#edf7fa" font-size="23" font-weight="600">
+    <text x="100" y="527">Remember progress</text>
+    <text x="495" y="527">Coordinate workspaces</text>
+    <text x="893" y="527">Resume work</text>
+  </g>
+  <text x="64" y="595" fill="#849fb3" font-size="16">github.com/bryan123466/taskcarry</text>
+  <text x="1216" y="595" text-anchor="end" fill="#849fb3" font-size="14">LOCAL MEMORY. SHARED PROGRESS.</text>
+</g>
+</svg>

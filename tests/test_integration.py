@@ -5,15 +5,15 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from agct.core import Core
-from agct.integration import Integration
-from agct.gitops import git, out, fingerprint, commit, ancestor
-from agct.store import GovernanceError
+from taskcarry.core import Core
+from taskcarry.integration import Integration
+from taskcarry.gitops import git, out, fingerprint, commit, ancestor
+from taskcarry.store import GovernanceError
 
 
 class GitFixture(unittest.TestCase):
     def setUp(self):
-        self.temp = tempfile.TemporaryDirectory(prefix="agct-integration-")
+        self.temp = tempfile.TemporaryDirectory(prefix="taskcarry-integration-")
         self.root = Path(self.temp.name)
         self.control = self.root / "control"
         Core.initialize(self.control, name="Synthetic quality system")
@@ -178,8 +178,8 @@ class ReceiveTests(GitFixture):
     def test_interruption_and_experience_recovery_without_duplicate_effect(self):
         self.delivery()
         pid = self.plan()
-        (self.control / ".agct" / "SYNTHETIC_TEST_ONLY").write_text("synthetic")
-        with patch.dict(os.environ, {"AGCT_TEST_FAULTS": "1"}):
+        (self.control / ".taskcarry" / "SYNTHETIC_TEST_ONLY").write_text("synthetic")
+        with patch.dict(os.environ, {"TASKCARRY_TEST_FAULTS": "1"}):
             with self.assertRaises(GovernanceError) as e:
                 self.execute(pid, fault="after_effect")
         self.assertEqual(e.exception.code, "INJECTED_INTERRUPTION")
@@ -193,8 +193,8 @@ class ReceiveTests(GitFixture):
         self.core.experience("receipt-recovery-v1", "EFFECT_PRESENT_RECEIPT_MISSING", "reconcile", "verify_and_finalize", version="0")
         self.delivery()
         pid = self.plan()
-        (self.control / ".agct" / "SYNTHETIC_TEST_ONLY").write_text("synthetic")
-        with patch.dict(os.environ, {"AGCT_TEST_FAULTS": "1"}):
+        (self.control / ".taskcarry" / "SYNTHETIC_TEST_ONLY").write_text("synthetic")
+        with patch.dict(os.environ, {"TASKCARRY_TEST_FAULTS": "1"}):
             with self.assertRaises(GovernanceError):
                 self.execute(pid, fault="after_effect")
         head = commit(self.base, "HEAD")
@@ -260,8 +260,8 @@ class AdoptTests(GitFixture):
         self.dirty_worker()
         self.write_commit(self.base, {"shared.txt": "public update"})
         pid = self.engine.adopt("worker", "baseline")["plan"]["plan_id"]
-        (self.control / ".agct" / "SYNTHETIC_TEST_ONLY").write_text("synthetic")
-        with patch.dict(os.environ, {"AGCT_TEST_FAULTS": "1"}):
+        (self.control / ".taskcarry" / "SYNTHETIC_TEST_ONLY").write_text("synthetic")
+        with patch.dict(os.environ, {"TASKCARRY_TEST_FAULTS": "1"}):
             with self.assertRaises(GovernanceError):
                 self.engine.adopt("worker", "baseline", True, pid, fault="after_adopt")
         result = self.engine.adopt("worker", "baseline", True, pid)

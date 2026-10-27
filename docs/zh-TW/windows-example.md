@@ -2,29 +2,31 @@
 
 [English](../en/windows-example.md) · [简体中文](../zh-CN/windows-example.md) · [操作總覽](operation-manual.md) · [快速入門](getting-started.md) · [指令參考](../COMMANDS.md)
 
-[準備專案](#choose) · [安裝](#install) · [治理視窗](#governance) · [專業視窗](#agents) · [MCP 與 CLI](#mcp) · [首次盤點](#delivery) · [自動化](#automation) · [私有 Git](#private-git) · [多電腦](#multi-computer) · [完成核對](#check)
+[準備專案](#choose) · [安裝](#install) · [治理視窗](#governance) · [專業視窗](#agents) · [MCP 與 CLI](#mcp) · [首次治理結果](#delivery) · [自動化](#automation) · [私有 Git](#private-git) · [多電腦](#multi-computer) · [完成核對](#check)
 
-適用版本：0.2.0rc1。本頁使用固定示例目錄 `C:/CoGov`，路徑已填好。提示詞放入指定對話，指令放入 Windows PowerShell。**粗體方括號是需要你填寫的位置**，例如 **[請填入專案名稱]**；替換後複製完整提示詞即可。已有記錄能重用時，不重複填寫。
+適用版本：0.2.0rc4。本頁使用固定示例目錄 `C:/TaskCarry`，路徑已填好。提示詞放入指定對話，指令放入 Windows PowerShell。**粗體方括號是需要你填寫的位置**，例如 **[請填入專案名稱]**；替換後複製完整提示詞即可。已有記錄能重用時，不重複填寫。
+
+本手冊以 Windows 上的 Codex 為具體操作範例。TaskCarry 面向本機 AI 工具，共用一套 CLI/MCP 核心；其他宿主需分別核驗連線、指令載入和排程能力。下載 [TaskCarry 0.2.0rc4](https://github.com/bryan123466/taskcarry/releases/tag/v0.2.0rc4)。
 
 <a id="choose"></a>
 
 ## 0. 準備專案名稱、簡介和三個目錄
 
-**一套 CoGov 對應一個完整的現實專案。** 例如一個產品的研發、實驗、科研和營運可以屬於同一個專案；完全無關的產品或事項應使用不同根目錄。本文推薦流程針對一個專案。需要另一專案時，在首次安裝前將所有 `C:/CoGov` 統一替換為另一個根目錄，再按相同步驟設定。
+**一套 TaskCarry 對應一個完整的現實專案。** 例如一個產品的研發、實驗、科研和營運可以屬於同一個專案；完全無關的產品或事項應使用不同根目錄。本文推薦流程針對一個專案。需要另一專案時，在首次安裝前將所有 `C:/TaskCarry` 統一替換為另一個根目錄，再按相同步驟設定。
 
 先準備兩項資訊：專案名稱 **[請填入專案名稱]**，以及一句話介紹 **[請用一句話介紹這個專案]**。無需先編寫完整目標書，也不需要選擇“新專案 / 已有專案”路線。
 
-新舊專案使用同一套日常治理。首次接入時，治理對話會核對已有登記、成果和你提供的原視窗回覆：有現成工作就接續原歷史，沒有現成工作才建立新的接收基線。建立一個空 CoGov 資料夾不代表過去沒有專案成果；尚不清楚時，治理只需確認是否有工作需要接續。
+新舊專案使用同一套日常治理。首次接入時，治理對話會核對已有登記、成果和你提供的原視窗回覆：有現成工作就接續原歷史，沒有現成工作才建立新的接收基線。建立一個空 TaskCarry 資料夾不代表過去沒有專案成果；尚不清楚時，治理只需確認是否有工作需要接續。
 
-現在用檔案總管建立下面三個目錄：先在 C 磁碟建 `CoGov`，再在裡面建 `control` 和 `toolkit`。**這一步只需建立這三個目錄**，執行環境、儲存庫和工作區由後續治理對話按實際需要建立。
+現在用檔案總管建立下面三個目錄：先在 C 磁碟建 `TaskCarry`，再在裡面建 `control` 和 `toolkit`。**這一步只需建立這三個目錄**，執行環境、儲存庫和工作區由後續治理對話按實際需要建立。
 
 ```text
-C:/CoGov
-C:/CoGov/control
-C:/CoGov/toolkit
+C:/TaskCarry
+C:/TaskCarry/control
+C:/TaskCarry/toolkit
 ```
 
-將產品 ZIP 解壓到 `C:/CoGov/toolkit`；開啟該目錄，應直接看到 `START_HERE.md`、`packages`、`docs` 和 `examples`，不要再多套一層同名目錄。如果根目錄已經用於本專案，接續現有安裝；如果屬於其他專案，另選根目錄，不覆蓋它。
+將產品 ZIP 解壓到 `C:/TaskCarry/toolkit`；開啟該目錄，應直接看到 `START_HERE.md`、`packages`、`docs` 和 `examples`，不要再多套一層同名目錄。如果根目錄已經用於本專案，接續現有安裝；如果屬於其他專案，另選根目錄，不覆蓋它。
 
 ```text
 準備目錄和產品套件
@@ -44,39 +46,39 @@ C:/CoGov/toolkit
 
 ## 1. 安裝：建立治理對話，選擇 control
 
-在 Codex 中建立對話，選擇 `C:/CoGov/control` 資料夾，建議將對話命名為“專案治理”。後面的安裝、接入和自動化設定都在這個治理對話中繼續。
+在 Codex 中建立對話，選擇 `C:/TaskCarry/control` 資料夾，建議將對話命名為“專案治理”。後面的安裝、接入和自動化設定都在這個治理對話中繼續。
 
 ### 推薦方式：讓治理對話直接安裝
 
 填寫兩處粗體內容，然後複製整段引文框到治理對話：
 
-> 請將 Agent Co-Governance Toolkit 安裝並設定為這個實際專案的治理工具。
+> 請將 TaskCarry 安裝並設定為這個實際專案的治理工具。
 >
 > 專案名稱：**[請填入專案名稱]**
 >
 > 一句話介紹：**[請用一句話介紹這個專案]**
 >
-> 專案根目錄：`C:/CoGov`；產品已解壓到 `C:/CoGov/toolkit`；治理目錄：`C:/CoGov/control`。
+> 專案根目錄：`C:/TaskCarry`；產品已解壓到 `C:/TaskCarry/toolkit`；治理目錄：`C:/TaskCarry/control`。
 >
-> 先讀產品 START_HERE.md、docs/zh-TW/windows-example.md、docs/COMMANDS.md 和本次所需技能。檢查 Python 3.11+ 與 Git，建立 `C:/CoGov/runtime` 專用環境，從 packages 目錄的本機 wheel 安裝；已有有效安裝則核對版本並重用。
+> 先讀產品 START_HERE.md、docs/zh-TW/windows-example.md、docs/COMMANDS.md 和本次所需技能。檢查 Python 3.11+ 與 Git，建立 `C:/TaskCarry/runtime` 專用環境，從 packages 目錄的本機 wheel 安裝；已有有效安裝則核對版本並重用。
 >
-> 核對已有治理登記、目錄和我提供的專案資料，決定初始化還是接續，不要求我選擇技術路線。有現成工作時保留原儲存庫和檔案，通過第 3.1 節取得原視窗的接入回覆，再從真實專案歷史確定接收基線；已有治理狀態則直接重用。無法判斷是否有現成工作時，先完成工具安裝，簡短確認是否有原工作要接續，不因 CoGov 為空就建立業務儲存庫。
+> 核對已有治理登記、目錄和我提供的專案資料，決定初始化還是接續，不要求我選擇技術路線。有現成工作時保留原儲存庫和檔案，通過第 3.1 節取得原視窗的接入回覆，再從真實專案歷史確定接收基線；已有治理狀態則直接重用。無法判斷是否有現成工作時，先完成工具安裝，簡短確認是否有原工作要接續，不因 TaskCarry 為空就建立業務儲存庫。
 >
 > 確認沒有原工作要接續、需要建立新專案時，在空 control 的首次初始化階段執行產品 examples/windows_quickstart/bootstrap.py，使用本專案根目錄、預設 0 個專業工作區及實際專案名稱。根據專案名稱和一句話介紹補充 PROJECT_CONTEXT.md，不擴寫未經我說明的需求；精確提交真實初始化內容，並在無其他寫入的 baseline 快進到該初始化提交。已有原工作時使用 init/setup 安裝治理狀態和技能，不執行新儲存庫腳手架。專業任務在職責明確後再登記。
 >
 > 本步驟不建立定時任務。完成後告訴我實際安裝版本、control、已登記基線或還需原視窗提供的資訊；在完成相應初始化後，把專案名稱、簡介、真實路徑和接入決定記錄到 control/PROJECT_MAP.md。缺少系統依賴、Git 提交身分或需要我登入時，給出具體操作。
 
-**完成標志：**專用 Python 能執行 AGCT doctor；新專案已有一個接收基線、尚無專業任務，已有專案則進入原工作接入步驟。初始腳手架不是實際業務成果。
+**完成標志：**專用 Python 能執行 TaskCarry doctor；新專案已有一個接收基線、尚無專業任務，已有專案則進入原工作接入步驟。初始腳手架不是實際業務成果。
 
 ### 手動安裝方式：同一條路線的指令操作
 
 已經在治理對話安裝成功可跳過。需手動操作時，先確認 Python 3.11+ 和 Git 已安裝，再在 PowerShell 執行：
 
 ```powershell
-py -3 -m venv 'C:/CoGov/runtime'
-$cogovWheel = Get-ChildItem -LiteralPath 'C:/CoGov/toolkit/packages' -Filter '*.whl' -File
-if (@($cogovWheel).Count -ne 1) { throw '产品 packages 目录应只有一个 wheel 文件，请先核对解压位置。' }
-& 'C:/CoGov/runtime/Scripts/python.exe' -m pip install --no-index --no-deps $cogovWheel.FullName
+py -3 -m venv 'C:/TaskCarry/runtime'
+$taskcarryWheel = Get-ChildItem -LiteralPath 'C:/TaskCarry/toolkit/packages' -Filter '*.whl' -File
+if (@($taskcarryWheel).Count -ne 1) { throw '产品 packages 目录应只有一个 wheel 文件，请先核对解压位置。' }
+& 'C:/TaskCarry/runtime/Scripts/python.exe' -m pip install --no-index --no-deps $taskcarryWheel.FullName
 ```
 
 這一步完成產品工具安裝。隨後在治理對話貼上上面的安裝提示詞，由它重用已安裝環境，並根據實際專案情況完成初始化或接續；你無需另選初始化指令。完成後繼續第 2 章。腳手架拒絕覆蓋非空 control 或已建立的儲存庫；發生中斷時，讓治理對話核對已完成部分後接續，不刪除現場重新來過。
@@ -91,7 +93,7 @@ if (@($cogovWheel).Count -ne 1) { throw '产品 packages 目录应只有一个 w
 
 ```text
 你是本專案的治理工作臺。沿用安裝時記錄的專案名稱和一句話介紹，以及我已經說明的任務與決定；無需讓我重新填寫。
-產品：`C:/CoGov/toolkit`；唯一 control：`C:/CoGov/control`；Python：`C:/CoGov/runtime/Scripts/python.exe`。
+產品：`C:/TaskCarry/toolkit`；唯一 control：`C:/TaskCarry/control`；Python：`C:/TaskCarry/runtime/Scripts/python.exe`。
 請核對當前安裝及 PROJECT_MAP.md，讀取本次所需的專案技能，並用 status 確認實際已登記對象。所有專業視窗共用這個 control，不各自初始化一份治理庫。
 你的職責是結合專案目標和實際證據理解任務與成果關係，接收明確交付、維護當前狀態、保留接續點，安排適用的工作區更新，並報告具體需要我決定或操作的事項。
 按實際路徑登記工作區，同一目錄重用已有記錄；任務沿用穩定的 task_id，接續不另造重複任務。只登記資料不能證明已接收或已更新，必須核對正式結果與實際檔案。
@@ -117,10 +119,10 @@ if (@($cogovWheel).Count -ne 1) { throw '产品 packages 目录应只有一个 w
 
 **步驟一：在每個需要接入的原視窗，填寫職責並貼上下面提示詞，等待它回覆。**
 
-> 我要把當前專案接入 Agent Co-Governance Toolkit，並繼續保留本對話已有任務和上下文。
+> 我要把當前專案接入 TaskCarry，並繼續保留本對話已有任務和上下文。
 > 這個視窗繼續負責：**[請填入該對話窗需要實際負責的專案內容]**。
-> 治理目錄是 `C:/CoGov/control`，產品在 `C:/CoGov/toolkit`。
-> 請讀取 `C:/CoGov/control/.agents/skills/agct-task-delivery/SKILL.md`，按當前工具的接入與交付方式整理資訊。
+> 治理目錄是 `C:/TaskCarry/control`，產品在 `C:/TaskCarry/toolkit`。
+> 請讀取 `C:/TaskCarry/control/.agents/skills/taskcarry-task-delivery/SKILL.md`，按當前工具的接入與交付方式整理資訊。
 > 請先整理當前實際工作目錄、Git 根目錄和分支、當前提交、我的任務要求、已完成成果、已提交及未提交的檔案、暫停/等待事項、重要決定與下一步。只讀取本任務相關資料，保留全部現有 WIP 和歷史，不把任務未完成等同於交付失敗，也不一次提交所有檔案。
 > 如果本目錄還有其他視窗工作，請說明已知的共同使用情況和可能重疊的寫入範圍；未知就寫未知。整理一份可以直接轉交治理對話的接入說明，包含實際路徑和任務邊界。
 > 如果已有 task_id、工作區登記或檢查點，沿用並給出它們。收到治理對話返回的明確綁定後，在原視窗繼續本角色；需要轉給新視窗的任務，先儲存接續摘要與精確檔案範圍，再停止該範圍的寫入，保留原歷史供查閱。
@@ -130,7 +132,7 @@ if (@($cogovWheel).Count -ne 1) { throw '产品 packages 目录应只有一个 w
 這裡的“接入回覆”指原視窗收到步驟一提示詞後整理出來的那份回覆，包含目錄、成果、WIP 和下一步。有多個原視窗時，將各自回覆都保留視窗名稱與目錄後一並轉交；無需複製整個歷史對話。先貼上這些回覆，再接著貼上下面提示詞，在治理對話中一起發送：
 
 ```text
-請根據我提供的原視窗接入說明接入本專案，繼續使用 `C:/CoGov/control`。
+請根據我提供的原視窗接入說明接入本專案，繼續使用 `C:/TaskCarry/control`。
 先核對真實工作目錄、Git 歷史、已登記任務與現有 WIP；同一路徑重用同一個 workspace，不把多個對話名稱登記成同一路徑的多個獨立寫入者。未登記的不同工作區可依次用 existing-1、existing-2 命名，已有身分和 task_id 則保留。
 原視窗有適合的獨立工作區就原地接續。多個舊視窗共用目錄時，按我的職責安排保留一個主要專業角色；其餘需要並行的職責，按第 3.2 節建立獨立工作區再接續，儲存原摘要、成果和未提交檔案，不覆蓋或混合提交。
 接收基線必須來自這個專案已確認的 Git 歷史；如尚無 Git 或存在無關歷史，先列清應納入的實際檔案、排除項和現有歷史，按明確專案範圍建立基線，不強行合併無關儲存庫或提交整臺電腦的檔案。
@@ -145,9 +147,9 @@ if (@($cogovWheel).Count -ne 1) { throw '产品 packages 目录应只有一个 w
 
 **步驟一：在治理對話準備工作區。** 填寫數量後，複製下面整段：
 
-> 請為本專案準備 **[n]** 個新的專業工作區，使用 `C:/CoGov/control`。
+> 請為本專案準備 **[n]** 個新的專業工作區，使用 `C:/TaskCarry/control`。
 >
-> 先讀取實際 status 和 PROJECT_MAP.md，確定本次新增數量和目標清單；保留已有工作區及編號，從尚未使用的下一個編號開始，在 `C:/CoGov/workspaces` 下依次建立 agent-編號目錄，對應 codex/agent-編號分支，並登記同名 workspace。記錄本次目標清單；同一次準備操作中斷後，重用清單中已完成的對象，只補缺少部分，不再重複新增一批。
+> 先讀取實際 status 和 PROJECT_MAP.md，確定本次新增數量和目標清單；保留已有工作區及編號，從尚未使用的下一個編號開始，在 `C:/TaskCarry/workspaces` 下依次建立 agent-編號目錄，對應 codex/agent-編號分支，並登記同名 workspace。記錄本次目標清單；同一次準備操作中斷後，重用清單中已完成的對象，只補缺少部分，不再重複新增一批。
 >
 > 從本專案當前已確認的接收基線建立所需 Git worktree。工作區數量按我填寫的 n 確定，不限制為前三個，也不預設業務職責。若沒有已確認基線，先依據本專案實際歷史補齊接入，不另造無關歷史。
 >
@@ -161,17 +163,17 @@ if (@($cogovWheel).Count -ne 1) { throw '产品 packages 目录应只有一个 w
 
 | 工作區名稱示例 | 建立對話時選擇的目錄 |
 |---|---|
-| agent-1 | `C:/CoGov/workspaces/agent-1` |
-| agent-2 | `C:/CoGov/workspaces/agent-2` |
+| agent-1 | `C:/TaskCarry/workspaces/agent-1` |
+| agent-2 | `C:/TaskCarry/workspaces/agent-2` |
 | 後續工作區 | 治理回覆中為該編號填寫的完整目錄，繼續到本次所需數量。 |
 
 **步驟三：貼入該工作區對應的專業提示詞，填寫實際職責。** 治理會為每個工作區生成填好路徑與編號的提示詞，也可以在任一已登記的新工作區使用下面這段通用提示詞：
 
 > 你是本專案的一個專業任務視窗，負責：**[請填入該對話窗需要實際負責的專案內容]**。
 >
-> 治理目錄：`C:/CoGov/control`；產品：`C:/CoGov/toolkit`；Python：`C:/CoGov/runtime/Scripts/python.exe`。
+> 治理目錄：`C:/TaskCarry/control`；產品：`C:/TaskCarry/toolkit`；Python：`C:/TaskCarry/runtime/Scripts/python.exe`。
 >
-> 請讀取 `C:/CoGov/control/PROJECT_MAP.md` 和 `C:/CoGov/control/.agents/skills/agct-task-delivery/SKILL.md`，檢查本對話實際工作目錄、Git 分支及 status 中的 workspace 登記，以真實目錄確定自己的工作區名稱。資訊不一致時先說明具體差異，不憑對話名字建立另一份登記。
+> 請讀取 `C:/TaskCarry/control/PROJECT_MAP.md` 和 `C:/TaskCarry/control/.agents/skills/taskcarry-task-delivery/SKILL.md`，檢查本對話實際工作目錄、Git 分支及 status 中的 workspace 登記，以真實目錄確定自己的工作區名稱。資訊不一致時先說明具體差異，不憑對話名字建立另一份登記。
 >
 > 沿用已有或交接的 task_id；確實是新任務時，根據實際 workspace 生成不重複的穩定 task_id，workstream 使用本工作區名稱，title 使用我指定的真實職責，實際呼叫 task 完成登記並用 status 確認。不要覆蓋其他任務，也不要把新的業務任務混進舊任務身分。
 >
@@ -185,45 +187,48 @@ if (@($cogovWheel).Count -ne 1) { throw '产品 packages 目录应只有一个 w
 
 | 方式 | 是什麼 | 推薦使用方式 |
 |---|---|---|
-| MCP | 將 AGCT 作為 Codex 可直接呼叫的工具，出現 agct_status、agct_checkpoint 等工具名。 | 治理視窗建議設定；呼叫更直接，仍由模型判斷下一步。 |
-| CLI | Codex 在終端用 Python 執行 AGCT 指令。 | 用於安裝、診斷及 MCP 不可用時；專業視窗可先使用這一方式。 |
+| MCP | 將 TaskCarry 作為 Codex 可直接呼叫的工具，出現 taskcarry_status、taskcarry_checkpoint 等工具名。 | 治理視窗建議設定；呼叫更直接，仍由模型判斷下一步。 |
+| CLI | Codex 在終端用 Python 執行 TaskCarry 指令。 | 用於安裝、診斷及 MCP 不可用時；專業視窗可先使用這一方式。 |
 
 **兩者呼叫同一個核心和同一份 control 狀態，不是兩套治理，也不是額外的 AI 模型。** MCP 不是繼續工作的前置；建立的相鄰專業資料夾不會自動繼承治理目錄的 MCP 設定。
 
 在治理對話貼上：
 
 ```text
-請為 `C:/CoGov/control` 設定專案級 AGCT MCP，使用 `C:/CoGov/runtime/Scripts/python.exe`。
-先核對安裝結果和本專案 setup 生成的 .agct/codex.mcp.toml，將其中 AGCT 服務設定合併到 `C:/CoGov/control/.codex/config.toml`；保留現有其他設定，不更改使用者全局設定。該服務啟動指令應綁定 -m agct --project 和這個唯一 control，再啟動 mcp 子指令。
-如當前專案尚未獲得 Codex 信任，或需要重新開啟對話/重載設定，告訴我具體一步。完成後實際呼叫 agct_doctor 和 agct_status，確認工具可用且指向本專案；僅生成設定檔案不算已經連接。
+請為 `C:/TaskCarry/control` 設定專案級 TaskCarry MCP，使用 `C:/TaskCarry/runtime/Scripts/python.exe`。
+先核對安裝結果和本專案 setup 生成的 .taskcarry/codex.mcp.toml，將其中 TaskCarry 服務設定合併到 `C:/TaskCarry/control/.codex/config.toml`；保留現有其他設定，不更改使用者全局設定。該服務啟動指令應綁定 -m taskcarry --project 和這個唯一 control，再啟動 mcp 子指令。
+如當前專案尚未獲得 Codex 信任，或需要重新開啟對話/重載設定，告訴我具體一步。完成後實際呼叫 taskcarry_doctor 和 taskcarry_status，確認工具可用且指向本專案；僅生成設定檔案不算已經連接。
 如果本視窗不能設定或尚未載入工具，保留現有 CLI 工作方式，並明確還缺哪一步。其他專業視窗若要使用 MCP，需要各自設定同一 control；預設先通過 CLI 接入即可。
 ```
 
 CLI 後備可以直接執行：
 
 ```powershell
-& 'C:/CoGov/runtime/Scripts/python.exe' -m agct --project 'C:/CoGov/control' status
-& 'C:/CoGov/runtime/Scripts/python.exe' -m agct --project 'C:/CoGov/control' doctor
+& 'C:/TaskCarry/runtime/Scripts/python.exe' -m taskcarry --project 'C:/TaskCarry/control' status
+& 'C:/TaskCarry/runtime/Scripts/python.exe' -m taskcarry --project 'C:/TaskCarry/control' doctor
 ```
 
 MCP 的專案設定、信任與載入方式以所用 Codex 版本為準，參考 [Codex 官方 MCP 文件](https://learn.chatgpt.com/docs/extend/mcp)。
 
 <a id="delivery"></a>
 
-## 5. 首次完整盤點：當前狀態全覆蓋，明確交付才接收
+## 5. 首次治理：整理目前工作並直接看到結果
 
-各專業視窗完成接入後，在治理對話貼上：
+安裝和相關視窗接入後，在目前治理對話貼上以下提示詞。它使用與定時治理相同的 Skill 和工具，不啟動 Automation。也可以在建立專業視窗之前執行：空專案可以先就緒，等待你分配第一項任務。
 
 ```text
-請對 `C:/CoGov/control` 的已登記專案做首次當前狀態盤點和接收。
-從 status 的 workspaces、tasks、checkpoints、stages、operations 及 PROJECT_MAP.md 獲取實際範圍，逐項核對必要的工作區與 Git 證據，不預設只有三個視窗。
-把結果分清：已在可信基線中的成果、明確可接收但尚未接收的階段、未完成工作的 checkpoint、暫停/等待狀態、需要實際處理的衝突或歸屬問題。沒有變化的舊狀態只保留，不重複入隊，不催我結束任務。
-已有穩定階段按真實 base/commit/完整差異路徑凍結提交；reconcile 先生成計畫，核對完整範圍後執行並驗證實際效果。新版本替代舊階段必須有明確累積關係和覆蓋證據，不能僅憑日期丟棄獨立成果。
-為可安全更新且無活動寫入的專業工作區計畫並執行 adopt，保全本機提交、暫存、未提交及新檔案；忙碌或具體衝突的對象保留狀態並說明下一條件。不要在其他視窗工作時強行更新。
-最後給出一張專案當前狀態表：任務及主責視窗/工作區、已接收階段、當前 checkpoint 或進行位置、需動作事項、下一步。指出未登記或證據不足的範圍。狀態完整記錄不等於所有未完成成果都已接收，也不等於業務完成。
+請對 `C:/TaskCarry/control` 的已登記專案執行一輪有限治理，使用 taskcarry-governance-reconcile 與已安裝工具。後續定時任務使用同一流程；本輪不建立或觸發排程。
+核對 doctor、目前實際可用的連線、agenda 和必要的 status 細節。從專案記錄與 PROJECT_MAP.md 取得已登記工作區和任務，不預設三個視窗，不讀取無關歷史。
+區分已接收成果、明確可接收的階段、未完成工作的檢查點、暫停/等待任務及具體衝突。無變化內容保留原位，不重複入隊，也不要求我結束任務。
+對既有授權的穩定階段核對真實 base/commit 和完整變更路徑。用 limit 20（最大 100）產生 reconcile 計畫，核對凍結範圍後執行並驗證實際效果；其餘工作留待後續輪次並如實說明。重用已經發生的效果，只接續缺步。累積替代須有任務、提交祖先和範圍涵蓋證據。
+只有實際任務依賴需要已接收的業務/程式碼成果、且工作區可安全更新並無活動寫入時，才使用 adopt。保全本機提交、暫存、未提交與新檔案；忙碌或衝突時保留具體下一條件。
+直接在本對話展示結果：實際安裝版本與專案目錄；本輪核驗的 CLI/MCP 連線；已接入工作區和任務；已接收階段、保留工作與本輪實際操作；目前剩餘事項；我需要做的下一步，沒有則明確無需操作。
+沒有任務或交付時，說明安裝和連線已就緒、可以接收工作，並指出真實缺少的設定。不要為填報告建立示範任務、提交或交付。計畫完成不等於專案完成，也不證明定時任務已觸發成功。
 ```
 
-日常專業視窗在自然階段交付；沒有完成整個任務時可以保留檢查點。檢查點儲存已寫入磁碟的精確檔案和接續資訊，不儲存編輯器未寫入磁碟的內容。治理接收的是穩定階段，任務狀態仍可保持 active、paused 或 waiting。
+**完成後應看到：**對話中一份基於實際核驗的簡明結果，分清安裝、連線和本輪工作；仍缺專案輸入時明確指出。後續設定定時任務重用這份結果，不再要求額外試跑一次。
+
+日常專業視窗在自然階段交付，未完成工作保留檢查點。後續由同一治理 AI 和宿主在對話中回報有意義變化及所需摘要，不另建報告服務或狀態頁面。
 
 <a id="automation"></a>
 
@@ -234,8 +239,9 @@ MCP 的專案設定、信任與載入方式以所用 Codex 版本為準，參考
 在治理對話貼上：
 
 ```text
-請在這個治理對話為本專案建立每天 06:00 的定時治理任務，使用當前實際本機時區，目標 `C:/CoGov/control`，保持我的模型與原生權限設定。
-先讀取 status 和 PROJECT_MAP.md，列出實際登記的專業工作區數、業務任務數及已明確綁定的對話；基線、技術保全任務單列，不算新增專業視窗或業務。工具能讀取登記對象，不代表能掃描 App 中所有對話；沒有對話綁定證據時只報告工作區/任務數量。相同路徑只使用一個實際登記，發現重複記錄先核對，不重複操作。
+請在這個治理對話為本專案建立每天 06:00 的定時治理任務，使用當前實際本機時區，目標 `C:/TaskCarry/control`，保持我的模型與原生權限設定。
+重用第 5 章的首次治理結果，不為驗證額外觸發 Automation。定時說明使用同一 taskcarry-governance-reconcile Skill 和有限工具流程，通常採用 reconcile limit 20。
+讀取 status 和 PROJECT_MAP.md，列出實際登記的專業工作區、業務任務和明確綁定的對話；基線與技術保全任務個別列出。讀取專案記錄不代表能掃描全部對話；沒有綁定證據時只回報工作區/任務數量。同一路徑使用一個登記，先核對重複記錄再操作。
 自動化每輪重新讀取已登記範圍，不寫死 agent-1 到 agent-3，也不要求今後每增加一個視窗都重建任務。只納入明確接入本專案的對象，不掃描無關或私人對話。
 每輪重用有效回執，處理新交付與具體未完操作；結合已有任務、檢查點、階段關係和檔案證據判斷，不把暫停或無變化內容反覆列為積壓。接收先核對計畫，再執行並確認實際效果；已完成部分不重放。
 對確實可更新、無活動寫入的工作區執行適用的基線採用，保全本機工作；忙碌或衝突時只跳過該對象。按當前實現和經驗規則有限恢復已知問題，未知問題說明實際影響與下一步，不循環重跑完整治理。
@@ -243,7 +249,7 @@ MCP 的專案設定、信任與載入方式以所用 Codex 版本為準，參考
 請使用宿主提供的正式自動化工具建立或更新已有同用途任務，並告訴我實際名稱、時區、時間及目標。不要寫設定檔案冒充已建立。當前環境不能建立時，給出需要我在介面完成的準確步驟和最終任務提示詞。
 ```
 
-這會覆蓋**已經接入並登記**的專業工作區與任務；尚未接入的舊視窗仍需先完成第 3 章。任務狀態 `paused` 也不能單獨證明當前沒有別的程式寫檔案。當前接收計畫會包含全部符合條件的階段，尚無每輪條數硬上限，執行前由治理核對範圍。
+這會涵蓋**已經接入並登記**的專業工作區與任務；尚未接入的舊視窗仍需先完成第 3 章。任務狀態 `paused` 不能單獨證明沒有其他程式寫檔案。接收計畫預設 20 項、最大 100 項，治理核對凍結範圍並個別回報其餘工作；這不是整個 AI 對話的時長限制。
 
 <a id="private-git"></a>
 
@@ -254,9 +260,9 @@ MCP 的專案設定、信任與載入方式以所用 Codex 版本為準，參考
 在治理對話貼上：
 
 ```text
-請為 `C:/CoGov/control` 所管理的專案準備私有 Git 線上記憶庫。
+請為 `C:/TaskCarry/control` 所管理的專案準備私有 Git 線上記憶庫。
 先讀取產品 docs/zh-TW/remote-and-multicomputer.md，核對已有遠端和實際基線，保留現有設定。先整理精確應納入的成果、精選任務說明和應排除的敏感內容、大檔案與執行狀態；需要我選擇帳號、私有儲存庫、存取權限或授權發布時，把具體對象列清楚。
-在我確認實際遠端和上傳範圍後，使用當前已接收基線進行精確提交與推送，並核對遠端提交。不要把 .agct 活躍資料庫、金鑰、快取或整個工作區直接當作 Git 記憶庫。另給出包含治理狀態及 WIP 的一致備份方式和恢復步驟，區分 Git 恢復與完整工作狀態恢復。
+在我確認實際遠端和上傳範圍後，使用當前已接收基線進行精確提交與推送，並核對遠端提交。不要把 .taskcarry 活躍資料庫、金鑰、快取或整個工作區直接當作 Git 記憶庫。另給出包含治理狀態及 WIP 的一致備份方式和恢復步驟，區分 Git 恢復與完整工作狀態恢復。
 ```
 
 具體操作與恢復限制見[私有 Git 與備份](remote-and-multicomputer.md#private-git)。
@@ -270,8 +276,8 @@ MCP 的專案設定、信任與載入方式以所用 Codex 版本為準，參考
 在治理對話貼上：
 
 ```text
-請為 `C:/CoGov/control` 的專案準備第二臺電腦的分工操作說明，先保持本機為唯一整合方。
-讀取產品 docs/zh-TW/remote-and-multicomputer.md；根據真實任務、已選遠端及檔案範圍，生成第二臺電腦可直接使用的接續提示詞和本機接收清單。按不同專業職責或獨立子任務分工，同一任務及寫入範圍只給一個主要寫入者；不要讓兩臺電腦同時寫同一工作區或共享活躍 .agct、.git。
+請為 `C:/TaskCarry/control` 的專案準備第二臺電腦的分工操作說明，先保持本機為唯一整合方。
+讀取產品 docs/zh-TW/remote-and-multicomputer.md；根據真實任務、已選遠端及檔案範圍，生成第二臺電腦可直接使用的接續提示詞和本機接收清單。按不同專業職責或獨立子任務分工，同一任務及寫入範圍只給一個主要寫入者；不要讓兩臺電腦同時寫同一工作區或共享活躍 .taskcarry、.git。
 第二臺電腦通過自己的獨立分支提交成果，保留原 base/commit、完整變更路徑和階段關係。本機通過穩定接收工作區取得這些證據，再使用本機 control 的正常 submit/reconcile 推進基線；兩臺機器的本機狀態不會自動合併。
 如果本機不可用，其他電腦可繼續授權範圍內的獨立工作。需要切換整合方時，先停止或隔離舊寫入權、對帳已發生效果，再安排接管；舊機恢復後先核對最新狀態再啟動原定時任務。
 告訴我真正需要在第二臺電腦執行、登入或確認的操作，以及尚未驗證的範圍；準備計畫不改變現有排程。
@@ -291,7 +297,7 @@ MCP 的專案設定、信任與載入方式以所用 Codex 版本為準，參考
 | 原視窗接續 | 原任務、成果、歷史和 WIP 保留，明確繼續寫入的位置。 |
 | 並行專業視窗 | 實際目錄/分支與登記一致，任務主責和寫入範圍明確。 |
 | MCP | 正式工具實際呼叫成功；未連接時 CLI 可用且說明缺步。 |
-| 首次盤點 | 每個已登記任務有當前位置，明確階段的接收與 WIP 分開。 |
+| 首次治理結果 | 對話展示安裝、連線、已登記範圍與實際有限處理結果；無交付時說明已就緒，不製造工作。 |
 | 定時治理 | 正式任務已建立；實際執行結果由自然執行證據確認。 |
 | 私有 Git / 多電腦 | 按選用範圍核對真實遠端與另一臺電腦，不以計畫代替完成。 |
 
