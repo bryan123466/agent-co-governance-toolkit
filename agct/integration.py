@@ -52,7 +52,7 @@ class Integration:
             prior = self.store.get("workspaces", name)
             if prior and prior["identity"] != ident:
                 pending = [s for s in self.store.list("stages") if s["workspace"] == name and s["status"] in {"QUEUED", "CONFLICT"}]
-                ops = [o for o in self.store.list("operations") if o.get("workspace") == name and o["status"] != "COMPLETED"]
+                ops = [o for o in self.store.list("operations") if o.get("workspace") == name and o["status"] not in {"COMPLETED", "SUPERSEDED"}]
                 if pending or ops:
                     raise GovernanceError("WORKSPACE_IN_USE", "Finish or resolve existing operations before rebinding this name")
             record = {"name": name, "path": str(p), "identity": ident}
@@ -228,7 +228,47 @@ class Integration:
         self._fault(fault, "after_effect")
         return self._finish(operation, baseline)
 
-    def reconcile(self, baseline, execute=False, plan_id=None, fault=None):
+    def _receive_selection(self, outstanding, stages, limit):
+        # Recovery comes first. An operation and its queued stage are one work
+        # item, even though both identities belong in the frozen plan.
+        groups = {}
+        for op in sorted(outstanding, key=lambda o: (o.get("created_at", ""), o["operation_id"])):
+            key = ("stage", op["stage_id"]) if op.get("stage_id") else ("operation", op["operation_id"])
+            groups.setdefault(key, {"operations": [], "stage": None})["operations"].append(op)
+        for stage in stages:
+            groups.setdefault(("stage", stage["stage_id"]), {"operations": [], "stage": None})["stage"] = stage
+        selected = list(groups.values())[:limit]
+        return ([op for group in selected for op in group["operations"]],
+                [group["stage"] for group in selected if group["stage"] is not None],
+                {"limit": limit, "selected_count": len(selected), "available_count": len(groups),
+                 "unselected_count": len(groups) - len(selected)})
+
+    def _receive_receipt(self, plan, results, reused=False):
+        current = self.core.status()
+        scoped_operations = set(plan.get("pending_operations", []))
+        scoped_stages = set(plan["stage_ids"])
+        operations = [o for o in current["actionable"]["operations"]
+                      if o["operation_id"] in scoped_operations or o.get("plan_id") == plan["plan_id"]]
+        unfinished = [s["stage_id"] for s in current["stages"]
+                      if s["stage_id"] in scoped_stages and s["status"] not in {"COMMITTED", "SUPERSEDED"}]
+        conflicts = [{"stage_id": s["stage_id"], "code": "CONTENT_CONFLICT"}
+                     for s in current["stages"] if s["status"] == "CONFLICT"]
+        queued = [s["stage_id"] for s in current["actionable"]["stages"] if s["status"] == "QUEUED"]
+        unselected = [sid for sid in queued if sid not in scoped_stages]
+        selected_operation_ids = {o["operation_id"] for o in operations}
+        return {"status": "ACTION_REQUIRED" if conflicts or unfinished or operations else "COMPLETE",
+                "scope": "plan", "plan_id": plan["plan_id"], "plan_complete": not unfinished and not operations,
+                "project_complete": None, "results": results, "reused": reused, "remaining": conflicts,
+                "remaining_stage_ids": unfinished, "remaining_operation_ids": [o["operation_id"] for o in operations],
+                "queued_stage_ids": queued, "unselected_queued_stage_ids": unselected,
+                "unselected_operation_ids": [o["operation_id"] for o in current["actionable"]["operations"]
+                                             if o["operation_id"] not in selected_operation_ids],
+                "current_actionable_counts": {name: len(records) for name, records in current["actionable"].items()},
+                "meaning": "Completion covers only this frozen plan. Other recorded work and business acceptance require separate assessment."}
+
+    def reconcile(self, baseline, execute=False, plan_id=None, fault=None, limit=20):
+        if type(limit) is not int or not 1 <= limit <= 100:
+            raise GovernanceError("INVALID_ARGUMENT", "Reconciliation limit must be an integer from 1 to 100")
         self._check_fault(fault)
         target = self._ws(baseline)
         with self.store.guard():
@@ -237,12 +277,15 @@ class Integration:
                 raise GovernanceError("BASELINE_BOUND", "A governance project has one integration baseline; use a separate project for another baseline")
             outstanding = [o for o in self.store.list("operations") if o.get("kind") == "reconcile" and o.get("baseline") == str(target) and o["status"] not in {"COMPLETED", "REVIEW_REQUIRED"}]
             if not execute:
-                stages = self._pending()
+                selected_ops, stages, selection = self._receive_selection(outstanding, self._pending(), limit)
                 conflicts = [{"stage_id": s["stage_id"], "code": "CONTENT_CONFLICT"} for s in self.store.list("stages") if s["status"] == "CONFLICT"]
-                data = {"kind": "reconcile", "baseline": baseline, "head": commit(target, "HEAD"), "stage_ids": [s["stage_id"] for s in stages], "declarations": {s["stage_id"]: s["declaration_hash"] for s in stages}, "unresolved": conflicts}
+                data = {"kind": "reconcile", "baseline": baseline, "head": commit(target, "HEAD"), "stage_ids": [s["stage_id"] for s in stages], "declarations": {s["stage_id"]: s["declaration_hash"] for s in stages}, "unresolved": conflicts,
+                        "pending_operations": [o["operation_id"] for o in selected_ops], "selection": selection}
                 pid = "plan-" + digest(data)[:24]
-                plan = {**data, "plan_id": pid, "created_at": now(), "pending_operations": [o["operation_id"] for o in outstanding]}
-                self._save("plans", pid, plan)
+                plan = self.store.get("plans", pid)
+                if plan is None:
+                    plan = {**data, "plan_id": pid, "created_at": now()}
+                    self._save("plans", pid, plan)
                 return {"plan": plan, "effects_executed": False, "clean_baseline": clean(target)}
             if not plan_id:
                 raise GovernanceError("PLAN_REQUIRED", "Review a persisted reconciliation plan before execution")
@@ -261,8 +304,7 @@ class Integration:
                     expected = op["candidate"]
             unfinished = [sid for sid in plan["stage_ids"] if self.store.get("stages", sid)["status"] not in {"COMMITTED", "SUPERSEDED"}]
             if not unfinished:
-                remaining = [{"stage_id": s["stage_id"], "code": "CONTENT_CONFLICT"} for s in self.store.list("stages") if s["status"] == "CONFLICT"]
-                return {"status": "ACTION_REQUIRED" if remaining else "COMPLETE", "results": results, "reused": not results, "remaining": remaining}
+                return self._receive_receipt(plan, results, reused=not results)
             if commit(target, "HEAD") != expected:
                 raise GovernanceError("STALE_BASELINE", "Baseline advanced since this plan; create a new plan", {"expected": expected, "actual": commit(target, "HEAD")})
             if not clean(target):
@@ -283,8 +325,7 @@ class Integration:
                     if exc.code != "CONTENT_CONFLICT":
                         raise
                     errors.append({"stage_id": sid, "code": exc.code})
-            remaining = [{"stage_id": s["stage_id"], "code": "CONTENT_CONFLICT"} for s in self.store.list("stages") if s["status"] == "CONFLICT"]
-            return {"status": "ACTION_REQUIRED" if remaining else "COMPLETE", "results": results, "remaining": remaining}
+            return self._receive_receipt(plan, results)
 
     def _restore_planned_bytes(self, workspace, operation):
         """Correct only proven checkout newline conversion, never new content.
@@ -340,11 +381,40 @@ class Integration:
         bytes_verified = self._restore_planned_bytes(workspace, operation)
         if not bytes_verified or fingerprint(workspace) != operation["expected_result"]:
             raise GovernanceError("WIP_RESTORE_REQUIRED", "Workspace does not match the prevalidated restored state; retained checkpoint and stash need review", {"operation_id": operation["operation_id"], "stash": operation.get("stash"), "checkpoint_id": operation.get("checkpoint_id")})
-        operation.update({"status": "COMPLETED", "completed_at": now()})
+        operation.update({"status": "COMPLETED", "effect_state": "VERIFIED", "completed_at": now()})
         self._save("operations", operation["operation_id"], operation)
+        self._resolve_adoption_preparations(operation)
         self.store.event("workspace_adopted", {"operation_id": operation["operation_id"], "workspace": operation["workspace"], "wip_verified": True})
         return {"status": "ADOPTED", "workspace": operation["workspace"], "commit": operation["candidate"], "wip_verified": True,
                 "retained_backup_stash": operation.get("stash"), "checkpoint_id": operation.get("checkpoint_id")}
+
+    def _resolve_adoption_preparations(self, operation):
+        # Only a reviewed successor plan and verified adoption retire prior
+        # no-effect preparations. The original failure evidence stays intact.
+        for oid in operation.get("resolves_preparation_failures", []):
+            old = self.store.get("operations", oid)
+            if (not old or old.get("kind") != "adopt" or old.get("workspace") != operation["workspace"]
+                    or old.get("baseline") != operation.get("baseline")
+                    or old.get("status") not in {"PREPARING", "PREPARATION_FAILED"}
+                    or old.get("effect_state") != "NOT_APPLIED" or old.get("candidate") or old.get("stash")):
+                continue
+            old.update({"historical_status": old["status"], "status": "SUPERSEDED",
+                        "resolved_by_operation": operation["operation_id"], "resolved_by_plan": operation["plan_id"]})
+            self._save("operations", oid, old)
+            self.store.event("adoption_preparation_superseded", {"operation_id": oid, "successor": operation["operation_id"]})
+
+    def _adoption_failure(self, operation, exc):
+        failure = {"code": getattr(exc, "code", "PREPARATION_FAILED"), "message": str(exc),
+                   "details": getattr(exc, "details", None)}
+        first_failure = "first_failure" not in operation
+        operation.setdefault("first_failure", failure)
+        operation.update({"status": "PREPARATION_FAILED", "phase": "preparation", "effect_state": "NOT_APPLIED",
+                          "code": failure["code"], "last_failure": failure})
+        self._save("operations", operation["operation_id"], operation)
+        # One durable attempt per plan, with bounded first/last diagnostics.
+        # Repeated errors may contain fresh scratch paths; they are not new work.
+        if first_failure:
+            self.store.event("adoption_preparation_failed", {"operation_id": operation["operation_id"], **failure})
 
     def _adopt_resume(self, target, operation):
         if fingerprint(target) == operation.get("expected_result"):
@@ -383,6 +453,75 @@ class Integration:
             git(target, "stash", "apply", "--index", stash)
         return self._adopt_finish(target, operation)
 
+    def _prepare_adoption(self, target, source, plan, op):
+        workspace = op["workspace"]
+        before = plan["before"]
+        staged = git(target, "diff", "--cached", "--binary", "--full-index", "--no-ext-diff", "--no-textconv", "--").stdout
+        unstaged = git(target, "diff", "--binary", "--full-index", "--no-ext-diff", "--no-textconv", "--").stdout
+        untracked = {rel: (target / rel).read_bytes() for rel in before["untracked"]}
+        dirty_paths = set(git(target, "diff", "--cached", "--name-only", "-z", "--").stdout.decode().strip("\0").split("\0")) - {""}
+        dirty_paths.update(set(git(target, "diff", "--name-only", "-z", "--").stdout.decode().strip("\0").split("\0")) - {""})
+        dirty_paths.update(untracked)
+        checkpoint_id = op.get("checkpoint_id")
+        checkpoint = self.store.get("checkpoints", checkpoint_id) if checkpoint_id else None
+        if checkpoint_id and checkpoint is None:
+            raise GovernanceError("RECOVERY_REVIEW_REQUIRED", "The retained preparation checkpoint is missing")
+        if dirty_paths and checkpoint is None:
+            for rel in dirty_paths:
+                pathsafe(rel)
+            backup_task = "adoption-backup-" + workspace
+            self.core.task(backup_task, title="Retained workspace update checkpoint", state="paused")
+            checkpoint = self.core.checkpoint(backup_task, str(target), sorted(dirty_paths), "Continue original work after public baseline update", decision="Technical preservation only; not a new delivery", paused=True)
+            checkpoint_id = checkpoint.get("checkpoint_id") or checkpoint.get("checkpoint", {}).get("checkpoint_id")
+            op["checkpoint_id"] = checkpoint_id
+            self._save("operations", op["operation_id"], op)
+        import_commit(target, source, plan["baseline_head"])
+        with Scratch(target, self.scratch, before["head"]) as scratch:
+            merge = git(scratch, "merge", "--no-edit", plan["baseline_head"], check=False)
+            if merge.returncode:
+                raise GovernanceError("ADOPTION_CONFLICT", "Local commits conflict with the public baseline; original workspace remains unchanged")
+            candidate = commit(scratch, "HEAD")
+            changed_paths = changed(scratch, before["head"], candidate)
+            assert_tree_types(scratch, candidate, changed_paths)
+            for rel in changed_paths:
+                pathsafe(rel)
+                was_tracked = bool(git(target, "ls-tree", "-z", before["head"], "--", rel).stdout)
+                if not was_tracked and (target / rel).exists() and rel not in untracked:
+                    raise GovernanceError("IGNORED_FILE_COLLISION", "A local ignored file or directory overlaps the new baseline; it was not changed", {"path": rel})
+            if staged:
+                cp = git(scratch, "apply", "--index", "--3way", "--whitespace=nowarn", "-", data=staged, check=False)
+                if cp.returncode:
+                    raise GovernanceError("WIP_CONFLICT", "Staged changes need review against the new baseline; original WIP retained")
+            if unstaged:
+                cp = git(scratch, "apply", "--whitespace=nowarn", "-", data=unstaged, check=False)
+                if cp.returncode:
+                    raise GovernanceError("WIP_CONFLICT", "Unstaged changes need review against the new baseline; original WIP retained")
+            for rel, payload in untracked.items():
+                dest = scratch / pathsafe(rel)
+                if dest.exists():
+                    raise GovernanceError("WIP_CONFLICT", "Untracked file would collide with a baseline file", {"path": rel})
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                dest.write_bytes(payload)
+            # Preserve raw WIP bytes where adoption did not change that file.
+            # For a merged file the isolated candidate defines its new bytes.
+            for record in (checkpoint or {}).get("files", []):
+                if record["path"] not in changed_paths and record["worktree"] is not None:
+                    dest = validate_relative_path(scratch, record["path"])
+                    dest.write_bytes(self.core._snapshot_bytes(record["worktree"]))
+            expected_bytes = {}
+            for rel in sorted(dirty_paths):
+                dest = validate_relative_path(scratch, rel)
+                expected_bytes[rel] = self.core._snapshot(read_file_bytes(dest)) if dest.is_file() else None
+            expected = fingerprint(scratch)
+        if identity(target) != self.store.get("workspaces", workspace)["identity"] or fingerprint(target) != before:
+            raise GovernanceError("WORKSPACE_CHANGED", "Workspace changed during adoption preparation")
+        has_wip = bool(before["status"])
+        op.update({"status": "CANDIDATE_READY", "phase": "prepared", "candidate": candidate,
+                   "expected_result": expected, "has_wip": has_wip, "checkpoint_id": checkpoint_id})
+        op["expected_worktree_bytes"] = expected_bytes
+        self._save("operations", op["operation_id"], op)
+        return op
+
     def adopt(self, workspace, baseline, execute=False, plan_id=None, fault=None):
         self._check_fault(fault)
         target, source = self._ws(workspace), self._ws(baseline)
@@ -391,9 +530,18 @@ class Integration:
         with self.store.guard():
             if not execute:
                 data = {"kind": "adopt", "workspace": workspace, "baseline": baseline, "baseline_head": commit(source, "HEAD"), "before": fingerprint(target)}
+                failures = [o["operation_id"] for o in self.store.list("operations")
+                            if o.get("kind") == "adopt" and o.get("workspace") == workspace and o.get("baseline") == baseline
+                            and o.get("status") in {"PREPARING", "PREPARATION_FAILED"}
+                            and o.get("effect_state") == "NOT_APPLIED" and not o.get("candidate") and not o.get("stash")
+                            and (o.get("before") != data["before"] or o.get("baseline_head") != data["baseline_head"])]
+                if failures:
+                    data["resolves_preparation_failures"] = failures
                 pid = "adopt-plan-" + digest(data)[:24]
-                plan = {**data, "plan_id": pid, "created_at": now()}
-                self._save("plans", pid, plan)
+                plan = self.store.get("plans", pid)
+                if plan is None:
+                    plan = {**data, "plan_id": pid, "created_at": now()}
+                    self._save("plans", pid, plan)
                 return {"plan": plan, "effects_executed": False}
             plan = self.store.get("plans", plan_id) if plan_id else None
             if not plan or plan["kind"] != "adopt" or plan["workspace"] != workspace or plan["baseline"] != baseline:
@@ -402,79 +550,46 @@ class Integration:
             op = self.store.get("operations", oid)
             if op:
                 if op["status"] == "COMPLETED":
+                    self._resolve_adoption_preparations(op)
                     return {"status": "ADOPTED", "reused": True, "workspace": workspace, "commit": op["candidate"]}
-                return self._adopt_resume(target, op)
+                if op["status"] == "SUPERSEDED":
+                    raise GovernanceError("OPERATION_SUPERSEDED", "A verified successor resolved this failed preparation; use its receipt", {"operation_id": oid, "resolved_by_operation": op.get("resolved_by_operation")})
+                if (op.get("effect_state") != "NOT_APPLIED" or op.get("candidate") or op.get("stash")
+                        or op.get("status") not in {"PREPARING", "PREPARATION_FAILED"}):
+                    return self._adopt_resume(target, op)
             if fingerprint(target) != plan["before"] or commit(source, "HEAD") != plan["baseline_head"]:
                 raise GovernanceError("STALE_PLAN", "Work or baseline changed; create a new adoption plan")
-            before = plan["before"]
-            staged = git(target, "diff", "--cached", "--binary", "--full-index", "--no-ext-diff", "--no-textconv", "--").stdout
-            unstaged = git(target, "diff", "--binary", "--full-index", "--no-ext-diff", "--no-textconv", "--").stdout
-            untracked = {rel: (target / rel).read_bytes() for rel in before["untracked"]}
-            dirty_paths = set(git(target, "diff", "--cached", "--name-only", "-z", "--").stdout.decode().strip("\0").split("\0")) - {""}
-            dirty_paths.update(set(git(target, "diff", "--name-only", "-z", "--").stdout.decode().strip("\0").split("\0")) - {""})
-            dirty_paths.update(untracked)
-            checkpoint_id = None
-            checkpoint = None
-            if dirty_paths:
-                for rel in dirty_paths:
-                    pathsafe(rel)
-                backup_task = "adoption-backup-" + workspace
-                self.core.task(backup_task, title="Retained workspace update checkpoint", state="paused")
-                checkpoint = self.core.checkpoint(backup_task, str(target), sorted(dirty_paths), "Continue original work after public baseline update", decision="Technical preservation only; not a new delivery", paused=True)
-                checkpoint_id = checkpoint.get("checkpoint_id") or checkpoint.get("checkpoint", {}).get("checkpoint_id")
-            import_commit(target, source, plan["baseline_head"])
-            with Scratch(target, self.scratch, before["head"]) as scratch:
-                merge = git(scratch, "merge", "--no-edit", plan["baseline_head"], check=False)
-                if merge.returncode:
-                    raise GovernanceError("ADOPTION_CONFLICT", "Local commits conflict with the public baseline; original workspace remains unchanged")
-                candidate = commit(scratch, "HEAD")
-                changed_paths = changed(scratch, before["head"], candidate)
-                assert_tree_types(scratch, candidate, changed_paths)
-                for rel in changed_paths:
-                    pathsafe(rel)
-                    was_tracked = bool(git(target, "ls-tree", "-z", before["head"], "--", rel).stdout)
-                    if not was_tracked and (target / rel).exists() and rel not in untracked:
-                        raise GovernanceError("IGNORED_FILE_COLLISION", "A local ignored file or directory overlaps the new baseline; it was not changed", {"path": rel})
-                if staged:
-                    cp = git(scratch, "apply", "--index", "--3way", "--whitespace=nowarn", "-", data=staged, check=False)
-                    if cp.returncode:
-                        raise GovernanceError("WIP_CONFLICT", "Staged changes need review against the new baseline; original WIP retained")
-                if unstaged:
-                    cp = git(scratch, "apply", "--whitespace=nowarn", "-", data=unstaged, check=False)
-                    if cp.returncode:
-                        raise GovernanceError("WIP_CONFLICT", "Unstaged changes need review against the new baseline; original WIP retained")
-                for rel, payload in untracked.items():
-                    dest = scratch / pathsafe(rel)
-                    if dest.exists():
-                        raise GovernanceError("WIP_CONFLICT", "Untracked file would collide with a baseline file", {"path": rel})
-                    dest.parent.mkdir(parents=True, exist_ok=True)
-                    dest.write_bytes(payload)
-                # Preserve raw WIP bytes where adoption did not change that file.
-                # For a merged file the isolated candidate defines its new bytes.
-                for record in (checkpoint or {}).get("files", []):
-                    if record["path"] not in changed_paths and record["worktree"] is not None:
-                        dest = validate_relative_path(scratch, record["path"])
-                        dest.write_bytes(self.core._snapshot_bytes(record["worktree"]))
-                expected_bytes = {}
-                for rel in sorted(dirty_paths):
-                    dest = validate_relative_path(scratch, rel)
-                    expected_bytes[rel] = self.core._snapshot(read_file_bytes(dest)) if dest.is_file() else None
-                expected = fingerprint(scratch)
-            if identity(target) != self.store.get("workspaces", workspace)["identity"] or fingerprint(target) != before:
-                raise GovernanceError("WORKSPACE_CHANGED", "Workspace changed during adoption preparation")
-            has_wip = bool(before["status"])
-            op = {"operation_id": oid, "kind": "adopt", "workspace": workspace, "plan_id": plan_id, "status": "CANDIDATE_READY", "expected_head": before["head"], "candidate": candidate,
-                  "expected_result": expected, "before": before, "has_wip": has_wip, "checkpoint_id": checkpoint_id, "created_at": now()}
-            op["expected_worktree_bytes"] = expected_bytes
-            self._save("operations", oid, op)
+            if op is None:
+                op = {"operation_id": oid, "kind": "adopt", "workspace": workspace, "baseline": baseline,
+                      "baseline_head": plan["baseline_head"], "plan_id": plan_id, "status": "PREPARING",
+                      "phase": "preparation", "effect_state": "NOT_APPLIED", "before": plan["before"],
+                      "expected_head": plan["before"]["head"], "created_at": now(),
+                      "resolves_preparation_failures": plan.get("resolves_preparation_failures", [])}
+                # An unchanged WIP snapshot may be reused even when the source
+                # baseline moved and the new plan supersedes a failed attempt.
+                for old_id in op["resolves_preparation_failures"]:
+                    old = self.store.get("operations", old_id)
+                    if old and old.get("before") == plan["before"] and old.get("checkpoint_id"):
+                        op["checkpoint_id"] = old["checkpoint_id"]
+                        break
+                self._save("operations", oid, op)
+            try:
+                op = self._prepare_adoption(target, source, plan, op)
+            except Exception as exc:
+                self._adoption_failure(op, exc)
+                raise
+            has_wip = op["has_wip"]
+            candidate = op["candidate"]
             if has_wip:
                 git(target, "stash", "push", "--include-untracked", "-m", "agct:" + oid)
                 op["stash"] = out(target, "rev-parse", "refs/stash")
                 op["status"] = "WIP_SAVED"
+                op["effect_state"] = "WIP_SAVED"
                 self._save("operations", oid, op)
             self._fault(fault, "after_stash")
             git(target, "merge", "--ff-only", "--no-overwrite-ignore", "--no-edit", candidate)
             op["status"] = "EFFECT_APPLIED"
+            op["effect_state"] = "APPLIED"
             self._save("operations", oid, op)
             self._fault(fault, "after_adopt")
             if has_wip:

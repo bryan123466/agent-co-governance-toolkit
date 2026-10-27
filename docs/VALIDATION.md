@@ -1,6 +1,20 @@
 # Release validation / 发布验证
 
-## Current 0.2.0rc2 validation / 本次更新验证
+## Current 0.2.0rc3 validation / 本次更新验证
+
+The source suite ran **159 cases: 156 passed, 0 failed, 0 errored, 3 skipped** on Windows with Python 3.12.14. The standard source wheel/sdist build check was enabled. Two skips require unavailable native symbolic-link privileges; the installed-wheel case is invoked separately and passed.
+
+New regression coverage exercises actual receiving limits, frozen recovery identity, old empty plans with later work, legacy plan compatibility, persisted preparation failures, unchanged-input retry, checkpoint reuse, pre-candidate interruption, successful successors, and conditional non-executing experience advice. Tests inspect actual Git results and saved state. Existing multi-workspace, cumulative-stage, conflict, WIP-layer and effect-recovery tests remain in the suite.
+
+The separate installed-wheel contract passed with four packaged Skills and real stdio MCP calls. A fresh rc2-to-rc3 upgrade walkthrough passed 55 assertions, preserving the original control state and restoring its old checkpoint. Another real old/new-wheel scenario resumed an effect-applied receiving operation, used existing recovery experience and completed its original receipt without a duplicate Git commit or professional-workspace change. These are additional scopes, not unique tests to add to the source count.
+
+本次源码测试 **159 项：156 通过、0 失败、0 错误、3 跳过**。跳过项为两项原生符号链接权限用例，以及另行通过的安装 wheel 用例。实际 rc2→rc3 升级通过 55 项断言，另验证旧版本已产生 Git 效果但回执中断时，新版沿原计划应用既有经验，只补回执，不重复提交、不改专业工作区。原九份操作手册字节保持不变。
+
+Skill frontmatter validation and independent static review completed. This was not a new autonomous model-decision experiment, native Codex connection activation, real scheduled automation run or physical multi-computer trial. Scheduling guidance describes host responsibilities; it does not certify that a user's schedule is active. Local tests are not cross-platform CI evidence: check the Actions run for the exact public commit.
+
+产品 ZIP 不附本页或测试结果；这些维护证据只保留在源码仓库。未运行用户项目、原生自动化或实体双电脑。旧版证据保留在下方及 JSON 的 prior_release_evidence 中，不冒充本次新增验证。
+
+## Historical 0.2.0rc2 validation / 旧版历史验证
 
 This maintenance update was verified with disposable synthetic projects and real local Git worktrees on Windows with Python 3.12. The source suite ran **143 cases: 140 passed, 0 failed, 0 errored, 3 skipped**. Two skips concern unavailable native symbolic-link privileges; the third is the separately invoked installed-wheel check. The source run explicitly enabled the standard wheel/sdist build check.
 

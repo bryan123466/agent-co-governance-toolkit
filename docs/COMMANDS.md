@@ -19,7 +19,7 @@ Success: `{"ok":true,"result":{...}}`. Failure: `{"ok":false,"error":{"code":"..
 | `restore` | `checkpoint_id`, `destination` | Restore to absent/empty independent destination / 恢复到不存在或空的独立目录 |
 | `artifact` | `task_id`, `path`, optional `role`, `backup`, `decision` | Register content identity and available backup evidence / 记录材料身份及备份证据 |
 | `submit` | `task_id`, `workspace`, `commit`, `base`, `paths`, optional `stage_id`, `relation`, `supersedes` | Freeze explicit stage; paths must equal commit diff / 冻结明确交付，路径与提交差异须一致 |
-| `reconcile` | `baseline`, optional `execute`, `plan_id` | Plan or execute local integration / 计划或执行本地接收 |
+| `reconcile` | `baseline`, optional `execute`, `plan_id`, planning `limit` (1–100, default 20) | Plan a bounded receiving batch or execute its frozen scope / 计划有限接收批次或执行冻结范围 |
 | `adopt` | `workspace`, `baseline`, optional `execute`, `plan_id` | Plan or execute workspace adoption / 计划或执行工作区采用 |
 | `experience` | `rule_id`, `code`, `operation`, `action`, optional `task_id`, `version`, `enabled` | Store bounded experience / 保存有限经验 |
 | `status` | none / 无 | Read current state / 读取当前状态 |
@@ -31,6 +31,10 @@ Paths in a checkpoint or submission are workspace-relative exact files, not wild
 `reconcile` and `adopt` default to planning. To execute, copy the returned plan identifier into a request with `execute: true`. First reconcile recorded unfinished operations against their actual effects and resume the original operation when applicable. If external changes invalidate the relevant facts and there is no applicable operation to resume, inspect the error and generate a fresh plan. Do not edit the persisted plan. 接收和采用默认只计划；先核对未完操作的实际效果，适用时接续原操作。外部变化使前提失效且无适用原操作可续办时，再检查错误并重新计划，不直接修改保存的计划。
 
 MCP starts with `python -m agct --project <control-directory> mcp`. Tools have `agct_` prefixes and expose the corresponding ordinary actions, except project initialization and setup. The server is project-bound. CLI and MCP output formatting differ where required by their protocols, but both call the same action dispatcher.
+
+Receiving plans include selected recovery operations in their identity. `scope: plan` and `plan_complete` describe the frozen selection; `project_complete` remains null, with current remaining work reported separately. An old empty plan can complete while later deliveries remain queued. An adoption preparation failure stays visible for review, with its checkpoint and original error. Matching `refresh_plan` experience can supply a `plan_request` for a proven no-effect operation; it proposes a fresh plan, never automatic execution. A candidate or uncertain effect requires effect reconciliation first.
+
+接收计划的身份覆盖选中的恢复操作。`scope: plan` 与 `plan_complete` 只说明冻结范围，`project_complete` 保持 null，当前剩余工作另列。旧空计划完成不代表后来交付也已接收。采用准备失败保留检查点和原错误，供下一轮复核。匹配的 `refresh_plan` 经验仅对已证明没有应用效果的操作给出 `plan_request` 建议，不自动执行；已有候选或效果未知时先对账实际效果。
 
 MCP 工具名以 `agct_` 开头，提供普通动作，不通过工具初始化或改装项目。服务固定到启动时的项目。协议封装可以不同，实际行为共用同一分发器。
 

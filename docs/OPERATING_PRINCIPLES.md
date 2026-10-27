@@ -12,7 +12,7 @@ The toolkit helps a project keep moving across working sessions. Professional ch
 - **Keep unaffected work moving.** A conflict in one workspace is a specific problem to resolve, not a reason to overwrite it or halt every independent task.
 - **Confirm the connection you will use.** Installing the toolkit, connecting MCP, and creating a host schedule are separate actions. Confirm each through its actual result.
 
-Review the complete plan before a large intake: the tools do not impose a maximum item count, a total run-time limit, or automatic rotation through limited batches. Upgrading or moving a project also needs a deliberate handoff; saved history does not by itself migrate pending operations. An OS or Codex failure may require host support, while the saved project work remains available.
+Review the selected receiving plan: its `limit` defaults to 20 and is at most 100, including selected unfinished receiving work. A completed batch does not mean the whole project is complete. The tools do not enforce a total AI-session time limit or automatically rotate through every batch. Upgrading or moving a project needs a deliberate handoff; saved history does not by itself migrate pending operations. An OS or Codex failure may require host support, while saved project work remains available. [Scheduled governance](en/automation.md) offers a single-writer template and an optional read-only observer.
 
 ## 简体中文
 
@@ -26,7 +26,7 @@ Review the complete plan before a large intake: the tools do not impose a maximu
 - **让不受影响的工作继续。** 一个工作区冲突，就处理那个具体问题，不覆盖它，也不停止所有独立任务。
 - **确认要使用的连接已生效。** 安装工具、接通 MCP、建立宿主定时任务分别完成，并各自核对实际结果。
 
-批量接收前要检查完整计划：工具没有每轮条数上限、总运行时间上限或自动分批轮转。升级或移动项目也需要明确交接；保留历史不代表未完成操作已自动迁移。操作系统或 Codex 故障可能需要处理宿主环境，已经保存的项目工作则继续保留。
+接收前要检查本次选择的计划：`limit` 默认 20、最大 100，包含选中的未完接收工作。批次完成不等于项目完成；工具没有强制 AI 对话总时限，也不会自动轮转执行所有批次。升级或移动项目需要明确交接；保留历史不代表未完成操作已自动迁移。操作系统或 Codex 故障可能需要处理宿主环境，已保存的项目工作继续保留。[定时治理](zh-CN/automation.md)提供单一写入者和可选只读观察者模板。
 
 ## 繁體中文
 
@@ -40,6 +40,6 @@ Review the complete plan before a large intake: the tools do not impose a maximu
 - **讓不受影響的工作繼續。** 一個工作區衝突，就處理那個具體問題，不覆蓋它，也不停止所有獨立任務。
 - **確認要使用的連線已生效。** 安裝工具、接通 MCP、建立宿主定時任務分別完成，並各自核對實際結果。
 
-批次接收前要檢查完整計畫：工具沒有每輪筆數上限、總執行時間上限或自動分批輪替。升級或移動專案也需要明確交接；保留歷史不代表未完成操作已自動遷移。作業系統或 Codex 故障可能需要處理宿主環境，已儲存的專案工作則繼續保留。
+接收前要檢查本次選擇的計畫：`limit` 預設 20、最大 100，包含選中的未完接收工作。批次完成不等於專案完成；工具沒有強制 AI 對話總時限，也不會自動輪替執行所有批次。升級或移動專案需要明確交接；保留歷史不代表未完成操作已自動遷移。作業系統或 Codex 故障可能需要處理宿主環境，已儲存的專案工作繼續保留。[定時治理](zh-TW/automation.md)提供單一寫入者與可選唯讀觀察者範本。
 
 [English manual](en/operation-manual.md) · [简体中文手册](zh-CN/operation-manual.md) · [繁體中文手冊](zh-TW/operation-manual.md)

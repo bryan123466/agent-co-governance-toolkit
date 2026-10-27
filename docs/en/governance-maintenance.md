@@ -4,7 +4,7 @@
 
 AGCT keeps project records in the control directory while the installed toolkit provides the operations that use them. Updating the toolkit should help the next session continue the same work. It should not create a new project, resubmit past results, or merge business branches simply to refresh a Skill.
 
-This supplement applies to 0.2.0rc2. The existing installation and operating walkthroughs remain applicable. Start a new project with the normal walkthrough; the arrangements below help maintain an existing installation.
+This supplement applies to 0.2.0rc3. The existing installation and operating walkthroughs remain applicable. Start a new project with the normal walkthrough; the arrangements below help maintain an existing installation. For saved schedules and an optional observer, see [scheduled governance](automation.md).
 
 ## Three updates with different purposes
 
@@ -28,6 +28,10 @@ Selection does not perform a repair, run another AI, or start a schedule. Matchi
 
 ## Resume an interrupted installation
 
+Before upgrading, inspect current receiving work and pending adoptions. `reconcile` accepts a planning `limit` (default 20, maximum 100), selecting unfinished receiving operations before new stages. Their identities enter the frozen plan. Plan completion covers its selection; later deliveries remain pending and are reported separately. An agenda page does not define execution scope.
+
+An adoption preparation failure retains its error and checkpoint for the next agenda. Once the conflict is addressed, a successful successor can explicitly supersede it while preserving the original failure. Do not erase journals or retry unchanged conflicts. `refresh_plan` offers planning advice for proven no-effect operations; it does not execute a replacement. `verify_and_finalize` lets the receiving executor verify an existing effect and finish its receipt.
+
 Setup saves an exact installation intent before changing managed files. If it stops after writing a file but before recording the result, repeating the same install can recognize that effect and finish the record. Files that have already reached the expected state do not need to be rewritten.
 
 If you have edited a managed file, or selected a different candidate while an installation is pending, setup preserves the evidence and reports the conflict. Keep the pending record and use the original candidate to diagnose or resume; deleting metadata is not a recovery method. Unmanaged files are not adopted merely because they happen to match a packaged file.
@@ -35,6 +39,8 @@ If you have edited a managed file, or selected a different candidate while an in
 While setup is changing its managed files, avoid editing those same files in another application. Its lock coordinates setup operations; it does not lock every external editor.
 
 ## Confirm which version is actually running
+
+A historical source snapshot describes what was used then; a current runtime observation or adoption receipt describes what is used now. Preserve both when software changes. This release does not import arbitrary legacy identifiers or discover every native chat.
 
 `doctor.runtime` reports the package version, interpreter and module location imported by the process answering the request, together with managed setup information. A successful CLI check does not prove a previously opened MCP process has reloaded. After deliberately updating its configuration or restarting that connection, check through that connection too.
 

@@ -233,7 +233,8 @@ class Core:
             except (ValueError, TypeError, UnicodeError) as exc:
                 raise GovernanceError('AGENDA_CURSOR_INVALID', 'Use an unchanged next_cursor from an agenda result.') from exc
 
-        records = self.store.snapshot((*CURRENT_COLLECTIONS, 'experience'))
+        records = self.store.snapshot((*CURRENT_COLLECTIONS, 'experience', 'plans'))
+        plans = {plan.get('plan_id'): plan for plan in records['plans']}
         current = self._current_view(records)
         # Observation timestamps are not new work; evidence, outcomes and inputs are.
         def content(record):
@@ -262,7 +263,29 @@ class Core:
                 if not code and operation == 'reconcile' and state.upper() == 'EFFECT_APPLIED' and record.get('candidate'):
                     code = 'EFFECT_PRESENT_RECEIPT_MISSING'
                 matches = self._experience_matches(records['experience'], code, operation, record.get('task_id')) if code else []
-                suggestions = [{**content(rule), 'requires_current_evidence': True} for rule in matches]
+                suggestions = []
+                for rule in matches:
+                    suggestion = {**content(rule), 'requires_current_evidence': True,
+                                  'execution': 'candidate_only'}
+                    if rule['action'] == 'refresh_plan':
+                        # A new plan is a proposal, never permission to replay an
+                        # effect. Derive its arguments from the original plan.
+                        plan = plans.get(record.get('plan_id'), {})
+                        if (kind == 'operation' and not record.get('candidate')
+                                and not record.get('stash')
+                                and record.get('effect_state') == 'NOT_APPLIED'
+                                and plan.get('kind') == operation
+                                and operation in {'adopt', 'reconcile'}):
+                            fields = ('workspace', 'baseline') if operation == 'adopt' else ('baseline',)
+                            if all(isinstance(plan.get(key), str) and plan[key] for key in fields):
+                                args = {key: plan[key] for key in fields}
+                                if operation == 'reconcile':
+                                    args['limit'] = plan.get('selection', {}).get('limit', 20)
+                                suggestion['plan_request'] = {'action': operation,
+                                                              'arguments': {**args, 'execute': False}}
+                                suggestion['execution'] = 'proposal_only'
+                                suggestion['requires_new_plan_review'] = True
+                    suggestions.append(suggestion)
                 item_input = {'record': content(record), 'experience_candidates': suggestions}
                 inputs.append({'kind': kind, 'id': record_id, **item_input})
                 item = {'kind': kind, 'id': kind + ':' + record_id, 'record_id': record_id,

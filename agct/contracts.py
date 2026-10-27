@@ -22,7 +22,7 @@ SCHEMAS = {
     "experience": schema({"rule_id": string(), "code": string(), "operation": string(), "action": string(enum=["verify_and_finalize", "refresh_plan"]), "task_id": string(), "version": string(), "enabled": BOOL}, ["rule_id", "code", "operation", "action"]),
     "workspace": schema({"name": string(), "path": string("Existing local Git worktree")}, ["name", "path"]),
     "submit": schema({"task_id": string(), "workspace": string(), "commit": string(), "base": string(), "paths": PATHS, "stage_id": string(), "relation": string(enum=["independent", "cumulative"]), "supersedes": {"type": "array", "items": string(), "uniqueItems": True}}, ["task_id", "workspace", "commit", "base", "paths"]),
-    "reconcile": schema({"baseline": string(), "execute": BOOL, "plan_id": string()}, ["baseline"]),
+    "reconcile": schema({"baseline": string(), "execute": BOOL, "plan_id": string(), "limit": {"type": "integer", "minimum": 1, "maximum": 100, "description": "Maximum distinct work items frozen into a new plan; execution uses its existing plan scope."}}, ["baseline"]),
     "adopt": schema({"workspace": string(), "baseline": string(), "execute": BOOL, "plan_id": string()}, ["workspace", "baseline"]),
 }
 def validate(value, definition, location="arguments"):
