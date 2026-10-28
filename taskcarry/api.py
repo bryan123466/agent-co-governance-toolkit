@@ -15,11 +15,20 @@ def invoke(project, action, arguments=None):
         raise GovernanceError("INVALID_ARGUMENT", str(exc)) from exc
     if action == "init":
         return Core.initialize(project, **args)
-    core_actions = {"status", "agenda", "task", "checkpoint", "restore", "artifact", "experience"}
+    core_actions = {"status", "agenda", "task", "checkpoint", "restore", "artifact", "experience", "upgrade"}
     git_actions = {"workspace", "submit", "reconcile", "adopt", "doctor"}
-    if action not in core_actions | git_actions:
+    continuity_actions = {"observe", "run"}
+    maintenance_actions = {"issue", "fix"}
+    if action not in core_actions | git_actions | continuity_actions | maintenance_actions:
         raise GovernanceError("UNKNOWN_ACTION", f"Unknown action: {action}")
-    obj = Core(project) if action in core_actions else Integration(project)
+    if action in continuity_actions:
+        from .continuity import Continuity
+        obj = Continuity(project)
+    elif action in maintenance_actions:
+        from .maintenance import Maintenance
+        obj = Maintenance(project)
+    else:
+        obj = Core(project) if action in core_actions else Integration(project)
     if action == "checkpoint" and isinstance(args.get("workspace"), str):
         registered = obj.store.get("workspaces", args["workspace"])
         if registered:

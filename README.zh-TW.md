@@ -4,7 +4,7 @@
 
 [English](README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md)
 
-[下載 TaskCarry](https://github.com/bryan123466/taskcarry/releases/tag/v0.2.0rc4) · [從操作手冊開始](docs/zh-TW/windows-example.md) · [瞭解架構](docs/zh-TW/architecture.md)
+[下載 TaskCarry](https://github.com/bryan123466/taskcarry/releases/tag/v0.2.0rc5) · [從操作手冊開始](docs/zh-TW/windows-example.md) · [瞭解架構](docs/zh-TW/architecture.md)
 
 TaskCarry 為人和 AI 共同推進的長期專案提供**專案記憶、工作區協作與專案工作流程治理**。它協助準備好的階段成果彙入共用專案，保留未完成的工作，並在支援的操作中斷後核對實際結果、接續後續步驟。任務背景、選定檔案、成果歷史與下一步跟著專案保留，讓工作能夠跨越對話與暫停時段繼續推進。
 
@@ -45,6 +45,7 @@ Git 儲存檔案歷史，AGENTS.md 等專案指令說明 AI 應該如何工作�
 | **工作區綁定與衝突檢查** | 核對登記工作區與預期狀態，協調工具自身的寫入，並識別具體衝突。 |
 | **未完成工作保全** | 採用共同成果時，保留支援範圍內的本機提交、暫存修改、工作檔案與新檔案。 |
 | **中斷操作恢復** | 核對實際發生了什麼，條件符合時重用既有恢復方法，補齊支援的缺失步驟，避免盲目重做。 |
+| **持久複核與維護依據** | 重用已核對的來源關聯，追蹤本輪選定成果的回執，並將具體問題連到通過驗證的修正及實際本機安裝。 |
 
 這裡的治理圍繞專案成果與工作流程展開。宿主權限與 Agent 身分驗證仍由 AI 平台與執行環境負責；[架構說明](docs/zh-TW/architecture.md)進一步介紹這些職責如何配合。
 
@@ -74,7 +75,7 @@ TaskCarry 儲存記錄並執行已支援的本機操作。你保留專案方向�
 
 ## 從一個專案開始
 
-在[發布頁面](https://github.com/bryan123466/taskcarry/releases/tag/v0.2.0rc4)下載 **taskcarry-0.2.0rc4-product.zip**，按照 [Windows 操作手冊](docs/zh-TW/windows-example.md)開始。
+在[發布頁面](https://github.com/bryan123466/taskcarry/releases/tag/v0.2.0rc5)下載 **taskcarry-0.2.0rc5-product.zip**，按照 [Windows 操作手冊](docs/zh-TW/windows-example.md)開始。
 
 1. **建立專案目錄與治理對話。** 手冊提供具體目錄範例與可複製的安裝提示詞，填寫 **【專案名稱】**與 **【一句話介紹】**即可。
 2. **接入既有工作，或增加任務工作區。** 可以繼續使用合適的原對話；需要並行時再建立獨立工作區，並填寫 **【這個對話實際負責的工作】**。
@@ -106,11 +107,13 @@ TaskCarry 使用 Python 3.11+，Git 工作流需要 Git。專案狀態儲存在�
 | 維護 | [Maintain a project](docs/en/governance-maintenance.md) | [维护项目](docs/zh-CN/governance-maintenance.md) | [維護專案](docs/zh-TW/governance-maintenance.md) |
 | 私有 Git 與多電腦 | [Guide](docs/en/remote-and-multicomputer.md) | [说明](docs/zh-CN/remote-and-multicomputer.md) | [說明](docs/zh-TW/remote-and-multicomputer.md) |
 
-[CLI / MCP 參考](docs/COMMANDS.md) · [公開技能](skills) · [驗證記錄](https://github.com/bryan123466/taskcarry/blob/v0.2.0rc4/docs/VALIDATION.md)
+[治理閉環如何變得更簡潔](docs/zh-TW/governance-evolution.md)
+
+[CLI / MCP 參考](docs/COMMANDS.md) · [公開技能](skills) · [驗證記錄](https://github.com/bryan123466/taskcarry/blob/v0.2.0rc5/docs/VALIDATION.md)
 
 ## 一起改進
 
-歡迎提問、分享實際情境、改善範例、翻譯或程式碼。可以從 [Issues](https://github.com/bryan123466/taskcarry/issues) 或[參與貢獻](https://github.com/bryan123466/taskcarry/blob/v0.2.0rc4/CONTRIBUTING.md)開始。分享前請移除私有專案內容；[安全說明](SECURITY.md)介紹哪些資料應保留在自己手中。
+歡迎提問、分享實際情境、改善範例、翻譯或程式碼。可以從 [Issues](https://github.com/bryan123466/taskcarry/issues) 或[參與貢獻](https://github.com/bryan123466/taskcarry/blob/v0.2.0rc5/CONTRIBUTING.md)開始。分享前請移除私有專案內容；[安全說明](SECURITY.md)介紹哪些資料應保留在自己手中。
 
 ## 開源授權
 

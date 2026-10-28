@@ -23,6 +23,8 @@ def identifier(value):
 
 
 class Integration:
+    OPERATION_PROTOCOL = 1
+
     def __init__(self, project):
         self.core = Core(project)
         self.store = self.core.store
@@ -30,8 +32,19 @@ class Integration:
         self.scratch = self.root / ".taskcarry" / "scratch"
 
     def _save(self, collection, key, record):
+        if collection in {"operations", "plans"}:
+            self._check_protocol(record)
+            record.setdefault("operation_protocol", self.OPERATION_PROTOCOL)
+            record.setdefault("created_with_version", __version__)
         self.store.put(collection, key, record)
         return record
+
+    def _check_protocol(self, record):
+        # Records created before protocol tagging use the same version-one
+        # contract. A future contract must not be replayed by an older engine.
+        version = record.get("operation_protocol", 1)
+        if type(version) is not int or version != self.OPERATION_PROTOCOL:
+            raise GovernanceError("OPERATION_PROTOCOL_UNSUPPORTED", "Use a compatible toolkit to continue this recorded operation", {"operation_protocol": version})
 
     def _ws(self, name):
         record = self.store.get("workspaces", identifier(name))
@@ -48,7 +61,7 @@ class Integration:
         if p.is_relative_to(self.root / ".taskcarry"):
             raise GovernanceError("RESERVED_PATH", "Internal metadata cannot be a workspace")
         ident = identity(p)
-        with self.store.guard():
+        with self.store.transaction():
             prior = self.store.get("workspaces", name)
             if prior and prior["identity"] != ident:
                 pending = [s for s in self.store.list("stages") if s["workspace"] == name and s["status"] in {"QUEUED", "CONFLICT"}]
@@ -91,7 +104,7 @@ class Integration:
         body = {"task_id": task_id, "workspace": workspace, "commit": tip, "base": origin,
                 "paths": exact, "relation": relation, "supersedes": predecessors}
         sid = identifier(stage_id or "stage-" + digest(body)[:20])
-        with self.store.guard():
+        with self.store.transaction():
             existing = self.store.get("stages", sid)
             if existing:
                 if existing["declaration_hash"] != digest(body):
@@ -145,30 +158,33 @@ class Integration:
             raise GovernanceError("FAULT_INJECTION_DISABLED", "Fault injection is restricted to explicitly marked synthetic tests")
 
     def _finish(self, operation, baseline):
+        self._check_protocol(operation)
         stage = self.store.get("stages", operation["stage_id"])
         candidate = operation["candidate"]
         if not ancestor(baseline, candidate, commit(baseline, "HEAD")):
             raise GovernanceError("EFFECT_NOT_CONFIRMED", "The frozen integration result is not present in the baseline")
         if out(baseline, "rev-parse", candidate + "^{tree}") != operation["result_tree"]:
             raise GovernanceError("EFFECT_MISMATCH", "Result tree differs from the journal")
-        stage.update({"status": "COMMITTED", "accepted_commit": candidate, "accepted_baseline": str(baseline), "accepted_at": now(), "operation_id": operation["operation_id"]})
-        self._save("stages", stage["stage_id"], stage)
-        for old in self._predecessors(stage):
-            old_id = old["stage_id"]
-            if old["status"] == "SUPERSEDED":
-                continue
-            old.update({"status": "SUPERSEDED", "successor": stage["stage_id"], "historical_status": old["status"]})
-            self._save("stages", old_id, old)
-            old_op = self.store.get("operations", old.get("operation_id", ""))
-            if old_op and old_op["status"] != "COMPLETED":
-                old_op.update({"historical_status": old_op["status"], "status": "COMPLETED", "resolved_by_successor": stage["stage_id"]})
-                self._save("operations", old_op["operation_id"], old_op)
-        operation.update({"status": "COMPLETED", "completed_at": now()})
-        self._save("operations", operation["operation_id"], operation)
-        self.store.event("stage_received", {"stage_id": stage["stage_id"], "result_commit": candidate, "integration_verified": True})
+        with self.store.transaction():
+            stage.update({"status": "COMMITTED", "accepted_commit": candidate, "accepted_baseline": str(baseline), "accepted_at": now(), "operation_id": operation["operation_id"]})
+            self._save("stages", stage["stage_id"], stage)
+            for old in self._predecessors(stage):
+                old_id = old["stage_id"]
+                if old["status"] == "SUPERSEDED":
+                    continue
+                old.update({"status": "SUPERSEDED", "successor": stage["stage_id"], "historical_status": old["status"]})
+                self._save("stages", old_id, old)
+                old_op = self.store.get("operations", old.get("operation_id", ""))
+                if old_op and old_op["status"] != "COMPLETED":
+                    old_op.update({"historical_status": old_op["status"], "status": "COMPLETED", "resolved_by_successor": stage["stage_id"]})
+                    self._save("operations", old_op["operation_id"], old_op)
+            operation.update({"status": "COMPLETED", "completed_at": now()})
+            self._save("operations", operation["operation_id"], operation)
+            self.store.event("stage_received", {"stage_id": stage["stage_id"], "result_commit": candidate, "integration_verified": True})
         return {"stage_id": stage["stage_id"], "status": "COMMITTED", "commit": candidate, "integration_verified": True}
 
     def _resume_receive(self, baseline, operation):
+        self._check_protocol(operation)
         if identity(baseline) != operation["baseline_identity"]:
             raise GovernanceError("WORKSPACE_CHANGED", "Original integration branch changed; no effects replayed")
         candidate = operation.get("candidate")
@@ -179,8 +195,9 @@ class Integration:
             applicable = [r for r in rules if r.get("action") == "verify_and_finalize"]
             if not applicable:
                 raise GovernanceError("EXPERIENCE_REVIEW_REQUIRED", "Effect is present; no currently applicable recovery rule permits automatic finalization", {"operation_id": operation["operation_id"]})
-            result = self._finish(operation, baseline)
-            self.store.event("experience_applied", {"rule_id": applicable[0]["rule_id"], "operation_id": operation["operation_id"], "effect_verified": True})
+            with self.store.transaction():
+                result = self._finish(operation, baseline)
+                self.store.event("experience_applied", {"rule_id": applicable[0]["rule_id"], "operation_id": operation["operation_id"], "effect_verified": True})
             return {**result, "recovered": True, "experience_rule": applicable[0]["rule_id"]}
         if candidate and commit(baseline, "HEAD") == operation["expected_head"] and clean(baseline):
             git(baseline, "merge", "--ff-only", "--no-overwrite-ignore", "--no-edit", candidate)
@@ -292,6 +309,17 @@ class Integration:
             plan = self.store.get("plans", plan_id)
             if not plan or plan["kind"] != "reconcile" or plan["baseline"] != baseline:
                 raise GovernanceError("PLAN_MISMATCH", "Plan does not describe this baseline")
+            self._check_protocol(plan)
+            for op in self.store.list("operations"):
+                if op.get("plan_id") == plan_id or op.get("operation_id") in plan.get("pending_operations", []):
+                    self._check_protocol(op)
+            for sid in plan["stage_ids"]:
+                stage = self.store.get("stages", sid)
+                if stage:
+                    for related in [stage, *self._predecessors(stage)]:
+                        op = self.store.get("operations", related.get("operation_id", ""))
+                        if op:
+                            self._check_protocol(op)
             results = []
             for op in outstanding:
                 if op["plan_id"] == plan_id or op["operation_id"] in plan.get("pending_operations", []):
@@ -378,13 +406,15 @@ class Integration:
         return True
 
     def _adopt_finish(self, workspace, operation):
+        self._check_protocol(operation)
         bytes_verified = self._restore_planned_bytes(workspace, operation)
         if not bytes_verified or fingerprint(workspace) != operation["expected_result"]:
             raise GovernanceError("WIP_RESTORE_REQUIRED", "Workspace does not match the prevalidated restored state; retained checkpoint and stash need review", {"operation_id": operation["operation_id"], "stash": operation.get("stash"), "checkpoint_id": operation.get("checkpoint_id")})
-        operation.update({"status": "COMPLETED", "effect_state": "VERIFIED", "completed_at": now()})
-        self._save("operations", operation["operation_id"], operation)
-        self._resolve_adoption_preparations(operation)
-        self.store.event("workspace_adopted", {"operation_id": operation["operation_id"], "workspace": operation["workspace"], "wip_verified": True})
+        with self.store.transaction():
+            operation.update({"status": "COMPLETED", "effect_state": "VERIFIED", "completed_at": now()})
+            self._save("operations", operation["operation_id"], operation)
+            self._resolve_adoption_preparations(operation)
+            self.store.event("workspace_adopted", {"operation_id": operation["operation_id"], "workspace": operation["workspace"], "wip_verified": True})
         return {"status": "ADOPTED", "workspace": operation["workspace"], "commit": operation["candidate"], "wip_verified": True,
                 "retained_backup_stash": operation.get("stash"), "checkpoint_id": operation.get("checkpoint_id")}
 
@@ -417,6 +447,7 @@ class Integration:
             self.store.event("adoption_preparation_failed", {"operation_id": operation["operation_id"], **failure})
 
     def _adopt_resume(self, target, operation):
+        self._check_protocol(operation)
         if fingerprint(target) == operation.get("expected_result"):
             return self._adopt_finish(target, operation)
         candidate = operation.get("candidate")
@@ -546,9 +577,15 @@ class Integration:
             plan = self.store.get("plans", plan_id) if plan_id else None
             if not plan or plan["kind"] != "adopt" or plan["workspace"] != workspace or plan["baseline"] != baseline:
                 raise GovernanceError("PLAN_REQUIRED", "Use the exact adoption plan for this workspace")
+            self._check_protocol(plan)
+            for old_id in plan.get("resolves_preparation_failures", []):
+                previous = self.store.get("operations", old_id)
+                if previous:
+                    self._check_protocol(previous)
             oid = "adopt-" + digest(plan_id)[:24]
             op = self.store.get("operations", oid)
             if op:
+                self._check_protocol(op)
                 if op["status"] == "COMPLETED":
                     self._resolve_adoption_preparations(op)
                     return {"status": "ADOPTED", "reused": True, "workspace": workspace, "commit": op["candidate"]}

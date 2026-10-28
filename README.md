@@ -4,7 +4,7 @@
 
 [English](README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md)
 
-[Download TaskCarry](https://github.com/bryan123466/taskcarry/releases/tag/v0.2.0rc4) · [Start with the user manual](docs/en/windows-example.md) · [See the architecture](docs/en/architecture.md)
+[Download TaskCarry](https://github.com/bryan123466/taskcarry/releases/tag/v0.2.0rc5) · [Start with the user manual](docs/en/windows-example.md) · [See the architecture](docs/en/architecture.md)
 
 TaskCarry provides **project memory, workspace collaboration, and project workflow governance** for people working with AI tools. Bring ready stages into a shared project, preserve unfinished work, and resume supported interrupted operations from recorded and verified results. Task context, selected files, deliverable history, and next steps stay with the project across conversations and pauses.
 
@@ -45,6 +45,7 @@ Project workflow governance connects the work people and AI produce with clear p
 | **Workspace binding and conflict checks** | Check the registered workspace and expected state, coordinate the toolkit's own writes, and identify concrete conflicts. |
 | **Work-in-progress preservation** | Retain supported local commits, staged changes, working files, and new files when adopting shared results. |
 | **Interrupted-operation recovery** | Check what actually happened, reuse a recovery method when its conditions match, and complete supported missing steps without blindly repeating finished work. |
+| **Durable review and maintenance evidence** | Reuse reviewed source relationships, track a selected round's receipts, and link a concrete defect to its tested fix and actual local setup. |
 
 This governance focuses on project deliverables and their workflow. Host permissions and Agent authentication remain with your AI platform and operating environment; [the architecture](docs/en/architecture.md) explains how these responsibilities fit together.
 
@@ -74,7 +75,7 @@ A received stage can be part of an unfinished task. A paused task can stay pause
 
 ## Start with one project
 
-Download **taskcarry-0.2.0rc4-product.zip** from the [release page](https://github.com/bryan123466/taskcarry/releases/tag/v0.2.0rc4), then follow the [Windows user manual](docs/en/windows-example.md).
+Download **taskcarry-0.2.0rc5-product.zip** from the [release page](https://github.com/bryan123466/taskcarry/releases/tag/v0.2.0rc5), then follow the [Windows user manual](docs/en/windows-example.md).
 
 1. **Create the project directory and governance chat.** The manual gives a concrete folder example and a copyable installation prompt. Fill in **[Project name]** and **[One-sentence introduction]**.
 2. **Connect existing work or add task workspaces.** Keep a suitable existing chat, or create independent workspaces for parallel tasks. Fill in **[The actual work this chat is responsible for]**.
@@ -106,11 +107,13 @@ TaskCarry uses Python 3.11+; Git is needed for Git workflows. It stores project 
 | Maintenance | [Maintain a project](docs/en/governance-maintenance.md) | [维护项目](docs/zh-CN/governance-maintenance.md) | [維護專案](docs/zh-TW/governance-maintenance.md) |
 | Private Git and multiple computers | [Guide](docs/en/remote-and-multicomputer.md) | [说明](docs/zh-CN/remote-and-multicomputer.md) | [說明](docs/zh-TW/remote-and-multicomputer.md) |
 
-[CLI / MCP reference](docs/COMMANDS.md) · [Public Skills](skills) · [Validation records](https://github.com/bryan123466/taskcarry/blob/v0.2.0rc4/docs/VALIDATION.md)
+[How the workflow became simpler](docs/en/governance-evolution.md)
+
+[CLI / MCP reference](docs/COMMANDS.md) · [Public Skills](skills) · [Validation records](https://github.com/bryan123466/taskcarry/blob/v0.2.0rc5/docs/VALIDATION.md)
 
 ## Join in
 
-Questions, real use cases, clearer examples, translations, and code improvements are welcome. Start with [Issues](https://github.com/bryan123466/taskcarry/issues) or the [contribution guide](https://github.com/bryan123466/taskcarry/blob/v0.2.0rc4/CONTRIBUTING.md). Remove private project information before sharing; the [security guide](SECURITY.md) explains what to keep out of a report.
+Questions, real use cases, clearer examples, translations, and code improvements are welcome. Start with [Issues](https://github.com/bryan123466/taskcarry/issues) or the [contribution guide](https://github.com/bryan123466/taskcarry/blob/v0.2.0rc5/CONTRIBUTING.md). Remove private project information before sharing; the [security guide](SECURITY.md) explains what to keep out of a report.
 
 ## License
 

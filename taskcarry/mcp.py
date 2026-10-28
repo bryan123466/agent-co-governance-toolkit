@@ -15,6 +15,11 @@ from .contracts import SCHEMAS, validate
 
 
 DESCRIPTIONS = {
+    "upgrade": "Explicitly build or repair the derived current-work index. Preserve original records and events; no package update.",
+    "observe": "Save host-reviewed evidence references and relationships with revision checks. Does not read chats or grant permissions.",
+    "run": "Freeze selected record identities, inspect them, or record their verified terminal state. No Git effects or claim that the whole project is complete.",
+    "issue": "Record a concrete condition and its resolution reference. Changed conditions reopen review; never mask an unfinished operation.",
+    "fix": "Link a defect to a version and validation references. Compare actual project setup evidence; no installation or claim of host reload.",
     "status": "Read current tasks, deliveries and actionable issues without creating state.",
     "agenda": "Read a bounded, paginated current-work selection for the existing agent. No execution, retry, scheduling or completion claim.",
     "doctor": "Read runtime prerequisites and project support; no installation or repair.",

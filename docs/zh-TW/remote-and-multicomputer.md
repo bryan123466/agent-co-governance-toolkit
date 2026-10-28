@@ -4,7 +4,7 @@ Windows 使用者可以直接跟隨[固定目錄完整示例](windows-example.md
 
 [返回操作手冊](operation-manual.md) · [English](../en/remote-and-multicomputer.md) · [简体中文](../zh-CN/remote-and-multicomputer.md) · [指令參考](../COMMANDS.md)
 
-適用版本：0.2.0rc4。這兩章是按需要啟用的參考流程，不是安裝後每天必須執行的任務。下述跨電腦流程尚未經過兩臺實體電腦的端到端驗證；它組合了 Git 操作與現有本機 TaskCarry 介面，沒有新增跨機同步或自動恢復能力。
+適用版本：0.2.0rc5。這兩章是按需要啟用的參考流程，不是安裝後每天必須執行的任務。下述跨電腦流程尚未經過兩臺實體電腦的端到端驗證；它組合了 Git 操作與現有本機 TaskCarry 介面，沒有新增跨機同步或自動恢復能力。
 
 所有 `<...>` 都是需要替換的預留位置符號。`python` 應指向已經安裝 TaskCarry 的 Python 環境。JSON 檔案儲存為 UTF-8；不要把示例中的預留位置符號直接執行。Git 推送會向所選遠端傳送資料，應先確認儲存庫、存取者和本次授權範圍。
 
@@ -132,7 +132,7 @@ Get-ChildItem -LiteralPath "<SNAPSHOT>/.taskcarry" -Force
 
 [本步驟可直接複製的 Windows 示例](windows-example.md#private-git)
 
-**不要把舊 `.taskcarry` 複製到新電腦後直接執行舊接收/採用計畫。** 工作區身分包含絕對路徑、Git 公共目錄和分支；整合基線還綁定原身分。0.2.0rc4 沒有完整的跨機狀態遷移 API。相同目錄名字不代表同一現場。
+**不要把舊 `.taskcarry` 複製到新電腦後直接執行舊接收/採用計畫。** 工作區身分包含絕對路徑、Git 公共目錄和分支；整合基線還綁定原身分。0.2.0rc5 沒有完整的跨機狀態遷移 API。相同目錄名字不代表同一現場。
 
 恢復步驟：
 

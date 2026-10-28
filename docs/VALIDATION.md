@@ -1,39 +1,51 @@
-# TaskCarry 0.2.0rc4 — validation
+# TaskCarry 0.2.0rc5 — validation
 
 [English](#english) · [简体中文](#简体中文) · [繁體中文](#繁體中文)
 
 ## English
 
-Validation uses disposable synthetic projects with real Git repositories. It does not run a user's project or native scheduled tasks. The local source suite ran **160 cases: 157 passed, 3 skipped, 0 failures and 0 errors**, on Windows with Python 3.12.14.
+All scenarios used disposable synthetic projects. No user's production project, native scheduled task or global host configuration was changed.
 
-Two source skips require native symbolic-link privileges unavailable on this host. The third is the installed-wheel contract, which passed separately against the built wheel. Standard wheel and source-distribution construction was enabled in the source run. Source coverage includes current-work selection, exact delivery, cumulative versions, bounded batches, paused checkpoints, file/index preservation, actual Git conflicts, interrupted effects and conditional experience-based continuation.
+| Validation | Observed result | Scope |
+|---|---|---|
+| Windows / Python 3.12.14 source suite | 211 cases: 208 passed, 3 skipped, 0 failures, 0 errors | Real local Git, records, recovery, state projection, public interfaces and standard source build |
+| Installed-wheel contract | 1 passed | Independent installation, generated stdio MCP command and packaged Skills |
+| Downloadable product walkthrough | 62 checks passed | Final ZIP manifest, member hashes, actual installed CLI/MCP and three synthetic workspaces |
+| AI-guided Skill rehearsal | 17 checks passed | One independently developed synthetic scenario, public API and CLI; development candidate, not native-host acceptance |
+| Four Skill definitions | Format checks passed | Structure and metadata, not a guarantee of every model decision |
 
-The final product ZIP was unpacked outside the checkout, its manifest and member hashes checked, and its wheel installed into an independent directory. The actual `taskcarry` command, four packaged Skills and generated stdio MCP command were exercised. The product walkthrough passed **47 checks** covering an empty initial project, three specialist workspaces, cumulative deliveries, paused work, a separately delivered stage, receipt recovery after an applied Git effect, repeat execution without a duplicate commit, checkpoint restoration and a selected workspace update preserving its local draft. These checks are a separate walkthrough, not additional independent unit tests to add to the suite count.
+Two source skips require symbolic-link privileges unavailable on the local host. The installed-wheel contract is skipped within the source run and executed separately against the packaged wheel. Standard wheel and source-distribution construction was explicitly enabled. Do not add walkthrough check counts to the unit-test count.
 
-An initial private walkthrough used the wrong Windows `pip --target` executable subdirectory. The executable was present in `bin`; the harness was corrected and the full walkthrough passed. Product code was not changed to accommodate that harness error.
+The product walkthrough verifies cumulative and independent stages, paused checkpoints, unfinished files, receipt recovery after a real Git effect, repeat execution without a new integration commit, checkpoint restoration and selected workspace adoption. It also exercises the new installed `observe`, `run`, `issue`, `fix` and `upgrade` entrypoints. A fix is checked against genuine setup evidence while host reload remains unverified.
 
-Four Skill definitions passed the system frontmatter validator. Public content was screened using an explicit file allowlist, host-path and common-secret checks and private-term exclusions. The downloadable product excludes maintenance tests and this validation record; its user-document links are checked against actual package membership.
+The new regression cases cover atomic state/event rollback, explicit legacy-index rebuild, an older writer invalidating the derived index, compare-and-swap evidence updates, selected-run receipts, retained failure conditions, safe successor closeout and operation protocol checks. With fixed current work, growing terminal history from 100 to 1,000 groups still loads 5 required records in the measured agenda fixture. This is structural evidence, not a production speedup percentage or a constant-cost claim for growing current work.
 
-The three-language static overview and six SVG diagrams were visually reviewed. Independent local rendering at 1440 px and 390 px found no horizontal overflow, missing images or script errors. This is artifact rendering, not native AI-client acceptance.
+The AI-guided rehearsal read the public Skills and made successive tool choices in a generated project. After an injected post-effect interruption, it verified the existing effect, used the supported experience rule and completed one receipt. Paused work and unsubmitted files remained unchanged. The scenario was prepared while the development version label changed from rc4 to rc5; it is recorded as candidate evidence, not the final wheel test. The final package was separately verified as above.
 
-**Not exercised:** native Codex or another AI client's activation, real scheduled triggers, physical multi-computer operation, or independent-user usability. Actual cross-platform CI is reported by the [Actions run for the release commit](https://github.com/bryan123466/taskcarry/actions); local results alone do not certify all platforms. Detailed portable results are in [VALIDATION_RESULTS.json](VALIDATION_RESULTS.json). Earlier evidence remains in Git history rather than being relabeled as this release's results.
+Public files were screened through the release allowlist, private-term, host-path and common-secret checks. Local documentation links were checked. The product ZIP excludes maintainer tests and these validation receipts. The existing artwork was retained; this release does not claim a new visual or native browser acceptance run.
+
+**Not verified here:** native Codex/other host activation, real scheduled triggers, physical multi-computer operation or independent-user usability. Cross-platform CI belongs to the [Actions run for the exact release commit](https://github.com/bryan123466/taskcarry/actions). Earlier release evidence remains in Git history. Portable details: [VALIDATION_RESULTS.json](VALIDATION_RESULTS.json).
 
 ## 简体中文
 
-本次仅在独立合成项目中使用真实 Git 进行验证，没有运行用户业务项目、原生自动化或修改全局宿主配置。源码测试 **160 项：157 通过、3 跳过、0 失败、0 错误**。两项跳过依赖本机未具备的符号链接权限；另一项安装包验证已单独实际通过。源码测试启用了标准 wheel 与 sdist 构建。
+本轮全部使用可丢弃的合成项目，没有运行生产项目、原生自动化或更改全局宿主配置。Windows / Python 3.12.14 源码测试 **211 项：208 通过、3 跳过、0 失败、0 错误**。其中两项需要本机未具备的符号链接权限，安装包合同在源码轮跳过后另行实际通过；标准 wheel/sdist 构建已启用。
 
-最终产品 ZIP 在源码目录外解压，逐项核对清单及哈希，再安装其 wheel。新版命令、四个 Skills 和生成的 stdio MCP 启动配置均实际执行。三个专业工作区的完整演练通过 **47 个检查点**，涵盖空白项目接入、累计版本交付、暂停检查点、独立交付、Git 效果发生后中断的经验恢复、重复执行不新增提交、检查点恢复及工作区更新保留本地草稿。演练检查点不与单元测试数相加。
+最终产品包在源码目录外解压、校验逐项哈希并安装。实际 CLI、生成的 stdio MCP、四份 Skills 及三个合成工作区演练通过 **62 个检查点**，覆盖累计与独立交付、暂停检查点、WIP 保全、已发生 Git 效果后的经验恢复、重复执行、观察依据、具名轮次、问题修正采用核对及索引升级。另有 **1 项独立安装包合同通过**，四份 Skill 格式检查通过。
 
-首次私有演练误用了 Windows `pip --target` 的命令目录；命令实际位于 `bin`，修正测试器后完整重跑通过，没有因此改动产品代码。另完成四份 Skill 格式验证、公开内容筛查、产品包内文档链接检查，以及三语页面和图示的桌面/手机渲染检查。
+独立 AI 引导演练通过 **17 项检查**：模型读取公开 Skill 后分步决定 API/CLI 调用，在预设回执中断后复用真实 Git 效果，仅补一次回执；暂停任务和未交付文件保持原位。该场景跨候选版本标签更新，明确作为开发候选演练，不冒充最终安装包、陌生用户或原生宿主验收。
 
-未进行真实 AI 客户端激活、定时任务自然触发、实体多电脑或陌生用户验收。跨平台结果以对应发布提交的 Actions 为准，不能用本地通过替代。产品包不附本页和维护测试结果；旧版记录保留在 Git 历史。
+本轮回归验证了状态与事件共同回滚、旧库显式重建、旧写入者使索引失效、依据修订号校验、合法后继收口、操作协议预检等。固定当前工作时，历史从 100 组增至 1,000 组，议程仍只加载 5 条必要记录；这是结构性结果，不是生产耗时比例或任意规模固定成本。
+
+公开文件经过允许清单、私有词语、主机路径和常见密钥筛查，本地文档链接已核对。产品包不附维护测试及本页。原生宿主激活、定时自然触发、实体多电脑及陌生用户验收仍未覆盖；跨平台结果以发布提交对应 Actions 为准。
 
 ## 繁體中文
 
-本次只在獨立合成專案中使用真實 Git 驗證，未執行使用者業務專案、原生排程或修改全域宿主設定。原始碼測試 **160 項：157 通過、3 跳過、0 失敗、0 錯誤**。兩項跳過需要本機未具備的符號連結權限；另一項套件安裝驗證已另行實際通過。原始碼測試啟用了標準 wheel 與 sdist 建置。
+本輪全部使用可丟棄的合成專案，未執行生產專案、原生排程或更改全域宿主設定。Windows / Python 3.12.14 原始碼測試 **211 項：208 通過、3 跳過、0 失敗、0 錯誤**。其中兩項需要本機未具備的符號連結權限，套件合同在原始碼輪跳過後另行實際通過；標準 wheel/sdist 建置已啟用。
 
-最終產品 ZIP 在原始碼目錄之外解壓縮，逐項核對清單與雜湊後安裝其中的 wheel。新版命令、四個 Skills 及產生的 stdio MCP 啟動設定均實際執行。三個專業工作區完整演練通過 **47 個檢查點**，涵蓋空白專案接入、累計版本交付、暫停檢查點、獨立交付、Git 效果發生後中斷的經驗恢復、重複執行不增加提交、檢查點還原及工作區更新保留本機草稿。演練檢查點不與單元測試數相加。
+最終產品套件在原始碼目錄之外解壓縮、逐項核對雜湊並安裝。實際 CLI、產生的 stdio MCP、四份 Skills 及三個合成工作區演練通過 **62 個檢查點**，涵蓋累計及獨立交付、暫停檢查點、WIP 保全、Git 效果已發生後的經驗恢復、重複執行、觀察依據、具名輪次、問題修正採用核對及索引升級。另有 **1 項獨立安裝套件合同通過**，四份 Skill 格式檢查通過。
 
-首次私有演練誤用了 Windows `pip --target` 的命令目錄；命令實際位於 `bin`，修正測試器後完整重跑通過，未因此更改產品程式碼。另完成四份 Skill 格式驗證、公開內容篩查、產品內文件連結檢查，以及三語頁面與圖示的桌面/手機渲染檢查。
+獨立 AI 引導演練通過 **17 項檢查**：模型讀取公開 Skill 後分步決定 API/CLI 呼叫，於預設回執中斷後重用實際 Git 效果，只補一次回執；暫停任務及未交付檔案保留原位。此情境跨候選版本標籤更新，明確列為開發候選演練，不冒充最終安裝套件、陌生使用者或原生宿主驗收。
 
-未進行真實 AI 用戶端啟用、排程自然觸發、實體多電腦或陌生使用者驗收。跨平台結果以對應發布提交的 Actions 為準，本機通過不能取代。產品套件不附本頁及維護測試結果；舊版記錄保留在 Git 歷史。
+回歸驗證涵蓋狀態與事件共同回滾、舊庫明確重建、舊寫入者使索引失效、依據修訂號檢查、合法後繼收口及操作協定預檢。固定目前工作時，歷史從 100 組增加至 1,000 組，議程仍只載入 5 筆必要記錄；此為結構性結果，並非生產耗時比例或任意規模固定成本。
+
+公開檔案經過允許清單、私有詞語、主機路徑及常見金鑰篩查，本機文件連結已核對。產品套件不附維護測試及本頁。原生宿主啟用、排程自然觸發、實體多電腦及陌生使用者驗收仍未涵蓋；跨平台結果以發布提交對應 Actions 為準。

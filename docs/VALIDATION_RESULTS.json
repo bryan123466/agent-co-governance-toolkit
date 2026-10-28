@@ -1,13 +1,13 @@
 {
   "product": "TaskCarry",
-  "version": "0.2.0rc4",
+  "version": "0.2.0rc5",
   "source_suite": {
     "schema": "taskcarry.test-evidence.v1",
-    "recorded_at": "2026-10-27T11:07:58.819428+00:00",
+    "recorded_at": "2026-10-28T07:51:00.382595+00:00",
     "platform": "Windows",
     "python": "3.12.14",
-    "tests_run": 160,
-    "passed": 157,
+    "tests_run": 211,
+    "passed": 208,
     "skipped": 3,
     "failures": 0,
     "errors": 0,
@@ -74,6 +74,30 @@
         "outcome": "PASS"
       },
       {
+        "test": "test_atomic_store.AtomicStoreTests.test_artifact_event_failure_cannot_leave_an_unrecorded_decision",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_atomic_store.AtomicStoreTests.test_checkpoint_event_failure_keeps_task_and_source_then_retry_succeeds",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_atomic_store.AtomicStoreTests.test_experience_event_failure_preserves_previous_rule",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_atomic_store.AtomicStoreTests.test_guard_preserves_effect_journal_when_external_operation_raises",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_atomic_store.AtomicStoreTests.test_nested_savepoint_reads_own_writes_and_inner_failure_isolated",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_atomic_store.AtomicStoreTests.test_task_event_failure_rolls_back_fact_and_retry_publishes_one_event",
+        "outcome": "PASS"
+      },
+      {
         "test": "test_bounded_integration.AdoptionPreparationTests.test_actual_preparation_failure_is_visible_after_reopening_and_reuses_checkpoint",
         "outcome": "PASS"
       },
@@ -119,6 +143,106 @@
       },
       {
         "test": "test_bounded_integration.BoundedReceiveTests.test_pending_operations_change_plan_identity_and_do_not_double_count_stage",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity.ContinuityGitTests.test_receipt_interruption_run_closeout_and_experience_recovery_preserve_effect",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity.ContinuityGitTests.test_received_operation_stays_complete_after_cumulative_stage",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity.ContinuityGitTests.test_run_closes_after_successor_adoption_resolves_old_preparation",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity.ContinuityTests.test_adoption_replacement_cycle_is_not_a_completion",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity.ContinuityTests.test_adoption_replacement_requires_same_scope_and_reciprocal_link",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity.ContinuityTests.test_artifact_content_change_changes_evidence_even_if_host_revision_reused",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity.ContinuityTests.test_changed_observation_is_visible_without_replaying_completed_work",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity.ContinuityTests.test_changed_observation_requires_cas_and_retains_prior_source",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity.ContinuityTests.test_empty_selection_is_explicit_and_does_not_complete_active_task",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity.ContinuityTests.test_finished_selection_does_not_imply_all_project_work_complete",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity.ContinuityTests.test_inspect_is_readonly_and_missing_run_is_not_created",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity.ContinuityTests.test_invalid_observation_fields_and_duplicate_relations_rejected",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity.ContinuityTests.test_legacy_partial_stage_receipt_does_not_hide_unfinished_operation",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity.ContinuityTests.test_observation_event_failure_rolls_back_current_and_history",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity.ContinuityTests.test_observation_identity_cannot_move_to_another_source_or_task",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity.ContinuityTests.test_observation_is_durable_and_identical_retry_writes_no_event",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity.ContinuityTests.test_operation_completion_requires_matching_receipt_not_status_only",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity.ContinuityTests.test_pending_work_blocks_only_selected_closeout_and_no_repeat_event",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity.ContinuityTests.test_run_selection_cannot_change_or_claim_missing_records",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity.ContinuityTests.test_run_start_and_finish_are_atomic_when_event_write_fails",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity.ContinuityTests.test_transitive_supersession_resolves_history_with_real_successor_receipt",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity.ContinuityTests.test_unknown_or_cross_task_workspace_relations_rejected",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity_interfaces.ContinuityInterfaceTests.test_cli_and_mcp_share_index_upgrade_and_run_inspection",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity_interfaces.ContinuityInterfaceTests.test_issue_reaches_agenda_then_resolved_evidence_leaves_current_selection",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_continuity_interfaces.ContinuityInterfaceTests.test_unfinished_run_reads_only_its_observation_dependencies",
         "outcome": "PASS"
       },
       {
@@ -231,7 +355,7 @@
         "outcome": "PASS"
       },
       {
-        "test": "test_current_view.CurrentViewTests.test_interrupted_receipt_tracks_baseline_path_and_committed_stage_workspace",
+        "test": "test_current_view.CurrentViewTests.test_interrupted_receipt_tracks_baseline_and_protects_source_binding",
         "outcome": "PASS"
       },
       {
@@ -320,6 +444,34 @@
       },
       {
         "test": "test_governance_lifecycle.GovernanceLifecycleTests.test_three_workspaces_keep_pause_and_receive_latest_plus_independent",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_incremental_view.IncrementalViewTests.test_ancestor_dependencies_and_pagination_match_legacy_selection",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_incremental_view.IncrementalViewTests.test_failed_upgrade_rolls_back_projection_and_remains_readable",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_incremental_view.IncrementalViewTests.test_history_growth_does_not_load_terminal_rows_or_plans",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_incremental_view.IncrementalViewTests.test_index_updates_on_terminal_reopen_and_artifact_decision_changes",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_incremental_view.IncrementalViewTests.test_legacy_reads_and_reinitialize_do_not_install_projection",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_incremental_view.IncrementalViewTests.test_older_writer_invalidates_projection_and_readonly_fallback_finds_work",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_incremental_view.IncrementalViewTests.test_upgrade_preserves_old_and_new_evidence_and_is_idempotent",
         "outcome": "PASS"
       },
       {
@@ -473,6 +625,58 @@
       },
       {
         "test": "test_interfaces.SetupTests.test_unmanaged_destination_conflict_causes_no_install",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_maintenance.MaintenanceTests.test_changed_condition_cannot_reuse_old_resolution",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_maintenance.MaintenanceTests.test_changed_record_requires_cas_and_retains_history",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_maintenance.MaintenanceTests.test_different_fix_version_remains_recorded_without_blocking_work",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_maintenance.MaintenanceTests.test_forged_version_label_alone_cannot_claim_adoption",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_maintenance.MaintenanceTests.test_identical_issue_and_fix_do_not_add_empty_events",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_maintenance.MaintenanceTests.test_issue_and_fix_events_fail_atomically",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_maintenance.MaintenanceTests.test_real_project_setup_matches_disk_but_not_host_reload",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_maintenance.MaintenanceTests.test_resolution_and_fix_require_named_evidence",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_receipt_transactions.ReceiptTransactionTests.test_adopt_event_failure_preserves_wip_and_finalizes_without_replay",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_receipt_transactions.ReceiptTransactionTests.test_legacy_untagged_plan_and_operation_continue",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_receipt_transactions.ReceiptTransactionTests.test_receive_event_failure_retains_effect_and_retries_only_receipt",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_receipt_transactions.ReceiptTransactionTests.test_unknown_plan_protocol_rejected_without_git_effect",
+        "outcome": "PASS"
+      },
+      {
+        "test": "test_receipt_transactions.ReceiptTransactionTests.test_unknown_resume_protocol_keeps_real_effect_unreplayed",
         "outcome": "PASS"
       },
       {
@@ -660,7 +864,7 @@
   },
   "installed_wheel": {
     "schema": "taskcarry.installed-wheel-evidence.v1",
-    "wheel": "taskcarry-0.2.0rc4-py3-none-any.whl",
+    "wheel": "taskcarry-0.2.0rc5-py3-none-any.whl",
     "tests_run": 1,
     "failures": 0,
     "errors": 0,
@@ -668,7 +872,7 @@
     "successful": true
   },
   "product_walkthrough": {
-    "version": "0.2.0rc4",
+    "version": "0.2.0rc5",
     "checks": [
       "archive paths are unique and confined",
       "manifest exactly names the product",
@@ -683,7 +887,7 @@
       "three registered specialist workspaces",
       "four installed Skills carry the new names",
       "generated MCP command actually starts",
-      "MCP advertises TaskCarry rc4",
+      "MCP advertises TaskCarry rc5",
       "MCP tools use new prefix",
       "fresh MCP agenda is empty",
       "CLI task returns success",
@@ -716,36 +920,64 @@
       "latest accepted and historical stage superseded",
       "paused task stays paused",
       "CLI reconcile returns success",
-      "no delivery backlog from paused work"
+      "no delivery backlog from paused work",
+      "CLI observe returns success",
+      "installed observation freezes linked evidence",
+      "CLI run returns success",
+      "CLI run returns success",
+      "installed round confirms selected receipts only",
+      "CLI issue returns success",
+      "CLI agenda returns success",
+      "installed issue is visible to current governance",
+      "CLI fix returns success",
+      "installed fix compares genuine setup evidence",
+      "CLI issue returns success",
+      "CLI agenda returns success",
+      "resolved issue no longer repeats as pending",
+      "CLI upgrade returns success",
+      "fresh index needs no migration"
     ],
     "scope": "final ZIP, isolated installed wheel, CLI, stdio MCP and synthetic Git workspaces",
     "native_host_or_schedule_tested": false,
     "successful": true,
-    "check_count": 47
+    "check_count": 62
   },
-  "skill_validation": {
-    "skills": 4,
-    "frontmatter_valid": true
+  "ai_guided_synthetic_rehearsal": {
+    "validation": "AI-guided forward Skill rehearsal using synthetic local Git materials and public API/CLI",
+    "overall": "PASS",
+    "checks": {
+      "only_declared_stage_received": true,
+      "injected_interruption_observed": true,
+      "unfinished_run_was_retained": true,
+      "experience_was_used_by_executor": true,
+      "recovery_did_not_repeat_git_effect": true,
+      "one_integration_commit": true,
+      "one_stage_received_event": true,
+      "one_experience_applied_event": true,
+      "run_completed_only_selected_scope": true,
+      "guide_remains_paused": true,
+      "guide_checkpoint_remains": true,
+      "guide_and_unsubmitted_wip_unchanged": true,
+      "paused_state_not_new_backlog": true,
+      "observation_reused_without_new_revision": true,
+      "run_reused_without_new_finished_event": true,
+      "no_artificial_maintenance_issue_or_fix": true,
+      "business_task_not_implicitly_complete": true
+    },
+    "check_count": 17,
+    "version_at_scaffold": "0.2.0rc4",
+    "version_at_final_read": "0.2.0rc5",
+    "runtime": "development source candidate; not an installed wheel or native host MCP session"
   },
-  "visual_review": {
-    "languages": [
-      "en",
-      "zh-CN",
-      "zh-TW"
-    ],
-    "widths": [
-      1440,
-      390
-    ],
-    "overflow": false,
-    "broken_images": false,
-    "script_errors": false
+  "skill_format_validation": {
+    "count": 4,
+    "successful": true
   },
-  "not_exercised": [
-    "native AI client connection activation",
-    "real scheduled automation",
-    "physical multi-computer operation"
+  "not_verified": [
+    "native AI-host activation",
+    "real scheduled triggers",
+    "physical multi-computer takeover",
+    "independent-user usability"
   ],
-  "ci_reference": "https://github.com/bryan123466/taskcarry/actions",
-  "validation_scope": "Disposable synthetic projects only; no user business projects or host configuration changes."
+  "cross_platform": "See the Actions run for the exact release commit; local results alone do not verify every operating system."
 }

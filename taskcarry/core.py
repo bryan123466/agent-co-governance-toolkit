@@ -7,7 +7,6 @@ from __future__ import annotations
 import base64
 import hashlib
 import json
-import json
 import os
 from pathlib import Path, PurePosixPath, PureWindowsPath
 import re
@@ -15,7 +14,7 @@ import stat
 import subprocess
 import uuid
 
-from .store import Store, GovernanceError, now
+from .store import Store, GovernanceError, now, TERMINAL_STATES
 
 MAX_FILE_BYTES = 32 * 1024 * 1024
 MAX_CHECKPOINT_BYTES = 128 * 1024 * 1024
@@ -122,7 +121,7 @@ class Core:
     @classmethod
     def initialize(cls, project, name='TaskCarry project'):
         store = Store(project, create=True)
-        with store.guard():
+        with store.transaction():
             config = store.get('config', 'project')
             if config is not None and config.get('schema_version') != 1:
                 raise GovernanceError('SCHEMA_VERSION_UNSUPPORTED', 'Initialization cannot downgrade existing project state.')
@@ -146,7 +145,7 @@ class Core:
         task_id = _id(task_id, 'Task ID')
         if state is not None and state not in ('active', 'paused', 'waiting', 'complete'):
             raise GovernanceError('INVALID_STATE', 'Task state must be active, paused, waiting or complete.')
-        with self.store.guard():
+        with self.store.transaction():
             previous = self.store.get('tasks', task_id)
             result = dict(previous or {'task_id': task_id, 'title': title or task_id, 'workstream': workstream or task_id,
                                        'state': 'active', 'created_at': now()})
@@ -160,12 +159,21 @@ class Core:
             return result
 
     def status(self):
-        return self._current_view(self.store.snapshot(CURRENT_COLLECTIONS))
+        supporting = ('observations', 'runs', 'issues', 'fixes')
+        records = self.store.snapshot(CURRENT_COLLECTIONS + supporting)
+        result = self._current_view(records)
+        result['continuity'] = {name: records[name] for name in supporting}
+        result['storage'] = self.store.storage_status()
+        return result
+
+    def upgrade(self):
+        """Opt in to the indexed agenda without rewriting project evidence."""
+        return self.store.upgrade()
 
     @staticmethod
     def _current_view(records):
         tasks, stages, operations, workspaces = (records[x] for x in ('tasks', 'stages', 'operations', 'workspaces'))
-        terminal = {'accepted', 'committed', 'complete', 'completed', 'superseded', 'cancelled', 'dismissed', 'finalized', 'adopted'}
+        terminal = TERMINAL_STATES
         pending_stages = [s for s in stages if str(s.get('state', s.get('status', 'queued'))).lower() not in terminal]
         # Submission validates cumulative ancestry. Project that declaration here
         # without pretending that the older stage already has a terminal receipt.
@@ -207,8 +215,9 @@ class Core:
     def agenda(self, limit=20, previous_fingerprint=None, cursor=None):
         """Select a page of recorded current work; never execute or acknowledge it.
 
-        The limit bounds returned items, not database query time. Cursor state is
-        returned to the caller rather than written into the governance database.
+        The limit bounds returned items. Indexed projects load current records
+        and their linked dependencies, not unrelated terminal history. Cursor
+        state is returned rather than written into the governance database.
         """
         if type(limit) is not int or not 1 <= limit <= 100:
             raise GovernanceError('INVALID_ARGUMENT', 'Agenda limit must be an integer from 1 to 100.')
@@ -233,9 +242,11 @@ class Core:
             except (ValueError, TypeError, UnicodeError) as exc:
                 raise GovernanceError('AGENDA_CURSOR_INVALID', 'Use an unchanged next_cursor from an agenda result.') from exc
 
-        records = self.store.snapshot((*CURRENT_COLLECTIONS, 'experience', 'plans'))
+        records = self.store.snapshot_current()
         plans = {plan.get('plan_id'): plan for plan in records['plans']}
         current = self._current_view(records)
+        current['actionable']['issues'] = [r for r in records['issues'] if r.get('state') != 'resolved']
+        current['actionable']['runs'] = [r for r in records['runs'] if r.get('state') != 'COMPLETED']
         # Observation timestamps are not new work; evidence, outcomes and inputs are.
         def content(record):
             return {key: value for key, value in record.items()
@@ -248,7 +259,8 @@ class Core:
         items, inputs = [], []
         selected_stages, referenced_workspaces = set(), set()
         kinds = (('operation', 'operations', 'operation_id'),
-                 ('stage', 'stages', 'stage_id'), ('artifact', 'artifacts', 'artifact_id'))
+                 ('stage', 'stages', 'stage_id'), ('artifact', 'artifacts', 'artifact_id'),
+                 ('issue', 'issues', 'issue_id'), ('run', 'runs', 'run_id'))
         for kind, collection, id_key in kinds:
             for record in sorted(current['actionable'][collection], key=lambda value: value.get(id_key, '')):
                 record_id = record.get(id_key)
@@ -299,8 +311,12 @@ class Core:
                 elif kind == 'stage':
                     item['next_step'] = 'Review the frozen delivery and its current reconciliation plan.'
                     selected_stages.add(record_id)
-                else:
+                elif kind == 'artifact':
                     item['next_step'] = 'Review the retained artifact relationship, decision and backup evidence.'
+                elif kind == 'issue':
+                    item['next_step'] = 'Review this recorded condition and its resolution evidence; an issue record never replaces an operation receipt.'
+                else:
+                    item['next_step'] = 'Inspect the frozen run selection and continue only its unfinished operations or receipt.'
                 items.append(item)
                 referenced_workspaces.update(record[name] for name in ('workspace', 'baseline')
                                              if isinstance(record.get(name), str))
@@ -324,7 +340,14 @@ class Core:
                             or workspace.get('path') in referenced_workspaces]
         input_fingerprint = fingerprint({'project': str(self.root), 'items': inputs,
                                          'tasks': active_tasks, 'workspaces': workspace_inputs,
-                                         'stage_dependencies': dependencies})
+                                         'stage_dependencies': dependencies,
+                                         'run_dependencies': {
+                                             'observations': [o for o in records['observations'] if o.get('observation_id') in
+                                                              {key for r in current['actionable']['runs'] for key in r.get('observation_ids', [])}],
+                                             'stages': [s for s in records['stages'] if s.get('stage_id') in
+                                                        {key for r in current['actionable']['runs'] for key in r.get('stage_ids', [])}],
+                                             'operations': [o for o in records['operations'] if o.get('operation_id') in
+                                                            {key for r in current['actionable']['runs'] for key in r.get('operation_ids', [])}]}})
         if cursor_data and cursor_data['fingerprint'] != input_fingerprint:
             raise GovernanceError('AGENDA_CURSOR_STALE', 'Recorded work changed; read a fresh first page.',
                                   {'current_fingerprint': input_fingerprint})
@@ -345,6 +368,7 @@ class Core:
         return {'items': page, 'counts': counts, 'total': len(items), 'returned': len(page),
                 'offset': offset, 'truncated': len(items) - end, 'next_cursor': next_cursor,
                 'fingerprint': input_fingerprint,
+                'storage': records['_storage'],
                 'changed': previous_fingerprint is None or previous_fingerprint != input_fingerprint,
                 'selection_only': True, 'effects_executed': False, 'project_complete': None,
                 'meaning': 'This is a bounded selection of recorded work, not an execution, retry, acknowledgment or proof of project completion. Verify live conditions before acting.'}
@@ -443,12 +467,15 @@ class Core:
                       'git': is_git, 'original_head': head or None, 'files': files, 'next_step': next_step,
                       'decision': decision, 'created_at': now(), 'scope': 'selected_files_only',
                       'delivery': False, 'total_layer_bytes': total}
-            self.store.put('checkpoints', checkpoint_id, result)
-            task.update(latest_checkpoint=checkpoint_id, next_step=next_step, updated_at=now())
-            if paused:
-                task['state'] = 'paused'
-            self.store.put('tasks', task_id, task)
-            self.store.event('checkpoint_saved', {'checkpoint_id': checkpoint_id, 'task_id': task_id})
+            # Immutable objects may exist before publication, but the checkpoint,
+            # task pointer and its evidence event become visible together.
+            with self.store.transaction():
+                self.store.put('checkpoints', checkpoint_id, result)
+                task.update(latest_checkpoint=checkpoint_id, next_step=next_step, updated_at=now())
+                if paused:
+                    task['state'] = 'paused'
+                self.store.put('tasks', task_id, task)
+                self.store.event('checkpoint_saved', {'checkpoint_id': checkpoint_id, 'task_id': task_id})
             return result
 
     def _snapshot_bytes(self, reference):
@@ -560,7 +587,7 @@ class Core:
                 backup_after = backup_path.stat()
                 verified = (backup_digest.hexdigest() == checksum and backup_stat.st_size == before.st_size
                             and (backup_stat.st_size, backup_stat.st_mtime_ns) == (backup_after.st_size, backup_after.st_mtime_ns))
-        with self.store.guard():
+        with self.store.transaction():
             old = self.store.get('artifacts', artifact_id)
             same = old and old['sha256'] == checksum
             result = {'artifact_id': artifact_id, 'task_id': task_id, 'path': str(raw.resolve()), 'role': role,
@@ -582,7 +609,7 @@ class Core:
             raise GovernanceError('INVALID_EXPERIENCE', 'Experience enabled must be a boolean.')
         result = {'rule_id': rule_id, 'code': code, 'operation': operation, 'action': action,
                   'task_id': task_id, 'version': str(version), 'enabled': enabled, 'updated_at': now()}
-        with self.store.guard():
+        with self.store.transaction():
             self.store.put('experience', rule_id, result)
             self.store.event('experience_registered', result)
         return result

@@ -13,4 +13,6 @@ For receipt recovery, repeat the original bounded governance call so the engine 
 
 Unknown defects can produce a candidate fix and synthetic regression scenario within authorized development scope. Validate the initial failure, the corrected outcome, replay safety and a negative non-applicable case before proposing a public rule/tool update. Never experiment on a user's live unrelated task. Record whether only scripts, simulated clients or an actual AI/host integration were tested.
 
+For a defect that needs continuing maintenance, use `taskcarry_issue` with a stable condition fingerprint, then `taskcarry_fix` to link the tested fix, version and evidence references. A changed condition reopens review; closing an issue requires a reviewed resolution reference and cannot close an unfinished Git operation. Identical records are reused. The fix result compares actual project setup and disk fingerprints; an installed version match still does not prove that another running host process reloaded it. A shared fix belongs in the tool or Skill release so future work can prevent the failure, not only repair it repeatedly. `taskcarry_upgrade` repairs the derived current-work index for an older store; it does not upgrade the package, install Skills, or change business branches.
+
 中文：经验闭环应降低源头复现，也应帮助中断接续。条件经验不能扩大权限，不能把过期经验强套新任务。未知情况保留实际证据，形成可验证的修正候选，不让一个任务冻结全项目。

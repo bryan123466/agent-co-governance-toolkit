@@ -4,7 +4,7 @@
 
 TaskCarry keeps project records in the control directory while the installed toolkit provides the operations that use them. Updating the toolkit should help the next session continue the same work. It should not create a new project, resubmit past results, or merge business branches simply to refresh a Skill.
 
-This supplement applies to 0.2.0rc4. The existing installation and operating walkthroughs remain applicable. Start a new project with the normal walkthrough; the arrangements below help maintain an existing installation. For saved schedules and an optional observer, see [scheduled governance](automation.md).
+This supplement applies to 0.2.0rc5. The existing installation and operating walkthroughs remain applicable. Start a new project with the normal walkthrough; the arrangements below help maintain an existing installation. For saved schedules and an optional observer, see [scheduled governance](automation.md).
 
 ## Three updates with different purposes
 
@@ -24,7 +24,25 @@ This supplement applies to 0.2.0rc4. The existing installation and operating wal
 
 Send this to `taskcarry_agenda`, or use the CLI `agenda` action with a JSON request file. Follow `next_cursor` to inspect remaining pages. A cursor belongs to the same current-input fingerprint; if work changes, start a fresh selection. Pass the previous `fingerprint` as `previous_fingerprint` when comparing observations. `changed: false` does not close pending work or authorize another attempt.
 
-Selection does not perform a repair, run another AI, or start a schedule. Matching experience is a suggestion; the existing executor must still verify actual effects. The item limit bounds the response, not database scanning costs, query time, or the duration of an AI session.
+Selection does not perform a repair, run another AI, or start a schedule. Matching experience is a suggestion; the existing executor must still verify actual effects. An indexed store selects current records and required predecessors without loading unrelated completed history. The item limit bounds the response, not all current-input processing, query time or the duration of an AI session.
+
+## Maintain the current-work index
+
+New projects create the derived index automatically. An older or invalidated index leaves the original records intact: `agenda` falls back to a full selection and reports `storage.upgrade_required`. After installing the chosen toolkit version and safely stopping affected governance writers, use the explicit `upgrade` action on the existing control directory:
+
+```sh
+python -m taskcarry --project ./control upgrade
+```
+
+Use the actual existing control path; do not initialize a replacement. The action rebuilds only the derived index, in one transaction, and is safe to repeat. Original records and events remain unchanged. Confirm `storage.mode` is `indexed_current_v1` and `storage.upgrade_required` is false afterward. This is not a package updater or a migration of business files. An older client writing records can invalidate the index again; retire that writer before rebuilding it.
+
+## Preserve reviewed evidence and a run's exact scope
+
+When authorized host tools supply relevant evidence, `observe` records its source reference, reviewed revision, registered task/workspace and explicit stage or artifact relationships. Repeating the same observation reuses it; a changed observation requires the previous revision so stale information cannot overwrite newer evidence. The record does not fetch a chat, establish source truth or grant access. Preserve a source reference rather than copying sensitive conversation content.
+
+For a round with selected work, `run` starts a record with named stages, operations and relevant observations. Finishing it checks the recorded terminal states of that selection. It reports unresolved objects and changed observations without replaying the operations or silently adding later work to the original scope. Verify actual effects through the corresponding operation tools first; a run result summarizes those records, not an independent Git audit. New work and the project's overall state remain separate from the selected result.
+
+See [the evolution report](governance-evolution.md) for the reasoning and focused synthetic checks behind these changes.
 
 ## Resume an interrupted installation
 

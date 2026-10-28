@@ -2,7 +2,7 @@
 
 [Complete Windows workflow](windows-example.md) · [简体中文](../zh-CN/operation-manual.md) · [繁體中文](../zh-TW/operation-manual.md) · [Product home](../../README.md) · [Command reference](../COMMANDS.md)
 
-Applies to 0.2.0rc4. **Use the [Windows walkthrough](windows-example.md) as the single detailed source for steps, directories and copyable prompts.** This page explains the workflow and choices rather than supplying a second installation procedure.
+Applies to 0.2.0rc5. **Use the [Windows walkthrough](windows-example.md) as the single detailed source for steps, directories and copyable prompts.** This page explains the workflow and choices rather than supplying a second installation procedure.
 
 ## One recommended onboarding path
 
@@ -52,7 +52,7 @@ The initial inventory covers the registered set in `status.workspaces`, `status.
 | A stable, explicit stage not yet received | Verify the frozen commit, original base, exact paths and task relationship; plan before receiving. |
 | Unfinished or uncommitted work | Preserve an exact checkpoint, findings and next step; do not claim delivery. |
 | Paused, waiting or unchanged work | Retain its current position without creating new backlog or reminders. |
-| A workspace needs the public update | Confirm no active writer, plan adoption and preserve local work. |
+| A task needs accepted code or deliverables | Confirm the dependency and no active writer, plan adoption and preserve local work. Reading shared progress alone needs no merge. |
 | Interruption or a concrete failure | Reconcile actual effects and original operations, then apply supported recovery to missing steps. |
 
 **Complete state coverage does not mean receiving all unfinished work.** Governance does not automatically discover every app chat. Register additional chats/workspaces through the walkthrough. Task completion, stage reception and business acceptance remain different states.
@@ -63,7 +63,7 @@ MCP is the recommended direct tool connection for the governance chat. The CLI r
 
 The first bounded governance pass shows its result directly in the current chat. Reuse that result when creating a schedule; do not run an extra Automation to demonstrate reporting. Create scheduled governance through the host's official tools, using its actual timezone and target. Daily results use the same AI and project records. Runs read registered tasks and workspaces without a fixed worker count or a claim to scan every chat.
 
-Specialists keep working normally. Reception handles explicit stages; adoption runs only when its target is ready. A `paused` task alone does not prove outside programs stopped writing. Toolkit locks serialize toolkit actions, not entire model turns or arbitrary external programs.
+Specialists keep working normally. Reception handles explicit stages; adoption runs only for an actual task dependency and when its target is ready. Reading shared progress or updating Skills does not require merging business branches. A `paused` task alone does not prove outside programs stopped writing. Toolkit locks serialize toolkit actions, not entire model turns or arbitrary external programs.
 
 ## Optional extensions and limits
 

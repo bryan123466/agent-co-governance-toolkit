@@ -251,7 +251,7 @@ class CurrentViewTests(unittest.TestCase):
         self.record('stages', 'v1', workspace='author', status='COMMITTED', accepted_commit='changed', supersedes=[])
         self.assertTrue(self.core.agenda(previous_fingerprint=first['fingerprint'])['changed'])
 
-    def test_interrupted_receipt_tracks_baseline_path_and_committed_stage_workspace(self):
+    def test_interrupted_receipt_tracks_baseline_and_protects_source_binding(self):
         engine = Integration(self.project)
         baseline, worker = self.root / 'baseline', self.root / 'worker'
         baseline.mkdir()
@@ -283,16 +283,17 @@ class CurrentViewTests(unittest.TestCase):
         with mock.patch.object(engine, '_save', side_effect=interrupt_after_stage_receipt):
             with self.assertRaisesRegex(RuntimeError, 'after stage receipt'):
                 engine.reconcile('baseline', True, plan)
-        self.assertEqual('COMMITTED', self.store.get('stages', stage['stage_id'])['status'])
+        self.assertEqual('QUEUED', self.store.get('stages', stage['stage_id'])['status'])
         operation = self.store.list('operations')[0]
         self.assertEqual('EFFECT_APPLIED', operation['status'])
         self.assertEqual(str(baseline.resolve()), operation['baseline'])
         self.assertNotIn('workspace', operation)
         # A separate current material keeps the first page bounded and produces
-        # a cursor without turning the committed stage back into a backlog item.
+        # a cursor. The receipt transaction rolled back, while the real Git
+        # effect remains durably journaled for an exact continuation.
         self.record('artifacts', 'material', sha256='0' * 64, backup_verified=False)
         first = self.core.agenda(limit=1)
-        self.assertEqual(0, first['counts']['stages'])
+        self.assertEqual(1, first['counts']['stages'])
         self.assertEqual(1, first['counts']['operations'])
         self.assertIsNotNone(first['next_cursor'])
 
@@ -300,6 +301,11 @@ class CurrentViewTests(unittest.TestCase):
             with self.subTest(rebound_workspace=name):
                 head = commit(path, 'HEAD')
                 git(path, 'checkout', '-b', 'next-work')
+                if name == 'worker':
+                    self.assertCode('WORKSPACE_IN_USE', engine.workspace, name, path)
+                    self.assertEqual(head, commit(path, 'HEAD'))
+                    self.assertEqual(operation, self.store.get('operations', operation['operation_id']))
+                    continue
                 engine.workspace(name, path)
                 before = self.logical_state()
                 changed = self.core.agenda(limit=1, previous_fingerprint=first['fingerprint'])

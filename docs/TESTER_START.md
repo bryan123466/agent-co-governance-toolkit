@@ -4,7 +4,7 @@
 
 The [user manual](en/windows-example.md) is the recommended way to connect your project. If you prefer to see the workflow first, use this optional walkthrough with fictional files in a separate directory. You do not need to provide private project data or become a software tester.
 
-Download **taskcarry-0.2.0rc4-product.zip** from the [release page](https://github.com/bryan123466/taskcarry/releases/tag/v0.2.0rc4). Give the extracted package and a new example directory to a Codex chat.
+Download **taskcarry-0.2.0rc5-product.zip** from the [release page](https://github.com/bryan123466/taskcarry/releases/tag/v0.2.0rc5). Give the extracted package and a new example directory to a Codex chat.
 
 ## A prompt you can use
 

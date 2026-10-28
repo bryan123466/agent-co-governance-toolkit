@@ -25,6 +25,11 @@ Success: `{"ok":true,"result":{...}}`. Failure: `{"ok":false,"error":{"code":"..
 | `status` | none / 无 | Read current state / 读取当前状态 |
 | `agenda` | optional `limit` (1–100), `previous_fingerprint`, `cursor` | Read a bounded, paginated selection; no execution / 读取有限分页议程，不执行操作 |
 | `doctor` | none / 无 | Inspect prerequisites / 检查运行条件 |
+| `upgrade` | none / 无 | Explicitly build/repair the derived current-work index; preserve records and events / 显式建立或修复当前事项派生索引，不升级软件包 |
+| `observe` | `observation_id`, `workspace`, `task_id`, `source_ref`, `source_revision`, `summary`; optional `relations`, `expected_revision` | Persist host-reviewed references with revision checks / 持久保存宿主已复核依据与关联 |
+| `run` | `run_id`; `mode` start/inspect/finish; optional `stage_ids`, `operation_ids`, `observation_ids`, `note` | Freeze and inspect a round's selected records / 固定并核对本轮选中记录 |
+| `issue` | `issue_id`, `condition`, `summary`; optional `state` open/resolved, `resolution_ref`, `expected_revision` | Keep a concrete issue and reviewed resolution / 保存具体问题条件与解决依据 |
+| `fix` | `fix_id`, `issue_id`, `version`, `evidence_refs`; optional `summary`, `expected_revision` | Link validation and fix version; inspect project setup evidence / 关联验证与修正版本，核对项目安装依据 |
 
 Paths in a checkpoint or submission are workspace-relative exact files, not wildcard expressions. In a cumulative submission, `relation` is `cumulative` and `supersedes` lists the exact earlier stage identifiers. The default relation is `independent`. 检查点和交付的路径是工作区相对精确文件，不使用通配符；累计交付明确列出被替代阶段。
 
@@ -37,6 +42,14 @@ Receiving plans include selected recovery operations in their identity. `scope: 
 接收计划的身份覆盖选中的恢复操作。`scope: plan` 与 `plan_complete` 只说明冻结范围，`project_complete` 保持 null，当前剩余工作另列。旧空计划完成不代表后来交付也已接收。采用准备失败保留检查点和原错误，供下一轮复核。匹配的 `refresh_plan` 经验仅对已证明没有应用效果的操作给出 `plan_request` 建议，不自动执行；已有候选或效果未知时先对账实际效果。
 
 MCP 工具名以 `taskcarry_` 开头，提供普通动作，不通过工具初始化或改装项目。服务固定到启动时的项目。协议封装可以不同，实际行为共用同一分发器。
+
+Observation `relations` contain objects with `kind: stage` or `kind: artifact` and an existing `id`. The engine checks task/workspace links and freezes each related record's content fingerprint. Supplied source references remain host-reviewed evidence, not independently read conversations. Identical observations/issues/fixes reuse their existing record; changed content requires the current positive integer `expected_revision`. Original revisions remain available in the local history.
+
+`status.continuity` exposes current observations, runs, issues and fixes. The agenda includes open issues and unfinished runs without replacing actual operation failures. A run freezes identities at `start`; `finish` checks their durable receipt linkage and records `COMPLETED` or `WAITING`, with `project_complete: null`. Changed observations are reported separately. Neither a closed issue nor a completed run is new authorization or business acceptance. `fix.adoption` compares the current project's managed setup files, runtime disk fingerprint and version; it never installs software or proves another host process reloaded.
+
+观察关系使用 `{"kind":"stage","id":"阶段ID"}` 或 `{"kind":"artifact","id":"材料ID"}`。内容变化须提供当前整数修订号；不变则复用。`status.continuity` 查询持久依据，`agenda` 显示未关闭问题与未完成轮次。单轮完成只核对冻结记录的回执，不重新执行 Git，也不代表项目结束；版本采用说明来自实际安装清单与磁盘指纹，不能冒充原生宿主重新加载验证。
+
+New plans and operations carry `operation_protocol: 1`. Untagged earlier records follow the compatible version-one contract; unsupported future protocols are rejected before continuing the selected operations. Tool version tags alone are not authorization to replay an effect.
 
 See `python -m taskcarry --help` and MCP `tools/list` for the installed version's exact interface. Fault-injection controls are for explicitly marked synthetic test projects only; they are not a supported production recovery method. 参数以已安装版本帮助和工具列表为准；故障注入只用于明确标记的合成项目。
 

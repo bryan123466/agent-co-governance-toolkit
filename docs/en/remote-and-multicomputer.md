@@ -4,7 +4,7 @@ Windows users can follow the [fixed-path walkthrough](windows-example.md) with r
 
 [Operation manual](operation-manual.md) · [简体中文](../zh-CN/remote-and-multicomputer.md) · [繁體中文](../zh-TW/remote-and-multicomputer.md) · [Command reference](../COMMANDS.md)
 
-Applies to 0.2.0rc4. These are optional reference procedures, not daily tasks required after installation. The cross-computer procedure has not been validated end to end on two physical computers. It combines Git operations with the existing local TaskCarry interface; it does not add automatic cross-host synchronization or recovery.
+Applies to 0.2.0rc5. These are optional reference procedures, not daily tasks required after installation. The cross-computer procedure has not been validated end to end on two physical computers. It combines Git operations with the existing local TaskCarry interface; it does not add automatic cross-host synchronization or recovery.
 
 Replace every `<...>` placeholder. Use the Python environment in which TaskCarry is installed. Save request files as UTF-8 JSON. Git pushes transmit data to the selected remote, so establish the destination, its readers and the authorized scope before uploading.
 
@@ -132,7 +132,7 @@ On other systems, use a local file-copy tool under the same stopped-writer condi
 
 [Ready-to-paste Windows example for this step](windows-example.md#private-git)
 
-**Do not copy an old `.taskcarry` to a new computer and execute its old reception/adoption plans.** Workspace identity includes absolute path, Git common directory and branch. The integration baseline also binds that identity. Version 0.2.0rc4 has no full cross-host state-migration API. Matching directory names do not prove the same execution state.
+**Do not copy an old `.taskcarry` to a new computer and execute its old reception/adoption plans.** Workspace identity includes absolute path, Git common directory and branch. The integration baseline also binds that identity. Version 0.2.0rc5 has no full cross-host state-migration API. Matching directory names do not prove the same execution state.
 
 Recovery procedure:
 

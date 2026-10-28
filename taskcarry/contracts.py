@@ -12,6 +12,23 @@ def schema(properties=None, required=()):
 PATHS = {"type": "array", "items": string("Exact workspace-relative file path"), "minItems": 1, "uniqueItems": True}
 BOOL = {"type": "boolean"}
 SCHEMAS = {
+    "upgrade": schema(),
+    "observe": schema({"observation_id": string(), "workspace": string(), "task_id": string(),
+                       "source_ref": string(), "source_revision": string(), "summary": string(),
+                       "relations": {"type": "array", "items": schema({"kind": string(enum=["stage", "artifact"]), "id": string()}, ["kind", "id"])},
+                       "expected_revision": {"type": "integer", "minimum": 1}},
+                      ["observation_id", "workspace", "task_id", "source_ref", "source_revision", "summary"]),
+    "run": schema({"run_id": string(), "mode": string(enum=["start", "finish", "inspect"]),
+                   "stage_ids": {"type": "array", "items": string(), "uniqueItems": True},
+                   "operation_ids": {"type": "array", "items": string(), "uniqueItems": True},
+                   "observation_ids": {"type": "array", "items": string(), "uniqueItems": True}, "note": string()}, ["run_id"]),
+    "issue": schema({"issue_id": string(), "condition": string(), "summary": string(),
+                     "state": string(enum=["open", "resolved"]), "resolution_ref": string(),
+                     "expected_revision": {"type": "integer", "minimum": 1}}, ["issue_id", "condition", "summary"]),
+    "fix": schema({"fix_id": string(), "issue_id": string(), "version": string(),
+                   "evidence_refs": {"type": "array", "items": string(), "minItems": 1, "uniqueItems": True},
+                   "summary": string(), "expected_revision": {"type": "integer", "minimum": 1}},
+                  ["fix_id", "issue_id", "version", "evidence_refs"]),
     "status": schema(),
     "agenda": schema({"limit": {"type": "integer", "minimum": 1, "maximum": 100}, "previous_fingerprint": string(), "cursor": string()}),
     "doctor": schema(),

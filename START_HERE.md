@@ -4,7 +4,7 @@
 
 完整产品介绍：[English](README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md)
 
-[Download TaskCarry 0.2.0rc4 / 下载产品包 / 下載產品套件](https://github.com/bryan123466/taskcarry/releases/tag/v0.2.0rc4)
+[Download TaskCarry 0.2.0rc5 / 下载产品包 / 下載產品套件](https://github.com/bryan123466/taskcarry/releases/tag/v0.2.0rc5)
 
 Maintenance / 维护 / 維護：[English](docs/en/governance-maintenance.md) · [简体中文](docs/zh-CN/governance-maintenance.md) · [繁體中文](docs/zh-TW/governance-maintenance.md)。Scheduled governance / 定时治理 / 定時治理：[English](docs/en/automation.md) · [简体中文](docs/zh-CN/automation.md) · [繁體中文](docs/zh-TW/automation.md)。
 
